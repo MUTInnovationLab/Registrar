@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title class="center-title"></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="form-title">Rejection Reason</div> <!-- Title outside the form container -->
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
+  <div class="form-container">
+    <ion-item>
+      <ion-label position="floating">Date</ion-label>
+      <ion-input type="date" style="text-align: right;"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">By Who</ion-label>
+      <ion-input type="text" style="text-align: right;"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Reason</ion-label>
+      <ion-textarea style="text-align: right;"></ion-textarea>
+    </ion-item>
+  </div>
+
+</ion-content>

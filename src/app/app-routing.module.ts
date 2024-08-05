@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
   {
@@ -31,6 +31,29 @@ const routes: Routes = [
     path: 'all-users',
     loadChildren: () => import('./all-users/all-users.module').then( m => m.AllUsersPageModule)
   },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'register',
+    loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
+  },
+  {
+    path: 'doc-view',
+    loadChildren: () => import('./doc-view/doc-view.module').then( m => m.DocViewPageModule)
+  },
+  {
+    path: 'rejection',
+    loadChildren: () => import('./rejection/rejection.module').then( m => m.RejectionPageModule)
+  },
+  {
+    path: 'assign',
+    loadChildren: () => import('./assign/assign.module').then( m => m.AssignPageModule)
+  },
+
+  
+
 ];
 
 @NgModule({

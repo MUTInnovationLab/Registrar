@@ -1,0 +1,66 @@
+ion-content {
+    --ion-background-color:#054c5b;
+  }
+  
+  .form-title {
+    text-align: center; /* Center the title */
+    margin: 20px auto; /* Space above and below the title */
+    color: rgb(238, 231, 231); /* Title color */
+    font-size: 24px; /* Adjust font size as needed */
+  }
+  
+  .form-container {
+    background: white;
+    border: 2px solid white;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 0 auto; 
+    width: 80%; 
+    max-width: 500px; /* Ensure it doesn't get too large on wide screens */
+  }
+  
+  ion-item {
+    --background: transparent;
+    --border-color: #ccc;
+  }
+  
+  ion-label {
+    color: black;
+  }
+  
+  ion-input,
+  ion-textarea {
+    color: black;
+  }
+  .diamond-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Adjust gap between diamonds as needed */
+    margin-bottom: 20px; /* Space below the diamonds container */
+  }
+  
+  /* General diamond styling */
+  .diamond {
+    width: 50px; /* Adjust size as needed */
+    height: 50px; /* Adjust size as needed */
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    /* Creates a diamond shape using clip-path */
+  }
+  
+  /* White diamond styling */
+  .white-diamond {
+    background-color: white;
+  }
+  
+  /* Maroon diamond styling */
+  .maroon-diamond {
+    background-color: maroon;
+  }
+  
+  /* Yellow diamond styling */
+  .yellow-diamond {
+    background-color: #C99115;
+  }
+  
+  

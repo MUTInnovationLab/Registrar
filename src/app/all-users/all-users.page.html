@@ -1,13 +1,35 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>all-users</ion-title>
+    <ion-title>VIEW ALL USERS</ion-title>
+    <ion-buttons slot="end">
+    <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">all-users</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-table-container">
+          <table>
+            <thead>
+              <tr class="titles">
+                <th>Email</th>
+                <th>Staff Number</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users" class="details">
+                <td>{{ user.email }}</td>
+                <td>{{ user.staffNumber }}</td>
+                <td>{{ user.role }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

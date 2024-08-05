@@ -1,0 +1,90 @@
+ion-header {
+    background-color: maroon;
+    color: #ffffff;
+    --ion-toolbar-background: maroon;
+    --ion-toolbar-color: #ffffff;
+    text-align: center;
+}
+
+.back-button {
+    --background: maroon; 
+    //--border-radius: 1px solid black;
+    //--border: 1px solid black;
+    --color: white;
+    //padding: 2px 2px 2px 2px ;
+    //margin: 4px 4px 4px 4px;
+    //position: absolute;
+    //right: 0;
+    //transition: background-color 0.3s, color 0.3s;
+  }
+
+  .back-button:hover{
+    --background: #054c5b;
+    --color: rgb(201, 145, 21);
+  }
+
+ion-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    --background: #054c5b;
+    margin: 30px;
+    padding: 16px;
+}
+
+ion-grid {
+    width: 100%;
+    max-width: 800px;
+    padding: 0;
+}
+  
+.ion-table-container {
+    margin: 10px;
+    padding: 10px;
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 0px;
+    box-shadow: 0 4px 8px grey;
+}
+  
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    border: 1px solid #e5e7eb;
+}
+  
+th {
+    padding: 12px 15px;
+ }
+
+td {
+    padding: 12px 15px;
+}
+
+.details{
+    padding: 12px 15px;
+    color: black;
+}
+
+.titles{
+    color: white;
+}
+  
+thead {
+    background-color: maroon;
+}
+  
+tbody tr {
+    background-color: white;
+}
+  
+tbody tr:hover {
+    background: #054c5b;
+    color: rgb(201, 145, 21);
+    text-decoration: solid;
+    transition: ease 0.3s;
+    transform: scale(1.01);
+}
+

@@ -1,0 +1,163 @@
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="header-title">ASSIGN USER</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="background">
+  <ion-grid class="grid-container">
+    <ion-row>
+      <ion-col size="12" class="info">
+        <ion-label>ADD & GRANT USER PRIVILEGES</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" class="card-column">
+        <ion-card class="cardcenter card-column">
+          <ion-card-header>
+            <ion-card-title text-align="center">Add User Info</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+
+            <ion-item>
+              <ion-label position="floating">Name</ion-label>
+              <ion-icon name="person" slot="start"></ion-icon>
+              <ion-input type="text" name="name" [(ngModel)]="name" (input)="nameError=null;"></ion-input>
+              <div class="error-message" *ngIf="nameError">{{ nameError }}</div>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-icon name="mail" slot="start"></ion-icon>
+              <ion-input type="email" [(ngModel)]="email" name="email" (input)="emailError = null;"></ion-input>
+              <div class="error-message" *ngIf="emailError">{{ emailError }}</div>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Position</ion-label>
+              <ion-select [(ngModel)]="position" name="position" (ionChange)="positionError = null">
+                <ion-select-option value="HR">External Moderator</ion-select-option>
+                <ion-select-option value="Admin">Finance</ion-select-option>
+                <ion-select-option value="Interviewer">Examination Officer</ion-select-option>
+                <ion-select-option value="Clerk">Human Resource</ion-select-option>
+                <ion-select-option value="Panel Member">Deputy Registrar</ion-select-option>
+                <ion-select-option> HOD</ion-select-option>
+                <ion-select-option>Lecturer</ion-select-option>
+              </ion-select>
+              <ion-icon name="briefcase" slot="start"></ion-icon>
+                  <div class="error-message" *ngIf="positionError">{{ positionError }}</div>
+            </ion-item>
+            
+
+            <ion-item>
+              <ion-label position="floating">Staff Number</ion-label>
+              <ion-icon name="people" slot="start"></ion-icon>
+              <ion-input type="text" name="staffNumber" [(ngModel)]="staffNumber" (input)="staffError = null;"></ion-input>
+              <div class="error-message" *ngIf="staffError">{{ staffError }}</div>
+            </ion-item>
+
+          </ion-card-content>
+        </ion-card>
+
+       
+         
+
+          
+      </ion-col>
+
+      <ion-col size="6" class="card-column1">
+        <ion-card class="cardcenter card-column1">
+          <ion-card-header>
+            <ion-card-title text-align="center">Add Role</ion-card-title>
+          </ion-card-header>
+          
+          <ion-card-content>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="time"></ion-icon>
+                Lecturer
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getHistoryValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="stats-chart"></ion-icon>
+                HOD
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getAllUsersValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="briefcase"></ion-icon>
+                Deputy Registrar
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getApplicantsValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="school"></ion-icon>
+                Human Resource
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getUpcomingValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="person-add-sharp"></ion-icon>
+                Examination Officer
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getAdduserValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="person-add-sharp"></ion-icon>
+                Finance
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getScoreValue($event)"></ion-toggle>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>
+                <ion-icon name="checkmark-done-sharp"></ion-icon>
+                External Moderator
+              </ion-label>
+              <ion-toggle slot="end" (ionChange)="getMarksValue($event)"></ion-toggle>
+            </ion-item>
+
+           
+
+           
+
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <button class="butSubmit" expand="block" (click)="Validation()" >
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+    Assign
+  </button>
+<button class="btnHover2" expand="block" (click)="Validation()" (click)="updateUser()" >
+  <ion-icon slot="start" name="pencil-outline"></ion-icon>
+  Update
+</button>
+<button  class="btnHover1"  expand="block" (click)="Validation()" (click)="deleteUser()">
+    <ion-icon slot="start" name="trash-outline"></ion-icon>
+    Remove
+  </button>
+  
+</ion-content>
+
+<ion-footer class="custom-footer">
+  Designed with ❤️ by <b>MUT INNOVATIONLAB</b>
+</ion-footer>

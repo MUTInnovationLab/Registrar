@@ -1,0 +1,170 @@
+/* General Background Color for ion-content */
+ion-content {
+  --ion-background-color: #054c5b;
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full viewport height */
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Center the toolbar content */
+ion-toolbar {
+  display: flex;
+  justify-content: center;
+}
+
+/* Style for the main title in the form */
+.form-title {
+  text-align: center;
+  margin: 10px auto;
+  color: rgb(238, 231, 231);
+  font-size: 20px;
+}
+
+/* Style for centered title */
+.center-title {
+  text-align: center;
+  color: black;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* Style for the form container to ensure proper layout */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 0 10px;
+  overflow: auto; /* Allow scrolling if content exceeds */
+}
+
+/* Style for search container */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0; /* Reduced margin to move search bar up */
+}
+
+/* Style for search bar with white background */
+ion-searchbar {
+  --background: white;
+  --placeholder-color: #888;
+}
+
+/* Style for table container with adjusted positioning */
+.table-container {
+  display: flex;
+  flex-direction: column; /* Ensure the table and buttons stack vertically */
+  flex: 1; /* Allow it to grow and fill available space */
+  margin: 10px 0; /* Reduced margin to bring table closer */
+  max-height: calc(100vh - 160px); /* Further reduced to decrease table height */
+  overflow-y: auto; /* Allow vertical scrolling within the table container */
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  max-height: 250px; /* Further reduced maximum height for the table */
+  display: block; /* Ensure that the height setting works properly */
+  overflow-y: auto; /* Add scrolling if content exceeds the fixed height */
+  margin: 0 auto;
+}
+
+/* Style for table headers */
+th {
+  background-color: maroon;
+  color: white;
+  border: 1px solid #ccc;
+  padding: 6px; /* Reduced padding */
+  text-align: center;
+}
+
+/* Style for table cells */
+td {
+  border: 1px solid #ccc;
+  padding: 6px; /* Reduced padding */
+  text-align: center;
+}
+
+/* Alternating row colors */
+tr:nth-child(even) {
+  background-color: white;
+}
+
+tr:nth-child(odd) {
+  background-color: #ffe4e1;
+}
+
+/* Class for additional striped rows */
+.striped-row {
+  background-color: #ffe4e1;
+}
+
+/* Style for comment text area */
+.comment-textarea {
+  --background: #d3d3d3;
+  color: black;
+  height: 80px; /* Reduced height */
+  resize: none;
+  margin-top: 5px;
+}
+
+/* Button group styling */
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px; /* Reduced margin */
+}
+
+/* Styling for individual buttons within the button group */
+.button-group ion-button {
+  margin: 0 8px; /* Reduced margin */
+}
+
+/* Specific button styles */
+.back-button {
+  --background: maroon;
+  --color: white;
+}
+
+.reset-button {
+  --background: maroon;
+}
+
+.save-button {
+  --background: #054c5b;
+}
+
+/* Diamond container styling */
+.diamond-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* Reduced gap */
+  margin-bottom: 15px; /* Reduced margin */
+}
+
+/* General diamond styling */
+.diamond {
+  width: 40px; /* Adjusted size */
+  height: 40px; /* Adjusted size */
+  background-color: transparent;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  /* Creates a diamond shape using clip-path */
+}
+
+/* White diamond styling */
+.white-diamond {
+  background-color: white;
+}
+
+/* Maroon diamond styling */
+.maroon-diamond {
+  background-color: maroon;
+}
+
+/* Yellow diamond styling */
+.yellow-diamond {
+  background-color: #C99115;
+}

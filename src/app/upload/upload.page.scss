@@ -1,15 +1,199 @@
-ion-toolbar {
-    color: red;
-    text-align: center;
+ion-content {
+  --background: #054C5B; 
 }
-ion-content.content-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center; // Vertical centering
-    height: 100%;
-  
-    ion-grid {
-      height: 50%; // Make content take 50% of the viewport height
-    }
-  }
-  
+
+ion-title {
+  text-align: center;
+  color: #FFFFFF;
+  font-family: 'Open Sans', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+ion-toolbar {
+  --padding-start: 0;
+  --padding-end: 0;
+  --background: #054C5B;
+}
+
+.centered-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+}
+
+.diamond-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0; 
+}
+
+.diamond {
+  width: 30px;
+  height: 30px;
+  margin: 0 15px;
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.diamond:nth-child(1) { background-color: #FFFFFF; }
+.diamond:nth-child(2) { background-color: #FAC710; }
+.diamond:nth-child(3) { background-color: #812B29; }
+
+ion-card {
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+  background: #FFFFFF;
+  font-family: 'Open Sans', sans-serif;
+  border-radius: 15px; 
+  padding: 20px;
+}
+
+/* Input and Select Styles */
+ion-item {
+  display: flex; /* Use flexbox for item layout */
+  align-items: center; /* Center items vertically */
+  gap: 10px; /* Adjust the gap between items as needed */
+}
+
+ion-label {
+  font-weight: bold; 
+}
+
+ion-select {
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+.upload-icon {
+  font-size: 30px; /* Adjust the icon size as needed */
+  color: #812B29; /* Adjust the icon color to match your design */
+  margin-left: 10px; /* Add space between the icon and the label */
+}
+.inline-container ion-icon,
+.inline-select ion-icon {
+  font-size: 35px; /* Adjust the icon size as needed */
+  color: #054C5B; /* Adjust the icon color to match your design */
+  margin-right: 10px; /* Add space between the icon and the label */
+}
+
+.custom-input {
+  flex: 1; /* Allow the input to grow to fill available space */
+  max-width: 200px; /* Control the maximum width of the input */
+  margin-top: 5px; /* Add space between the input and the label */
+}
+
+/* Drop Zone Styles */
+.drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border: 2px solid #812B29;
+  border-radius: 10px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.drop-zone.drag-over {
+  border-color:  deeppink;; 
+}
+
+.drop-zone p { margin: 0; }
+.drop-zone ion-button { margin-left: 10px; }
+
+/* File List & Error Styles */
+.file-list { margin-top: 15px; }
+.error-message { 
+  color: red; 
+  font-weight: bold; 
+}
+
+/* Button Styles */
+ion-button {
+  --background: #812B29;
+  --background-hover: #9e3532;
+  --background-activated: #6a2321;
+  --background-focused: #9e3532;
+  --color: #FFFFFF;
+  --border-radius: 8px;
+  --border-color: #ffffff;
+  --border-style: solid;
+  --border-width: 1px;
+  --box-shadow: 0 2px 6px 0 rgb(0, 0, 0, 0.25);
+  --ripple-color: deeppink;
+  --padding-top: 10px;
+  --padding-bottom: 10px;
+}
+.submit-button {
+  margin-top: 20px;
+  width: 45%;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background:#812B29;
+  width: 80%;
+  height: 70px;
+  margin: 20px auto;
+  padding: 10px;
+  border: 2px solid #054C5B;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border-color: #FFFFFF;
+}
+
+.title-container ion-title {
+  font-size: 24px;
+}
+
+/* Custom styles for colored text */
+.upload {
+  color: white;
+  margin-right: 10px; 
+}
+
+.doc {
+  color:  #FAC710; 
+}
+
+.uments {
+  color: #054C5B;
+}
+
+.custom-input {
+  caret-color: #054C5B; /* Cursor color */
+  margin-left: 150px;
+  margin-bottom: 20px;
+  margin-top: 0px; /* Add space between the original and new inputs */
+  flex: 1; /* Allow the input to grow to fill available space */
+  max-width: 200px; /* Control the maximum width of the new inputs */
+  background: #FFFFFF; /* Background color for solid input */
+  border: 1px solid #ccc; /* Border color for solid input */
+  border-radius: 4px; /* Rounded corners */
+  padding: 8px; /* Padding inside the input */
+  color: #000; /* Text color */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); /* Inner shadow */
+}
+
+.inline-container ion-input,
+.inline-select ion-input {
+  font-size: 16px; /* Font size for input text */
+  color: #333; /* Text color */
+}
+
+.inline-container ion-input::placeholder,
+.inline-select ion-input::placeholder {
+  color: #888; /* Placeholder text color */
+}

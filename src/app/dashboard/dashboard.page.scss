@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  height: 100%;
+}
+
+.div1 {
+  margin-top: 80px;
+  width: 300px;
+  background-color: #56231F;
+  height: 87.5%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1px;
+}
+
+.div1, .card1{
+  border-radius: 1px;
+}
+
+.card1 {
+  flex: 1;
+  margin-top: 20px;
+  overflow: auto; 
+}
+
+.footer1 {
+  border-color: #812B29;
+  display: flex;
+  justify-content: space-around; /* Space the buttons evenly */
+  padding: 10px; /* Optional: Add some padding for better visual */
+  background-color: #f8f5f3; /* Ensure footer is visible */
+  position: sticky;
+  bottom: 0; /* Stick to the bottom of the container */
+}
+
+
+
+.div2 {
+  flex: 1; /* div2 will take the remaining space */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* Ensure content can scroll if it overflows */
+}
+
+.swiper-container-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.prev-button, .next-button {
+  position: absolute;
+  z-index: 10;
+}
+
+.prev-button {
+  left: 10px; /* Adjust as needed */
+}
+
+.next-button {
+  right: 10px; /* Adjust as needed */
+}
+
+swiper-container {
+  width: 100%;
+  height: 100%;
+}
+
+.footer1 ion-button{
+  --background:#054c5b;
+}
+
+.Card ion-button{
+  --background:#054c5b;
+}
+
+.prev-button, .next-button{
+  --background:#054c5b;
+}
+
+.info-section {
+  position: absolute;
+  margin-top: 20px;
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Ensure it is on top */
+  background-color: #080402; /* Ensure the background is opaque */
+}
+.info-section {
+  height: 60px;
+  margin-left: 5px;
+  background-color: whitesmoke;
+  // color: whitesmoke;
+}
+
+.info-section ion-label{
+  padding: 50px;
+  margin-bottom: 8px;
+  color: #054c5b;
+}
+
+.info-section span ion-label{
+  padding: 490px;
+}
+
+swiper-slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// swiper-slide img {
+//   width: auto;
+//   max-width: 100%;
+//   height: auto;
+//   max-height: 100%;
+// }
+
+.Card {
+  background-color: whitesmoke;
+  height: 290px;
+  width: 210px;
+  text-align: center;
+}
