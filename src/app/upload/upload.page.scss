@@ -1,0 +1,15 @@
+ion-toolbar {
+    color: red;
+    text-align: center;
+}
+ion-content.content-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; // Vertical centering
+    height: 100%;
+  
+    ion-grid {
+      height: 50%; // Make content take 50% of the viewport height
+    }
+  }
+  

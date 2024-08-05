@@ -1,13 +1,49 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>upload</ion-title>
+    <ion-title>Upload Documents</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">upload</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="content-container"> <ion-grid> <ion-row justify-content-center align-items-center> <ion-col size="12" size-md="8" size-lg="6"> <ion-card> 
+          <ion-item>
+            <ion-label position="floating">Date submission</ion-label>
+            <ion-input type="date"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Module for:</ion-label>
+            <ion-select>
+              <ion-select-option value="moderation">Moderation</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-label>Upload file:</ion-label>
+            <input type="file" (change)="handleFileInput($event)" />
+          </ion-item>
+
+          <ion-button expand="block" (click)="submit()">Submit</ion-button>
+        </ion-card>
+
+        <ion-list>
+          <ion-item detail="true" *ngFor="let user of users">
+            <ion-label>{{ user.name }}</ion-label>
+            <ion-label>{{ user.email }}</ion-label>
+            <ion-label>{{ user.role }}</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary">
+                <ion-icon name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button color="medium">
+                <ion-icon name="person-add-outline"></ion-icon>
+              </ion-button>
+              <ion-button color="danger">
+                <ion-icon name="close-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
