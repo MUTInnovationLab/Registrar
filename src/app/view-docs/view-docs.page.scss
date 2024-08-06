@@ -2,11 +2,23 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
 ion-toolbar {
     --background: maroon;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px; /* Add padding for better spacing */
 }
+
+ion-buttons {
+    display: flex;
+    align-items: center;
+}
+
+
 
 ion-title {
     padding: 10px 5px;
@@ -15,12 +27,26 @@ ion-title {
     text-align: center;
 }
 
-.profile-icon {
-    background-color: maroon;
-    color: black;
+.back-icon {
+    --background: maroon;
+    color: white;
     padding: 8px;
     border-radius: 50%;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border-radius 0.3s ease-in-out;
+    transition: --background 0.3s ease-in-out, color 0.2s ease-in-out, border-radius 0.3s ease-in-out;
+}
+
+.back-icon:hover {
+    --background: #054c5b;
+    color: rgb(201, 145, 21);
+    border-radius: 54%;
+}
+
+.profile-icon {
+    --background: maroon;
+    color: black;
+    padding: 8px;
+    border-radius: 60%;
+    transition: --background 0.3s ease, color 0.3s ease, border-radius 0.3s ease;
 }
 
 .profile-icon:hover {
@@ -38,6 +64,7 @@ ion-title {
     align-items: center;
     justify-content: center;
     margin: 10px 20px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .search-icon {
@@ -51,6 +78,7 @@ ion-title {
     border: 1px solid maroon;
     border-radius: 5px;
     margin-right: 10px;
+    max-width: 100%; /* Ensure it doesn't overflow */
 }
 
 .search-button {
@@ -235,6 +263,12 @@ ion-footer ion-title {
     .table-container {
         width: 100%;
     }
+
+    .slogan{
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
+    }
 }
 
 @media (max-width: 480px) {
@@ -253,5 +287,11 @@ ion-footer ion-title {
     th, td {
         font-size: 14px;
         padding: 8px;
+    }
+
+    .slogan{
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
     }
 }
