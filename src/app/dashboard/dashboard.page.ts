@@ -10,6 +10,11 @@ import Swiper from 'swiper';
 export class DashboardPage implements OnInit, AfterViewInit {
   @ViewChild('swiper', { static: false }) swiperRef: ElementRef | undefined;
   swiper?: Swiper;
+  showMenu = false;
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
 
   constructor(private navController:NavController) { }
 
