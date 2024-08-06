@@ -4,25 +4,15 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
 import { LoadingController, NavController, ToastController } from '@ionic/angular';
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
-
-  
-
-  // Submit(){
-
-  //   this.navController.navigateForward('/dashboard');
-  // }
-
-email: any;
-  password: any;
+  email: string = '';
+  password: string = '';
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // regular expression for email validation
-  passwordError: any; // Variable to hold the error message for the password
 
   constructor(
     private db: AngularFirestore,
@@ -74,7 +64,6 @@ email: any;
     }
 
     // Validate password
-
     if (!this.password) {
       const toast = await this.toastController.create({
         message: 'Please enter your password.',
@@ -90,18 +79,6 @@ email: any;
   }
 
   async log() {
-    this.passwordError = null;
-
-    if (!this.email) {
-      alert("Please enter your email");
-      return;
-    }
-
-    if (!this.password) {
-      alert("Please enter a password");
-      return;
-    }
-
     const loader = await this.loadingController.create({
       message: 'Signing in',
       cssClass: 'custom-loader-class'
@@ -131,14 +108,15 @@ email: any;
             .then((querySnapshot) => {
               loader.dismiss();
               if (!querySnapshot.empty) {
-                this.navCtrl.navigateForward("/posts");
-              } else {
                 this.navCtrl.navigateForward("/dashboard");
+              } else {
+                this.navCtrl.navigateForward("/home");
               }
             })
             .catch((error) => {
               loader.dismiss();
               const errorMessage = error.message;
+              console.error("Error checking registered students:", errorMessage);
             });
         }
       })
@@ -147,21 +125,30 @@ email: any;
         const errorMessage = error.message;
         if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." 
         || errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
-    
-
-          const toast =  this.toastController.create({
+          const toast = this.toastController.create({
             message: 'Invalid email or password',
             duration: 2000,
             color: 'danger'
           });
           (await toast).present();
-          return;
         } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
-          alert("incorrectly formatted email");
+          const toast = this.toastController.create({
+            message: 'Incorrectly formatted email',
+            duration: 2000,
+            color: 'danger'
+          });
+          (await toast).present();
+        } else {
+          const toast = this.toastController.create({
+            message: 'Error signing in: ' + errorMessage,
+            duration: 2000,
+            color: 'danger'
+          });
+          (await toast).present();
         }
       });
   }
-  
+
   async getUserData(email: string) {
     try {
       const snapshot = await this.db.collection("registeredStudents").ref.where("email", "==", email).get();
@@ -177,4 +164,3 @@ email: any;
     }
   }
 }
-

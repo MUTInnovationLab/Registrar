@@ -26,16 +26,20 @@ export class DataService {
   
       return batch.commit();
     }
-    
+
+    //add modules
     addModules(user : User) {
       user.id = this.afs.createId();
       return this.afs.collection('/Modules').add(user);
     }
 
+    //get all modules
   getAllModules() {
     return this.afs.collection('/Modules').snapshotChanges();
   }
 
+
+  //add staff
   addStaff(user : User) {
     user.id = this.afs.createId();
     return this.afs.collection('/registeredStaff').add(user);
