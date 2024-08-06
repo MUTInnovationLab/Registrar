@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize } from 'rxjs/operators';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { DataService } from './Shared/data.service'; // Ensure the correct path to your DataService
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +11,10 @@ export class UploadService {
   constructor(
     private firestore: AngularFirestore,
     private storage: AngularFireStorage,
-    private auth: AngularFireAuth
+    private dataService: DataService // Inject DataService
   ) {}
 
   async uploadFile(file: File, date: string, module: string): Promise<void> {
-    const user = await this.auth.currentUser;
-    if (!user) throw new Error('User not authenticated');
-
     const filePath = `uploads/${date}/${module}/${file.name}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
@@ -29,7 +26,7 @@ export class UploadService {
         finalize(() => {
           fileRef.getDownloadURL().subscribe((url) => {
             // console.log('File URL:', url);
-            this.saveFileData(file.name, url, date, module, user.uid)
+            this.saveFileData(file.name, url, date, module)
               .then(() => {
                 // console.log('File uploaded and metadata saved successfully');
                 resolve();
@@ -44,18 +41,17 @@ export class UploadService {
     });
   }
 
-  private saveFileData(fileName: string, url: string, date: string, module: string, userId: string): Promise<void> {
+  private saveFileData(fileName: string, url: string, date: string, module: string): Promise<void> {
     const fileData = {
       name: fileName,
       url: url,
       date: date,
       module: module,
       createdAt: new Date(),
-      userId: userId,
       version: 1 // Initial version
     };
     // console.log('Saving file data:', fileData);
-    return this.firestore.collection('uploads').add(fileData)
+    return this.dataService.addDocuments('uploads', [fileData]) // Use addDocuments method
       .then(() => {
         // console.log('File metadata saved successfully');
       })
@@ -65,14 +61,13 @@ export class UploadService {
       });
   }
 
-  private logDocumentActivity(fileName: string, action: string, userId: string): Promise<void> {
+  private logDocumentActivity(fileName: string, action: string): Promise<void> {
     const activityLog = {
       fileName: fileName,
       action: action,
-      userId: userId,
       timestamp: new Date()
     };
-    return this.firestore.collection('documentActivities').add(activityLog)
+    return this.dataService.addDocuments('documentActivities', [activityLog])
       .then(() => {
         // console.log('Document activity logged successfully');
       })

@@ -8,6 +8,9 @@ import { User } from '../Model/user';
   providedIn: 'root'
 })
 export class DataService {
+  uploadDocument(file: File) {
+    throw new Error('Method not implemented.');
+  }
 
    constructor(private afs : AngularFirestore,
     private auth: AngularFireAuth,
