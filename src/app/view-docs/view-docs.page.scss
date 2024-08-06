@@ -2,6 +2,7 @@ html, body {
     height: 100%;
     margin: 0;
     overflow: hidden;
+    font-family: Arial, sans-serif;
 }
 
 ion-toolbar {
@@ -9,6 +10,7 @@ ion-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 20px; /* Add padding for better spacing */
 }
 
 ion-buttons {
@@ -16,9 +18,7 @@ ion-buttons {
     align-items: center;
 }
 
-ion-button {
-    margin: 0 10px;
-}
+
 
 ion-title {
     padding: 10px 5px;
@@ -64,6 +64,7 @@ ion-title {
     align-items: center;
     justify-content: center;
     margin: 10px 20px;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .search-icon {
@@ -77,6 +78,7 @@ ion-title {
     border: 1px solid maroon;
     border-radius: 5px;
     margin-right: 10px;
+    max-width: 100%; /* Ensure it doesn't overflow */
 }
 
 .search-button {
@@ -261,6 +263,12 @@ ion-footer ion-title {
     .table-container {
         width: 100%;
     }
+
+    .slogan{
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
+    }
 }
 
 @media (max-width: 480px) {
@@ -279,5 +287,11 @@ ion-footer ion-title {
     th, td {
         font-size: 14px;
         padding: 8px;
+    }
+
+    .slogan{
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
     }
 }

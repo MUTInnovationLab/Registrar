@@ -75,14 +75,15 @@ ion-select {
   --padding-end: 8px;
 }
 .upload-icon {
-  font-size: 30px; /* Adjust the icon size as needed */
+  font-size: 35px; /* Adjust the icon size as needed */
   color: #812B29; /* Adjust the icon color to match your design */
-  margin-left: 10px; /* Add space between the icon and the label */
+  margin-left: 15px; /* Add space between the icon and the label */
 }
 .inline-container ion-icon,
 .inline-select ion-icon {
-  font-size: 35px; /* Adjust the icon size as needed */
-  color: #054C5B; /* Adjust the icon color to match your design */
+  margin-top: 0px;
+  font-size: 50px; /* Adjust the icon size as needed */
+  color: #812B29; /* Adjust the icon color to match your design */
   margin-right: 10px; /* Add space between the icon and the label */
 }
 

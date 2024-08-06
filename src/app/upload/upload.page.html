@@ -4,7 +4,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content [fullscreen]="true" class="ion-padding">
   <div class="centered-content">
     <div class="content-wrapper">
       <div class="diamond-container">
@@ -20,30 +20,54 @@
           <span class="uments">UMENTS</span>
         </ion-title>
       </div>
+      
       <ion-card class="rounded-card">
         <ion-item class="inline-container">
           <ion-icon name="calendar-outline" slot="start" class="icon"></ion-icon>
           <ion-label class="label" position="floating">Submission Date:</ion-label>
-          <ion-input placeholder="Enter date" [(ngModel)]="customDate" class="custom-input"></ion-input>
+          <ion-input 
+            type="date"
+            placeholder="Enter date" 
+            [(ngModel)]="customDate" 
+            class="custom-input"
+            aria-label="Submission Date"
+            required>
+          </ion-input>
         </ion-item>
         
         <ion-item class="inline-select">
           <ion-icon name="school-outline" slot="start" class="icon"></ion-icon>
           <ion-label class="label" position="floating">Module for moderation:</ion-label>
-          <ion-input placeholder="Enter module" [(ngModel)]="customModule" class="custom-input"></ion-input>
+          <ion-input 
+            type="text"
+            placeholder="Enter module" 
+            [(ngModel)]="customModule" 
+            class="custom-input"
+            aria-label="Module for moderation"
+            required>
+          </ion-input>
         </ion-item>
         
-        <div class="drop-zone" 
-     (dragover)="onDragOver($event)" 
-     (dragleave)="onDragLeave($event)" 
-     (drop)="onDrop($event)">
-  <p>Drag and drop files here or 
-    <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
-  </p>
-  <ion-button (click)="fileInput.click()">Choose Files</ion-button>
-  <input type="file" #fileInput style="display: none" (change)="onFileSelected($event)" multiple>
-</div>
-
+        <div 
+          class="drop-zone" 
+          (dragover)="onDragOver($event)" 
+          (dragleave)="onDragLeave($event)" 
+          (drop)="onDrop($event)"
+          tabindex="0"
+          role="button"
+          aria-label="Drag and drop files here or click to upload files">
+          <p>Drag and drop files here or 
+            <ion-icon name="cloud-upload-outline" class="upload-icon"></ion-icon>
+          </p>
+          <ion-button (click)="fileInput.click()">Choose Files</ion-button>
+          <input 
+            type="file" 
+            #fileInput 
+            style="display: none" 
+            (change)="onFileSelected($event)" 
+            multiple
+            aria-label="File input">
+        </div>
 
         <div *ngIf="selectedFileNames.length > 0" class="file-list">
           <p>Selected files:</p>
@@ -52,12 +76,13 @@
           </ul>
         </div>
 
-        <div *ngIf="showError" class="error-message">
+        <div *ngIf="showError" class="error-message" role="alert">
           {{ errorMessage }}
         </div>
       </ion-card>
+      
       <div class="submit-button">
-      <ion-button expand="block" (click)="submit()">Submit</ion-button>
+        <ion-button expand="block" (click)="submit()" aria-label="Submit files">Submit</ion-button>
       </div>
     </div>
   </div>
