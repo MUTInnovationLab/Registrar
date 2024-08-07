@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize, switchMap, take } from 'rxjs/operators';
 import { DataService } from './Shared/data.service';
@@ -14,7 +15,8 @@ export class UploadService {
     private firestore: AngularFirestore,
     private storage: AngularFireStorage,
     private dataService: DataService,
-    private authService: AuthService
+    private authService: AuthService,
+    private auth: AngularFireAuth
   ) {}
 
   uploadFile(file: File, date: string, module: string): Observable<void> {
@@ -57,7 +59,7 @@ export class UploadService {
       version: 1
     };
     return this.dataService.addDocuments('uploads', [fileData])
-      .then(() => this.logDocumentActivity(fileName, 'upload'))
+      .then(() => this.logDocumentActivity(fileName, 'uploads'))
       .catch(error => {
         throw error;
       });
