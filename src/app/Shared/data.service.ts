@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { User } from '../Model/user';
 
 @Injectable({
@@ -55,4 +55,33 @@ export class DataService {
     this.deleteStaff(user);
     this.addStaff(user);
   }
+  getAllUserStaffNumbers(): Observable<{staffNumber: string, role: any}[]> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        return {
+          staffNumber: data.staffNumber,
+          role: data.role
+        };
+      }))
+    );
+  }
+  
+
+  // Fetch all admin staff numbers
+  getAllAdminStaffNumbers(): Observable<string[]> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
+      map((actions: any[]) => actions.map((a: { payload: { doc: { data: () => { (): any; new(): any; staffNumber: any; }; }; }; }) => a.payload.doc.data().staffNumber))
+    );
+  }
+ // Fetch all documents
+ getAllDocuments(): Observable<any[]> {
+  return this.afs.collection('/uploads').snapshotChanges().pipe(
+    map(actions => actions.map(a => {
+      const data = a.payload.doc.data() as any; // Replace 'any' with your document type
+      const id = a.payload.doc.id;
+      return { id, ...data };
+    }))
+  );
+}
 }
