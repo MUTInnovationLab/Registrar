@@ -36,7 +36,6 @@ export class ApprovalPage implements OnInit {
   }
 
   loadItems() {
-    // Fetch data from DataService
     this.dataService.getAllDocuments().subscribe(data => {
       console.log('Documents fetched:', data);
       this.items = data;
@@ -52,9 +51,14 @@ export class ApprovalPage implements OnInit {
     );
   }
 
-  onStatusChange(item: DocumentItem) {
-    console.log('Status changed:', item);
-    this.showToast('Status updated');
+  async onStatusChange(item: DocumentItem) {
+    try {
+      await this.dataService.updateDocument(item.id!, { status: item.status, comment: item.comment });
+      this.showToast('Status updated successfully');
+    } catch (error) {
+      console.error('Error updating status:', error);
+      this.showToast('Error updating status');
+    }
   }
 
   goBack() {
@@ -71,22 +75,23 @@ export class ApprovalPage implements OnInit {
     this.showToast('Form reset successfully');
   }
 
-  saveChanges() {
-    // Filter out documents with undefined ids
-    const updatedDocuments = this.items
-      .filter(item => item.id) // Ensure id is defined
-      .map(item => ({
-        id: item.id!,
-        status: item.status,
-        comment: item.comment
-      }));
-  
-    this.dataService.updateDocuments(updatedDocuments).then(() => {
+  async saveChanges() {
+    try {
+      // Filter out documents with undefined ids
+      const updatedDocuments = this.items
+        .filter(item => item.id) // Ensure id is defined
+        .map(item => ({
+          id: item.id!,
+          status: item.status,
+          comment: item.comment
+        }));
+
+      await this.dataService.updateDocuments(updatedDocuments);
       this.showToast('Changes saved successfully');
-    }).catch(error => {
+    } catch (error) {
       console.error('Error saving changes: ', error);
       this.showToast('Error saving changes');
-    });
+    }
   }
 
   async showToast(message: string) {
