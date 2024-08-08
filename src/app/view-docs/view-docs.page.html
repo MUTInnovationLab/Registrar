@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="back-icon">Back
+      <ion-button class="back-icon" (click)="goBack()">Back
         <ion-icon slot="icon" name="arrow-back" class="back-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -17,8 +17,8 @@
   <ion-title>All Documents</ion-title>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input">
-    <ion-button class="search-button">Search</ion-button>
+    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" (input)="filterDocuments()">
+    <ion-button class="search-button" (click)="filterDocuments()">Search</ion-button>
   </div>
   <div class="view-docs-container">
     <div class="side-panel">
@@ -48,7 +48,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let doc of allDocuments; let i = index" [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" (click)="selectRow(doc)">
+            <tr *ngFor="let doc of filteredDocuments; let i = index" 
+                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+                (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
               <td>{{doc.name}}</td>
               <td>{{doc.status}}</td>
@@ -66,7 +68,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let doc of approvedDocuments; let i = index" [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" (click)="selectRow(doc)">
+            <tr *ngFor="let doc of approvedDocuments; let i = index" 
+                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+                (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
               <td>{{doc.name}}</td>
               <td>{{doc.status}}</td>
@@ -84,7 +88,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let doc of declinedDocuments; let i = index" [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" (click)="selectRow(doc)">
+            <tr *ngFor="let doc of declinedDocuments; let i = index" 
+                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+                (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
               <td>{{doc.name}}</td>
               <td>{{doc.status}}</td>
@@ -102,7 +108,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let doc of suspendedDocuments; let i = index" [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" (click)="selectRow(doc)">
+            <tr *ngFor="let doc of suspendedDocuments; let i = index" 
+                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+                (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
               <td>{{doc.name}}</td>
               <td>{{doc.status}}</td>

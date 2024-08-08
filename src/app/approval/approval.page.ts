@@ -48,7 +48,7 @@ export class ApprovalPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/previous-page']);  // Update this to your actual route
+    this.router.navigate(['/home']);  // Update this to your actual route
   }
 
   resetForm() {

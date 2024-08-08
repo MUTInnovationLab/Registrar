@@ -12,6 +12,7 @@ ion-content {
 ion-toolbar {
   display: flex;
   justify-content: center;
+  --background: white; /* Set toolbar background to white */
 }
 
 /* Style for the main title in the form */
@@ -86,6 +87,7 @@ td {
   border: 1px solid #ccc;
   padding: 6px; /* Reduced padding */
   text-align: center;
+  color: black; /* Set text color to black */
 }
 
 /* Alternating row colors */
@@ -109,6 +111,7 @@ tr:nth-child(odd) {
   height: 80px; /* Reduced height */
   resize: none;
   margin-top: 5px;
+  align-self: flex-start; /* Align the text area to the left */
 }
 
 /* Button group styling */
