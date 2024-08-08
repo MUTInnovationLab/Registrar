@@ -7,11 +7,22 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../Model/user';
 
+interface DocumentItem {
+  id?: string;
+  email: string;
+  documentName: string;
+  status: string;
+  comment: string;
+  uploadDate: string;
+  module: string;
+  url?: string;
+  uploadedAt?: Date;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
-
   constructor(
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
@@ -39,17 +50,47 @@ export class DataService {
         finalize(() => {
           fileRef.getDownloadURL().subscribe(url => {
             this.afs.collection('uploads').add({
-              fileName: file.name,
+              email: user.email,
+              documentName: file.name,
+              status: 'pending',
+              comment: '',
+              uploadDate: submissionDate,
+              module: module,
               url,
-              submissionDate,
-              module,
-              uploadedBy: user.email,
               uploadedAt: new Date()
             }).then(() => resolve()).catch(error => reject(error));
           }, error => reject(error));
         })
       ).subscribe();
     });
+  }
+
+  // Method to get all uploaded documents
+  getAllDocuments(): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('/uploads').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as DocumentItem;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  // Method to update a single document
+  updateDocument(documentId: string, data: Partial<DocumentItem>): Promise<void> {
+    return this.afs.collection('/uploads').doc(documentId).update(data);
+  }
+
+  // Method to batch update documents
+  updateDocuments(documents: { id: string; status: string; comment: string; }[]): Promise<void> {
+    const batch = this.afs.firestore.batch();
+    
+    documents.forEach(doc => {
+      const docRef = this.afs.collection('/uploads').doc(doc.id).ref;
+      batch.update(docRef, { status: doc.status, comment: doc.comment });
+    });
+    
+    return batch.commit();
   }
 
   addDocuments(collectionName: string, documents: any[]) {
@@ -105,16 +146,6 @@ export class DataService {
         return {
           staffNumber: data.staffNumber || ''
         };
-      }))
-    );
-  }
-
-  getAllDocuments(): Observable<any[]> {
-    return this.afs.collection('/uploads').snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as any; // Replace 'any' with your document type
-        const id = a.payload.doc.id;
-        return { id, ...data };
       }))
     );
   }

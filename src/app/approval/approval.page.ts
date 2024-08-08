@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataService } from '../Shared/data.service';
+import { ToastController } from '@ionic/angular';
 
 interface DocumentItem {
+  id?: string;
   email: string;
   documentName: string;
   status: string;
   comment: string;
+  uploadDate: string;
+  module: string;
+  url?: string;
+  uploadedAt?: Date;
 }
 
 @Component({
@@ -15,24 +22,25 @@ interface DocumentItem {
 })
 export class ApprovalPage implements OnInit {
   searchQuery: string = '';
-  items: DocumentItem[] = [
-    { email: 'user1@example.com', documentName: 'Document 1', status: '', comment: '' },
-    { email: 'user2@example.com', documentName: 'Document 2', status: '', comment: '' },
-    { email: 'user3@example.com', documentName: 'Document 3', status: '', comment: '' },
-    { email: 'user4@example.com', documentName: 'Document 4', status: '', comment: '' },
-    { email: 'user5@example.com', documentName: 'Document 5', status: '', comment: '' },
-    { email: 'user6@example.com', documentName: 'Document 6', status: '', comment: '' },
-    { email: 'user7@example.com', documentName: 'Document 7', status: '', comment: '' },
-    { email: 'user8@example.com', documentName: 'Document 8', status: '', comment: '' },
-    { email: 'user9@example.com', documentName: 'Document 9', status: '', comment: '' },
-    { email: 'user10@example.com', documentName: 'Document 10', status: '', comment: '' },
-  ];
-  filteredItems: DocumentItem[] = this.items;
+  items: DocumentItem[] = [];
+  filteredItems: DocumentItem[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router, 
+    private dataService: DataService, 
+    private toastCtrl: ToastController
+  ) { }
 
   ngOnInit(): void {
-    // Initialize any required data or services here
+    this.loadItems();
+  }
+
+  loadItems() {
+    // Fetch data from DataService
+    this.dataService.getAllDocuments().subscribe(data => {
+      this.items = data;
+      this.filteredItems = data;
+    });
   }
 
   filterItems(event: any) {
@@ -45,10 +53,11 @@ export class ApprovalPage implements OnInit {
 
   onStatusChange(item: DocumentItem) {
     console.log('Status changed:', item);
+    this.showToast('Status updated');
   }
 
   goBack() {
-    this.router.navigate(['/home']);  // Update this to your actual route
+    this.router.navigate(['/home']);
   }
 
   resetForm() {
@@ -58,10 +67,33 @@ export class ApprovalPage implements OnInit {
       comment: ''
     }));
     this.filteredItems = [...this.items];
+    this.showToast('Form reset successfully');
   }
 
   saveChanges() {
-    // Handle save operation here
-    console.log('Changes saved:', this.items);
+    // Filter out documents with undefined ids
+    const updatedDocuments = this.items
+      .filter(item => item.id) // Ensure id is defined
+      .map(item => ({
+        id: item.id!,
+        status: item.status,
+        comment: item.comment
+      }));
+  
+    this.dataService.updateDocuments(updatedDocuments).then(() => {
+      this.showToast('Changes saved successfully');
+    }).catch(error => {
+      console.error('Error saving changes: ', error);
+      this.showToast('Error saving changes');
+    });
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      position: 'top'
+    });
+    toast.present();
   }
 }
