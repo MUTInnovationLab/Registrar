@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-view-docs',
@@ -21,7 +23,10 @@ export class ViewDocsPage implements OnInit {
   
   searchTerm: string = ''; // For search input
 
-  constructor(private dataService: DataService) { }
+  constructor(
+    private router: Router, 
+    private dataService: DataService
+  ) { }
 
   ngOnInit() {
     this.loadDocuments();
@@ -48,11 +53,12 @@ export class ViewDocsPage implements OnInit {
 
   filterDocuments() {
     this.filteredDocuments = this.documents.filter(doc => 
-      doc.name.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
-      doc.email.toLowerCase().includes(this.searchTerm.toLowerCase())
+      (doc.documentName?.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
+       doc.email?.toLowerCase().includes(this.searchTerm.toLowerCase()))
     );
     this.updateCounts(); // Update the counts if necessary
   }
+  
 
   showDocuments(tab: string) {
     this.activeTab = tab;
@@ -69,5 +75,6 @@ export class ViewDocsPage implements OnInit {
   }
 
   goBack() {
+    this.router.navigate(['/home']);
   }
 }
