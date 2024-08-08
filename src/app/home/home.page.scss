@@ -1,27 +1,69 @@
-#container {
-  text-align: center;
 
+.main-card{
+  background-color: #054c5b;
+  width: 850px;
+  margin: auto;
+}
+
+.profile-card{
+
+  z-index: 20;
   position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  top: 60px;
+  right: 10px;
+  color: white;
+  height: 350px;
+  width: 225px;
+  background: #054c5b;
+  border-radius: 10px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.3s, box-shadow 0.3s; 
+  
+  &:hover {
+    transform: translateY(-20px); 
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+.dashboard-content {
+  --background: #053a44;
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
-  margin: 0;
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px; 
+  padding: 16px;
 }
 
-#container a {
-  text-decoration: none;
+.dashboard-card {
+  color: white;
+  height: 150px;
+  background: #562520;
+  border-radius: 10px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+  transition: transform 0.3s, box-shadow 0.3s; 
+  
+  &:hover {
+    transform: translateY(-20px); 
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
+  }
+}
+
+ion-card-header {
+  background: white; 
+  color: #054c5b; 
+  border-top-left-radius: 10px; 
+  border-top-right-radius: 10px; 
+}
+
+ion-card-title {
+  font-size: 1.2rem; 
+  font-weight: bold; 
+}
+
+ion-card-content {
+  font-size: 0.9rem; 
+  color: #555; 
+  
 }

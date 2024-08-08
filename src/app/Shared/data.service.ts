@@ -8,6 +8,9 @@ import { User } from '../Model/user';
   providedIn: 'root'
 })
 export class DataService {
+  uploadDocument(file: File, customDate: string, customModule: string) {
+    throw new Error('Method not implemented.');
+  }
 
    constructor(private afs : AngularFirestore,
     private auth: AngularFireAuth,
@@ -41,10 +44,7 @@ export class DataService {
     return this.afs.collection('/registeredStaff').add(user);
   }
 
-  getAllStaff() {
-    return this.afs.collection('/registeredStaff').snapshotChanges();
-  }
-
+  
   // delete student
   deleteStaff(user : User) {
      this.afs.doc('/registeredStaff/'+user.id).delete();
@@ -55,33 +55,39 @@ export class DataService {
     this.deleteStaff(user);
     this.addStaff(user);
   }
-  getAllUserStaffNumbers(): Observable<{staffNumber: string, role: any}[]> {
+  
+  getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         return {
-          staffNumber: data.staffNumber,
-          role: data.role
+          staffNumber: data.staffNumber || '', // Ensure fallback if not found
+          role: data.role || '' // Ensure fallback if not found
         };
       }))
     );
   }
-  
 
   // Fetch all admin staff numbers
-  getAllAdminStaffNumbers(): Observable<string[]> {
+  getAllAdminStaffNumbers(): Observable<{ staffNumber: string }[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
-      map((actions: any[]) => actions.map((a: { payload: { doc: { data: () => { (): any; new(): any; staffNumber: any; }; }; }; }) => a.payload.doc.data().staffNumber))
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        return {
+          staffNumber: data.staffNumber || '' // Ensure fallback if not found
+        };
+      }))
     );
   }
- // Fetch all documents
- getAllDocuments(): Observable<any[]> {
-  return this.afs.collection('/uploads').snapshotChanges().pipe(
-    map(actions => actions.map(a => {
-      const data = a.payload.doc.data() as any; // Replace 'any' with your document type
-      const id = a.payload.doc.id;
-      return { id, ...data };
-    }))
-  );
-}
+
+  // Fetch all documents
+  getAllDocuments(): Observable<any[]> {
+    return this.afs.collection('/uploads').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any; // Replace 'any' with your document type
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
 }

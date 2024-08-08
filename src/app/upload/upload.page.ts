@@ -1,6 +1,6 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { UploadService } from 'src/app/upload.service';
-import { AlertController, ToastController } from '@ionic/angular';
+/*import { Component } from '@angular/core';
+import { DataService } from '../Shared/data.service';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-upload',
@@ -8,91 +8,148 @@ import { AlertController, ToastController } from '@ionic/angular';
   styleUrls: ['./upload.page.scss'],
 })
 export class UploadPage {
+  selectedFiles: FileList | null = null; // Initialize with null
   customDate: string = '';
   customModule: string = '';
   selectedFileNames: string[] = [];
-  showError: boolean = false;
+  showError = false;
   errorMessage: string = '';
 
-  @ViewChild('fileInput') fileInput!: ElementRef;
+  constructor(private dataService: DataService, private toastController: ToastController) {}
 
-  constructor(
-    private uploadService: UploadService,
-    private alertController: AlertController,
-    private toastController: ToastController
-  ) {}
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input && input.files) {
-      this.selectedFileNames = [];
-      for (let i = 0; i < input.files.length; i++) {
-        this.selectedFileNames.push(input.files[i].name);
-      }
-    }
+  onFileSelected(event: any): void {
+    this.selectedFiles = event.target.files;
+    this.selectedFileNames = this.selectedFiles ? Array.from(this.selectedFiles).map(file => file.name) : [];
   }
 
-  onDragOver(event: DragEvent) {
+  onDragOver(event: any): void {
     event.preventDefault();
-    event.stopPropagation();
-    // Add any visual feedback for the drag over event here
   }
 
-  onDragLeave(event: DragEvent) {
+  onDragLeave(event: any): void {
     event.preventDefault();
-    event.stopPropagation();
-    // Add any visual feedback for the drag leave event here
   }
 
-  onDrop(event: DragEvent) {
+  onDrop(event: any): void {
     event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer?.files;
-    if (files) {
-      this.selectedFileNames = [];
-      for (let i = 0; i < files.length; i++) {
-        this.selectedFileNames.push(files[i].name);
-      }
-      const input = this.fileInput.nativeElement as HTMLInputElement;
-      input.files = files;
-    }
+    this.selectedFiles = event.dataTransfer.files;
+    this.selectedFileNames = this.selectedFiles ? Array.from(this.selectedFiles).map(file => file.name) : [];
   }
 
-  async submit() {
-    const input = this.fileInput.nativeElement as HTMLInputElement;
-    if (input && input.files && this.customDate && this.customModule) {
-      for (let i = 0; i < input.files.length; i++) {
-        await this.uploadService.uploadFile(input.files[i], this.customDate, this.customModule);
-      }
-      this.showError = false;
-      this.errorMessage = '';
-      this.clearFields(); // Clear input fields and file input
-      this.showSuccessToast(); // Show success toast on successful upload
-    } else {
+  async submit(): Promise<void> {
+    if (!this.selectedFiles || !this.customDate || !this.customModule) {
       this.showError = true;
-      this.errorMessage = 'Please fill in all fields and select at least one file.';
+      this.errorMessage = 'Please fill all fields and select files to upload.';
+      return;
     }
+
+    this.showError = false;
+
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      const file = this.selectedFiles[i];
+      try {
+        await this.dataService.uploadDocument(file, this.customDate, this.customModule);
+      } catch (error) {
+        this.showError = true;
+        this.errorMessage = `Error uploading file: ${file.name}`;
+        return;
+      }
+    }
+
+    // Show success toast message
+    this.showToast('Files uploaded successfully');
+
+    // Clear selections after upload
+    this.selectedFiles = null;
+    this.selectedFileNames = [];
+    this.customDate = '';
+    this.customModule = '';
   }
 
-  private async showSuccessToast() {
+  async showToast(message: string) {
     const toast = await this.toastController.create({
-      message: 'Files uploaded successfully!',
+      message: message,
       duration: 2000,
-      position: 'middle',
+      position: 'bottom'
     });
     toast.present();
   }
+}
+*/
+import { Component } from '@angular/core';
+import { DataService } from '../Shared/data.service';
+import { ToastController } from '@ionic/angular';
 
-  private clearFields() {
-    // Clear input fields
+@Component({
+  selector: 'app-upload',
+  templateUrl: './upload.page.html',
+  styleUrls: ['./upload.page.scss'],
+})
+export class UploadPage {
+  selectedFiles: FileList | null = null;
+  customDate: string = '';
+  customModule: string = '';
+  selectedFileNames: string[] = [];
+  showError = false;
+  errorMessage: string = '';
+
+  constructor(private dataService: DataService, private toastController: ToastController) {}
+
+  onFileSelected(event: any): void {
+    this.selectedFiles = event.target.files;
+    this.selectedFileNames = this.selectedFiles ? Array.from(this.selectedFiles).map(file => file.name) : [];
+  }
+
+  onDragOver(event: any): void {
+    event.preventDefault();
+  }
+
+  onDragLeave(event: any): void {
+    event.preventDefault();
+  }
+
+  onDrop(event: any): void {
+    event.preventDefault();
+    this.selectedFiles = event.dataTransfer.files;
+    this.selectedFileNames = this.selectedFiles ? Array.from(this.selectedFiles).map(file => file.name) : [];
+  }
+
+  async submit(): Promise<void> {
+    if (!this.selectedFiles || !this.customDate || !this.customModule) {
+      this.showError = true;
+      this.errorMessage = 'Please fill all fields and select files to upload.';
+      return;
+    }
+
+    this.showError = false;
+
+    for (let i = 0; i < this.selectedFiles.length; i++) {
+      const file = this.selectedFiles[i];
+      try {
+        await this.dataService.uploadDocument(file, this.customDate, this.customModule);
+      } catch (error) {
+        this.showError = true;
+        this.errorMessage = `Error uploading file: ${file.name}`;
+        return;
+      }
+    }
+
+    // Show success toast message
+    this.showToast('Files uploaded successfully');
+
+    // Clear selections after upload
+    this.selectedFiles = null;
+    this.selectedFileNames = [];
     this.customDate = '';
     this.customModule = '';
-    
-    // Clear file input
-    const input = this.fileInput.nativeElement as HTMLInputElement;
-    input.value = '';
-    
-    // Clear selected file names
-    this.selectedFileNames = [];
+  }
+
+  async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 2000,
+      position: 'bottom'
+    });
+    toast.present();
   }
 }

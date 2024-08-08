@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToastController, LoadingController } from '@ionic/angular';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,11 @@ export class AuthService {
     private load: LoadingController) { }
     
   
-  
+    isAuthenticated(): Observable<boolean> {
+      return this.fauth.authState.pipe(
+        map(user => !!user)
+      );
+    }
     
   
     async registerUser(email:string, password:string){

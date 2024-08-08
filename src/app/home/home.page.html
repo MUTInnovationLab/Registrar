@@ -1,20 +1,88 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+  <ion-toolbar >
+    <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="dashboard-content">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-card class="main-card">
+    <div class="dashboard-grid">
+      <ion-card class="dashboard-card" routerLink="/all-users">
+        <ion-card-header>
+          <ion-card-title>All Users</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="people-circle"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/approval">
+        <ion-card-header>
+          <ion-card-title>Approval</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="checkmark-done-circle"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/assign">
+        <ion-card-header>
+          <ion-card-title>Assign</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="person-add"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/dashboard">
+        <ion-card-header>
+          <ion-card-title>Home</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="home"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/rejection">
+        <ion-card-header>
+          <ion-card-title>Rejection</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/upload">
+        <ion-card-header>
+          <ion-card-title>Upload</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="cloud-upload"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+  
+      <ion-card class="dashboard-card" routerLink="/view-docs">
+        <ion-card-header>
+          <ion-card-title>View Documents</ion-card-title>
+        </ion-card-header>
+        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
+          <ion-icon name="document"></ion-icon>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </ion-card>
+
+  <ion-card class="profile-card" routerLink="/view-docs">
+    <ion-card-header>
+      <ion-card-title>Profile Management</ion-card-title>
+    </ion-card-header>
+    <ion-card-content style="color: white;">
+     <ion-icon name="person-circle"></ion-icon>Name:  Wandile Khumalo <br>
+    <ion-icon name="mail"></ion-icon>  Email: generalwandile41&#64; <br>
+      <ion-icon name="person-add"></ion-icon>Role:  Admin <br>
+      <ion-icon name="calendar-number"></ion-icon>Login Count:  5 <br>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>
