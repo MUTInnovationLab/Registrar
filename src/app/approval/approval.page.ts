@@ -38,8 +38,9 @@ export class ApprovalPage implements OnInit {
   loadItems() {
     // Fetch data from DataService
     this.dataService.getAllDocuments().subscribe(data => {
+      console.log('Documents fetched:', data);
       this.items = data;
-      this.filteredItems = data;
+      this.filteredItems = data; // Initialize filteredItems with all documents
     });
   }
 

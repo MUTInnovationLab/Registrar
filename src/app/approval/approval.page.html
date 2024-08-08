@@ -19,11 +19,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" class="search-container">
-          <ion-searchbar 
-            [(ngModel)]="searchQuery" 
-            (ionInput)="filterItems($event)" 
-            placeholder="Search...">
-          </ion-searchbar>
+          <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -38,7 +34,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of filteredItems; let i = index" [ngClass]="{'striped-row': i % 2 === 0}">
+              <tr *ngFor="let item of filteredItems">
                 <td>{{ item.email }}</td>
                 <td>{{ item.documentName }}</td>
                 <td>

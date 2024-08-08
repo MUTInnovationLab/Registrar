@@ -35,39 +35,40 @@ export class DataService {
   }
 
   // Method to upload a document
-  async uploadDocument(file: File, submissionDate: string, module: string): Promise<void> {
-    const user = await this.auth.currentUser;
-    if (!user) {
-      throw new Error('User not authenticated');
-    }
-
-    const filePath = `uploads/${submissionDate}/${module}/${file.name}`;
-    const fileRef = this.storage.ref(filePath);
-    const task = this.storage.upload(filePath, file);
-
-    return new Promise<void>((resolve, reject) => {
-      task.snapshotChanges().pipe(
+  uploadDocument(file: File, date: string, module: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const filePath = `uploads/${file.name}`;
+      const fileRef = this.storage.ref(filePath);
+      const uploadTask = fileRef.put(file);
+  
+      uploadTask.snapshotChanges().pipe(
         finalize(() => {
           fileRef.getDownloadURL().subscribe(url => {
+            // Save document info to Firestore
             this.afs.collection('uploads').add({
-              email: user.email,
+              email: 'user@example.com', // Example; replace with actual data
               documentName: file.name,
               status: 'pending',
               comment: '',
-              uploadDate: submissionDate,
+              uploadDate: date,
               module: module,
-              url,
+              url: url,
               uploadedAt: new Date()
-            }).then(() => resolve()).catch(error => reject(error));
-          }, error => reject(error));
+            }).then(() => resolve())
+              .catch(err => reject(new Error(`Failed to save document info: ${err.message}`)));
+          });
         })
-      ).subscribe();
+      ).subscribe({
+        error: (err) => reject(new Error(`Failed to upload file: ${(err as any).message || err}`))
+      });
     });
   }
+  
+  
 
   // Method to get all uploaded documents
   getAllDocuments(): Observable<DocumentItem[]> {
-    return this.afs.collection<DocumentItem>('/uploads').snapshotChanges().pipe(
+    return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as DocumentItem;
         const id = a.payload.doc.id;

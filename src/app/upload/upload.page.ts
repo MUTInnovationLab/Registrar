@@ -42,9 +42,9 @@ export class UploadPage {
       this.errorMessage = 'Please fill all fields and select files to upload.';
       return;
     }
-
+  
     this.showError = false;
-
+  
     // Prepare and upload files
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i];
@@ -52,20 +52,22 @@ export class UploadPage {
         await this.dataService.uploadDocument(file, this.customDate, this.customModule);
       } catch (error) {
         this.showError = true;
-        this.errorMessage = `Error uploading file: ${file.name}`;
+        // Cast the error to 'any' to access its properties
+        this.errorMessage = `Error uploading file "${file.name}": ${(error as any).message || error}`;
         return;
       }
     }
-
+  
     // Show success toast message
     this.showToast('Files uploaded successfully');
-
+  
     // Clear selections after upload
     this.selectedFiles = null;
     this.selectedFileNames = [];
     this.customDate = '';
     this.customModule = '';
   }
+  
 
   async showToast(message: string) {
     const toast = await this.toastController.create({
