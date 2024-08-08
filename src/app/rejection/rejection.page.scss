@@ -1,37 +1,53 @@
+/* General Background Color for ion-content */
 ion-content {
-    --ion-background-color:#054c5b;
+    --ion-background-color: #054c5b;
   }
   
+  /* Center the form title */
   .form-title {
-    text-align: center; /* Center the title */
-    margin: 20px auto; /* Space above and below the title */
-    color: rgb(238, 231, 231); /* Title color */
-    font-size: 24px; /* Adjust font size as needed */
+    text-align: center;
+    margin: 20px auto;
+    color: rgb(238, 231, 231);
+    font-size: 24px;
   }
   
+  /* Style for the form container */
   .form-container {
     background: white;
     border: 2px solid white;
     border-radius: 10px;
     padding: 20px;
-    margin: 0 auto; 
-    width: 80%; 
-    max-width: 500px; /* Ensure it doesn't get too large on wide screens */
+    margin: 0 auto;
+    width: 80%;
+    max-width: 500px;
   }
   
-  ion-item {
-    --background: transparent;
-    --border-color: #ccc;
+  /* Container for label and input */
+  .label-input-container {
+    display: flex;
+    align-items: center; /* Align items vertically in the center */
+    margin-bottom: 20px; /* Space between form fields */
   }
   
-  ion-label {
+  /* Style for form labels */
+  .form-label {
     color: black;
+    margin-right: 10px; /* Space between label and input */
+    width: 80px; /* Fixed width for label */
   }
   
-  ion-input,
-  ion-textarea {
-    color: black;
+  /* Style for text input and textarea */
+  .text-input {
+    flex: 1; /* Allow the input to grow within the container */
+    text-align: left; /* Align text to the right */
+    border: 1px solid #ccc; /* Add border to make input visible */
+    padding: 10px; /* Add padding for better visibility */
+    border-radius: 5px; /* Rounded corners for input */
+    background-color: white; /* White background for input */
+    color: black; /* Black text color */
   }
+  
+  /* Diamond container styling */
   .diamond-container {
     display: flex;
     justify-content: center;
@@ -62,5 +78,4 @@ ion-content {
   .yellow-diamond {
     background-color: #C99115;
   }
-  
   
