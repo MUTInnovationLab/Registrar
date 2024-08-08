@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="back-button" (click)="goBack()">Back</ion-button>
@@ -62,4 +62,72 @@
       </div>
     </ion-grid>
   </div>
+</ion-content> -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="form-title">Document Evaluation</div> 
+
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
+
+  <div class="form-container">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="search-container">
+          <!-- Search bar for filtering documents -->
+          <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12" class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Document Name</th>
+                <th>Status</th>
+                <th>Comment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of filteredItems">
+                <td>{{ item.email }}</td>
+                <td>{{ item.documentName }}</td>
+                <td>
+                  <ion-select [(ngModel)]="item.status" (ionChange)="onStatusChange(item)">
+                    <ion-select-option value="approved">Approved</ion-select-option>
+                    <ion-select-option value="declined">Declined</ion-select-option>
+                    <ion-select-option value="suspended">Suspended</ion-select-option>
+                  </ion-select>
+                </td>
+                <td>
+                  <ion-input [(ngModel)]="item.comment" placeholder="Add comment" class="comment-input"></ion-input>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </ion-col>
+      </ion-row>
+      <div class="sticky-footer">
+        <ion-row>
+          <ion-col size="12" class="button-group">
+            <ion-button class="reset-button" (click)="resetForm()">Reset</ion-button>
+            <ion-button class="save-button" (click)="saveChanges()">Save</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </ion-grid>
+  </div>
 </ion-content>
+

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-view-docs',
   templateUrl: './view-docs.page.html',
@@ -15,27 +14,32 @@ export class ViewDocsPage implements OnInit {
   approvedDocuments: any[] = [];
   declinedDocuments: any[] = [];
   suspendedDocuments: any[] = [];
-  
+
   allCount = 0;
   approvedCount = 0;
   declinedCount = 0;
   suspendedCount = 0;
-  
+
   searchTerm: string = ''; // For search input
 
   constructor(
     private router: Router, 
     private dataService: DataService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadDocuments();
   }
 
   loadDocuments() {
+    this.documents = this.dataService.getSharedDocuments(); // Get documents from the shared array
+    this.filteredDocuments = [...this.documents]; // Initially, all documents are filtered
+    this.updateCounts();
+
+    // Subscribe to changes in Firestore to keep the array updated
     this.dataService.getAllDocuments().subscribe(docs => {
       this.documents = docs;
-      this.filteredDocuments = this.documents; // Initially, all documents are filtered
+      this.filteredDocuments = this.documents;
       this.updateCounts();
     });
   }
@@ -58,7 +62,6 @@ export class ViewDocsPage implements OnInit {
     );
     this.updateCounts(); // Update the counts if necessary
   }
-  
 
   showDocuments(tab: string) {
     this.activeTab = tab;

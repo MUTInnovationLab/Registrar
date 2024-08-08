@@ -29,18 +29,22 @@ export class ApprovalPage implements OnInit {
     private router: Router, 
     private dataService: DataService, 
     private toastCtrl: ToastController
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.loadItems();
   }
 
   loadItems() {
+    this.items = this.dataService.getSharedDocuments(); // Get documents from the shared array
+    this.filteredItems = [...this.items]; // Initialize filteredItems with all documents
+
+    // Subscribe to changes in Firestore to keep the array updated
     this.dataService.getAllDocuments().subscribe(
       data => {
         console.log('Documents fetched:', data);
         this.items = data;
-        this.filteredItems = data; // Initialize filteredItems with all documents
+        this.filteredItems = data; // Update filteredItems with new documents
       },
       error => {
         console.error('Error fetching documents:', error);
@@ -48,20 +52,25 @@ export class ApprovalPage implements OnInit {
       }
     );
   }
-  
 
   filterItems(event: any) {
     const query = event.target.value.toLowerCase();
     this.filteredItems = this.items.filter(item => 
       item.email.toLowerCase().includes(query) ||
-      item.documentName.toLowerCase().includes(query)
+      item.documentName.toLowerCase().includes(query) ||
+      item.status.toLowerCase().includes(query) ||
+      item.comment.toLowerCase().includes(query)
     );
   }
 
   async onStatusChange(item: DocumentItem) {
     try {
-      await this.dataService.updateDocument(item.id!, { status: item.status, comment: item.comment });
-      this.showToast('Status updated successfully');
+      if (item.id) {
+        await this.dataService.updateDocument(item.id, { status: item.status, comment: item.comment });
+        this.showToast('Status updated successfully');
+      } else {
+        this.showToast('Document ID is missing');
+      }
     } catch (error) {
       console.error('Error updating status:', error);
       this.showToast('Error updating status');
@@ -81,13 +90,12 @@ export class ApprovalPage implements OnInit {
     this.filteredItems = [...this.items];
     this.showToast('Form reset successfully');
   }
-  
 
   async saveChanges() {
     try {
-      // Filter out documents with undefined ids
+      // Ensure id is defined before including the document for update
       const updatedDocuments = this.items
-        .filter(item => item.id) // Ensure id is defined
+        .filter(item => item.id) // Include only documents with ids
         .map(item => ({
           id: item.id!,
           email: item.email,

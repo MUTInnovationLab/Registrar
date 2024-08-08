@@ -23,6 +23,8 @@ interface DocumentItem {
   providedIn: 'root'
 })
 export class DataService {
+  private allDocuments: DocumentItem[] = []; // Shared array to store all documents
+
   constructor(
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
@@ -72,15 +74,28 @@ export class DataService {
     }
   }
 
-  // Method to get all uploaded documents
+  // Method to get all uploaded documents and update the shared array
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as DocumentItem;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
+      map(actions => {
+        this.allDocuments = actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+        return this.allDocuments;
+      })
     );
+  }
+
+  // Method to get documents from the shared array
+  getSharedDocuments(): DocumentItem[] {
+    return this.allDocuments;
+  }
+
+  // Method to set documents to the shared array (if needed)
+  setSharedDocuments(documents: DocumentItem[]): void {
+    this.allDocuments = documents;
   }
 
   // Method to update a single document
@@ -91,12 +106,12 @@ export class DataService {
   // Method to batch update documents
   updateDocuments(documents: { id: string; status: string; comment: string; }[]): Promise<void> {
     const batch = this.afs.firestore.batch();
-    
+
     documents.forEach(doc => {
       const docRef = this.afs.collection('/uploads').doc(doc.id).ref;
       batch.update(docRef, { status: doc.status, comment: doc.comment });
     });
-    
+
     return batch.commit();
   }
 
@@ -177,22 +192,20 @@ export class DataService {
   }
 
   // Method to delete document by name
- // Method to delete document by name
-deleteDocumentByName(documentName: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
-      if (snapshot.empty) {
-        resolve(); // Resolve immediately if no documents found
-        return;
-      }
+  deleteDocumentByName(documentName: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
+        if (snapshot.empty) {
+          resolve(); // Resolve immediately if no documents found
+          return;
+        }
 
-      const batch = this.afs.firestore.batch();
-      snapshot.docs.forEach(doc => batch.delete(doc.ref));
+        const batch = this.afs.firestore.batch();
+        snapshot.docs.forEach(doc => batch.delete(doc.ref));
 
-      batch.commit().then(() => resolve())
-        .catch(error => reject(error));
+        batch.commit().then(() => resolve())
+          .catch(error => reject(error));
+      });
     });
-  });
-}
-
+  }
 }
