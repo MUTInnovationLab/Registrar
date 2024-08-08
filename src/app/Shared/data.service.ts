@@ -176,7 +176,8 @@ export class DataService {
     );
   }
 
-// Method to delete document by name
+  // Method to delete document by name
+ // Method to delete document by name
 deleteDocumentByName(documentName: string): Promise<void> {
   return new Promise((resolve, reject) => {
     this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
