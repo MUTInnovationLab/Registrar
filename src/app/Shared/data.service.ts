@@ -44,7 +44,10 @@ export class DataService {
     return this.afs.collection('/registeredStaff').add(user);
   }
 
-  
+  getAllStaff() {
+    return this.afs.collection('/registeredStaff').snapshotChanges();
+  }
+
   // delete student
   deleteStaff(user : User) {
      this.afs.doc('/registeredStaff/'+user.id).delete();
@@ -55,39 +58,33 @@ export class DataService {
     this.deleteStaff(user);
     this.addStaff(user);
   }
-  
-  getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
+  getAllUserStaffNumbers(): Observable<{ staffNumber: string, role: any }[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         return {
-          staffNumber: data.staffNumber || '', // Ensure fallback if not found
-          role: data.role || '' // Ensure fallback if not found
+          staffNumber: data.staffNumber,
+          role: data.role
         };
       }))
     );
   }
+  
 
   // Fetch all admin staff numbers
-  getAllAdminStaffNumbers(): Observable<{ staffNumber: string }[]> {
+  getAllAdminStaffNumbers(): Observable<string[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as User;
-        return {
-          staffNumber: data.staffNumber || '' // Ensure fallback if not found
-        };
-      }))
+      map((actions: any[]) => actions.map((a: { payload: { doc: { data: () => { (): any; new(): any; staffNumber: any; }; }; }; }) => a.payload.doc.data().staffNumber))
     );
   }
-
-  // Fetch all documents
-  getAllDocuments(): Observable<any[]> {
-    return this.afs.collection('/uploads').snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as any; // Replace 'any' with your document type
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    );
-  }
+ // Fetch all documents
+ getAllDocuments(): Observable<any[]> {
+  return this.afs.collection('/uploads').snapshotChanges().pipe(
+    map(actions => actions.map(a => {
+      const data = a.payload.doc.data() as any; // Replace 'any' with your document type
+      const id = a.payload.doc.id;
+      return { id, ...data };
+    }))
+  );
+}
 }
