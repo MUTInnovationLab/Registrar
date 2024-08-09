@@ -30,8 +30,7 @@ export class AllUsersPage implements OnInit {
       });
     });
   }
-
   goBack() {
-    this.router.navigate(['/home']);  // Update this to your actual route
+    this.router.navigate(['/home']);
   }
 }
