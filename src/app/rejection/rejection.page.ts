@@ -2,11 +2,25 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/Shared/data.service'; // Adjust the path as needed
 import { DocumentItem } from 'src/app/Model/document-item'; // Adjust the path as needed
 import { Router } from '@angular/router';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
 
 @Component({
   selector: 'app-rejection',
   templateUrl: './rejection.page.html',
   styleUrls: ['./rejection.page.scss'],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({ transform: 'translateY(0)' })),
+      state('out', style({ transform: 'translateY(100%)' })),
+      transition('in => out', [
+        animate('0.3s ease-in-out')
+      ]),
+      transition('out => in', [
+        animate('0.3s ease-in-out')
+      ])
+    ])
+  ]
 })
 export class RejectionPage implements OnInit {
   declinedDocuments: DocumentItem[] = [];
@@ -21,12 +35,17 @@ export class RejectionPage implements OnInit {
     this.loadDeclinedDocuments();
   }
 
+  // Method to toggle the details view
+  toggleDetails(doc: DocumentItem) {
+    doc.showDetails = !doc.showDetails;
+  }
+
   loadDeclinedDocuments() {
     this.declinedDocuments = this.dataService.getDeclinedDocuments();
     this.checkForDocuments();
   }
 
-  getDocumentsToDisplay() {
+  getDocumentsToDisplay()  {
     return this.declinedDocuments;
   }
 
