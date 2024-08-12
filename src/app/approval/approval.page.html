@@ -3,14 +3,12 @@
     <ion-buttons slot="start">
       <ion-button class="back-button" (click)="goBack()">Back</ion-button>
     </ion-buttons>
-    <ion-title class="center-title"></ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="form-title">Document Evaluation</div> <!-- Title outside the form container -->
-  
-  <!-- Container for diamonds -->
+  <div class="form-title">Document Evaluation</div> 
+
   <div class="diamond-container">
     <div class="diamond white-diamond"></div>
     <div class="diamond maroon-diamond"></div>
@@ -21,11 +19,8 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" class="search-container">
-          <ion-searchbar 
-            [(ngModel)]="searchQuery" 
-            (ionInput)="filterItems($event)" 
-            placeholder="Search...">
-          </ion-searchbar>
+          <!-- Search bar for filtering documents -->
+          <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
         </ion-col>
       </ion-row>
       <ion-row>
@@ -40,7 +35,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of filteredItems; let i = index" [ngClass]="{'striped-row': i % 2 === 0}">
+              <tr *ngFor="let item of filteredItems">
                 <td>{{ item.email }}</td>
                 <td>{{ item.documentName }}</td>
                 <td>
@@ -58,7 +53,7 @@
           </table>
         </ion-col>
       </ion-row>
-      <div style="background-color: white; position: sticky; z-index: 0;">
+      <div class="sticky-footer">
         <ion-row>
           <ion-col size="12" class="button-group">
             <ion-button class="reset-button" (click)="resetForm()">Reset</ion-button>
@@ -69,3 +64,4 @@
     </ion-grid>
   </div>
 </ion-content>
+

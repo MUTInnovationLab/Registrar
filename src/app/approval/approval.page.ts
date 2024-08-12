@@ -1,11 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DataService } from '../Shared/data.service';
+import { ToastController } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AlertController, LoadingController, NavController } from '@ionic/angular';
+import { AuthService } from '../Shared/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface DocumentItem {
+  id?: string;
   email: string;
   documentName: string;
   status: string;
   comment: string;
+  uploadDate: string;
+  module: string;
+  url?: string;
+  uploadedAt?: Date;
 }
 
 @Component({
@@ -15,40 +27,69 @@ interface DocumentItem {
 })
 export class ApprovalPage implements OnInit {
   searchQuery: string = '';
-  items: DocumentItem[] = [
-    { email: 'user1@example.com', documentName: 'Document 1', status: '', comment: '' },
-    { email: 'user2@example.com', documentName: 'Document 2', status: '', comment: '' },
-    { email: 'user3@example.com', documentName: 'Document 3', status: '', comment: '' },
-    { email: 'user4@example.com', documentName: 'Document 4', status: '', comment: '' },
-    { email: 'user5@example.com', documentName: 'Document 5', status: '', comment: '' },
-    { email: 'user6@example.com', documentName: 'Document 6', status: '', comment: '' },
-    { email: 'user7@example.com', documentName: 'Document 7', status: '', comment: '' },
-    { email: 'user8@example.com', documentName: 'Document 8', status: '', comment: '' },
-    { email: 'user9@example.com', documentName: 'Document 9', status: '', comment: '' },
-    { email: 'user10@example.com', documentName: 'Document 10', status: '', comment: '' },
-  ];
-  filteredItems: DocumentItem[] = this.items;
+  items: DocumentItem[] = [];
+  filteredItems: DocumentItem[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private fb: FormBuilder,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private db: AngularFirestore,
+    private loadingController: LoadingController,
+    private auth: AngularFireAuth,
+    private auths: AuthService,
+    private navCtrl: NavController,
+    private router: Router, 
+    private dataService: DataService, 
+    private toastCtrl: ToastController
+  ) {}
 
   ngOnInit(): void {
-    // Initialize any required data or services here
+    this.loadItems();
+  }
+
+  loadItems() {
+    this.dataService.getAllDocuments().subscribe(
+      data => {
+        console.log('Documents fetched:', data);
+        this.items = data;
+        this.filteredItems = [...data]; // Initialize filteredItems with all documents
+        this.dataService.setSharedDocuments(data); // Update shared documents in the service
+      },
+      error => {
+        console.error('Error fetching documents:', error);
+        this.showToast('Error fetching documents');
+      }
+    );
   }
 
   filterItems(event: any) {
     const query = event.target.value.toLowerCase();
     this.filteredItems = this.items.filter(item => 
       item.email.toLowerCase().includes(query) ||
-      item.documentName.toLowerCase().includes(query)
+      item.documentName.toLowerCase().includes(query) ||
+      item.status.toLowerCase().includes(query) ||
+      item.comment.toLowerCase().includes(query)
     );
   }
 
-  onStatusChange(item: DocumentItem) {
-    console.log('Status changed:', item);
+  async onStatusChange(item: DocumentItem) {
+    try {
+      if (item.id) {
+        await this.dataService.updateDocument(item.id, { status: item.status, comment: item.comment });
+        this.showToast('Status updated successfully');
+        this.loadItems(); // Refresh the list after update
+      } else {
+        this.showToast('Document ID is missing');
+      }
+    } catch (error) {
+      console.error('Error updating status:', error);
+      this.showToast('Error updating status');
+    }
   }
 
   goBack() {
-    this.router.navigate(['/previous-page']);  // Update this to your actual route
+    this.router.navigate(['/home']);
   }
 
   resetForm() {
@@ -58,10 +99,65 @@ export class ApprovalPage implements OnInit {
       comment: ''
     }));
     this.filteredItems = [...this.items];
+    this.showToast('Form reset successfully');
   }
 
-  saveChanges() {
-    // Handle save operation here
-    console.log('Changes saved:', this.items);
+  async saveChanges() {
+    try {
+      const updatedDocuments = this.items
+        .filter(item => item.id) // Include only documents with ids
+        .map(item => ({
+          id: item.id!,
+          email: item.email,
+          documentName: item.documentName,
+          status: item.status,
+          comment: item.comment
+        }));
+  
+      await this.dataService.updateDocuments(updatedDocuments);
+  
+      const declinedDocuments = this.items.filter(item => item.status === 'declined');
+      this.dataService.setDeclinedDocuments(declinedDocuments); // Update declined documents in the service
+  
+      this.showToast('Changes saved successfully');
+    } catch (error) {
+      console.error('Error saving changes: ', error);
+      this.showToast('Error saving changes');
+    }
+  }
+
+  async updateDocumentStatus(docId: string, status: string, reason: string) {
+    try {
+      const user = await this.auth.currentUser;
+      if (user) {
+        const declinationTime = new Date().toISOString();
+        const email = user.email;
+  
+        await this.db.collection('rejected').doc(docId).set({
+          status: status,
+          declinationTime: declinationTime,
+          declinedBy: email,
+          reason: reason
+        });
+  
+        this.showToast('Document status updated successfully');
+      } else {
+        this.showToast('User is not authenticated');
+      }
+    } catch (error) {
+      console.error('Error updating document status:', error);
+      this.showToast('Error updating document status');
+    }
+  }
+  
+
+  
+  async showToast(message: string) {
+    const toast = await this.toastCtrl.create({
+      message,
+      duration: 2000,
+      position: 'top'
+    });
+    toast.present();
   }
 }
