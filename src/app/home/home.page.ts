@@ -7,6 +7,13 @@ import { Component } from '@angular/core';
 })
 export class HomePage {
 
+  profileVisible: boolean = false;
+
   constructor() {}
 
+  ngOnInit() {}
+
+  toggleProfile() {
+    this.profileVisible = !this.profileVisible;
+  }
 }

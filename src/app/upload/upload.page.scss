@@ -76,14 +76,14 @@ ion-select {
 }
 .upload-icon {
   font-size: 35px; /* Adjust the icon size as needed */
-  color: #812B29; /* Adjust the icon color to match your design */
+  color: #562520; /* Adjust the icon color to match your design */
   margin-left: 15px; /* Add space between the icon and the label */
 }
 .inline-container ion-icon,
 .inline-select ion-icon {
   margin-top: 0px;
   font-size: 50px; /* Adjust the icon size as needed */
-  color: #812B29; /* Adjust the icon color to match your design */
+  color: #562520; /* Adjust the icon color to match your design */
   margin-right: 10px; /* Add space between the icon and the label */
 }
 
@@ -99,7 +99,7 @@ ion-select {
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  border: 2px solid #812B29;
+  border: 2px solid #562520;
   border-radius: 10px;
   text-align: center;
   margin-top: 10px;
@@ -121,7 +121,7 @@ ion-select {
 
 /* Button Styles */
 ion-button {
-  --background: #812B29;
+  --background: ##562520;
   --background-hover: #9e3532;
   --background-activated: #6a2321;
   --background-focused: #9e3532;
@@ -144,7 +144,7 @@ ion-button {
   display: flex;
   justify-content: center;
   align-items: center;
-  background:#812B29;
+  background:#562520;
   width: 80%;
   height: 70px;
   margin: 20px auto;

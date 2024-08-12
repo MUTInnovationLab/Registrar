@@ -26,15 +26,16 @@ export class AssignPage implements OnInit {
 
   
   role = {
-    history: 'off',
-    score: 'off',
-    allApplicants: 'off',
-    addUser: 'off',
-    marks: 'off',
-    upcomingInterviews: 'off',
-    allUsers: 'off',
-    scheduleInterview: 'off',
-    createPost: 'off'
+    allUsers : 'off',
+    approval : 'off',
+    assign  : 'off',
+    dashboard : 'off',
+    rejection : 'off',
+    upload : 'off',
+    viewDocs : 'off'
+    
+
+    
   };
 
   constructor(
@@ -63,32 +64,32 @@ export class AssignPage implements OnInit {
 
   getAdduserValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.addUser = toggleValue;
+    this.role.assign = toggleValue;
   }
 
-  getHistoryValue(event: any) {
+  getAllusersValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.history = toggleValue;
+    this.role.allUsers = toggleValue;
   }
 
-  getScoreValue(event: any) {
+  getApprovalValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.score = toggleValue;
+    this.role.approval = toggleValue;
   }
 
-  getMarksValue(event: any) {
+  getDashboardValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.marks = toggleValue;
+    this.role.dashboard = toggleValue;
   }
 
-  getUpcomingValue(event: any) {
+  getRejectionValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role. upcomingInterviews = toggleValue;
+    this.role.rejection = toggleValue;
     console.log(this.role);
   }
-  getApplicantsValue(event: any) {
+  getUploadValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.allApplicants = toggleValue;
+    this.role.upload = toggleValue;
     console.log(this.role);
   }
   getAllUsersValue(event: any) {
@@ -96,29 +97,19 @@ export class AssignPage implements OnInit {
     this.role.allUsers = toggleValue;
     console.log(this.role);
   }
-  getScheduleInterviewValue(event: any) {
+  getViewDocsValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.scheduleInterview = toggleValue;
+    this.role.viewDocs = toggleValue;
     console.log(this.role);
   }
 
-  getCreatePost(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.createPost = toggleValue;
-    console.log(this.role);
-  }
+
 
   goToStaffProfile(): void {
     this.navController.navigateBack('/staffprofile');
   }
   
   
-
-
-
-
-
-
 
 updateUser() {
 //   const email = this.email; // Get the email from the input field
@@ -436,15 +427,14 @@ async presentConfirmationAlert() {
 async Validation() {
   // Check if the specific role is selected
   if (
-    this.role.history === 'off' &&
-    this.role.score === 'off' &&
-    this.role.allApplicants === 'off' &&
-    this.role.addUser === 'off' &&
-    this.role.marks === 'off' &&
-    this.role.upcomingInterviews === 'off' &&
+    this.role.upload === 'off' &&
+    this.role.viewDocs === 'off' &&
+    this.role.rejection === 'off' &&
+    this.role.assign === 'off' &&
     this.role.allUsers === 'off' &&
-    this.role.scheduleInterview === 'off' &&
-    this.role.createPost === 'off'
+    this.role.dashboard === 'off' &&
+    this.role.allUsers === 'off' &&
+    this.role.approval === 'off' 
   ) {
     alert('Please select at least one role.');
     return;

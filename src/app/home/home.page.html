@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar >
+  <ion-toolbar>
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -73,16 +73,22 @@
     </div>
   </ion-card>
 
-  <ion-card class="profile-card" routerLink="/view-docs">
+  <ion-card class="profile-card" *ngIf="profileVisible">
     <ion-card-header>
       <ion-card-title>Profile Management</ion-card-title>
     </ion-card-header>
     <ion-card-content style="color: white;">
-     <ion-icon name="person-circle"></ion-icon>Name:  Wandile Khumalo <br>
-    <ion-icon name="mail"></ion-icon>  Email: generalwandile41&#64; <br>
-      <ion-icon name="person-add"></ion-icon>Role:  Admin <br>
-      <ion-icon name="calendar-number"></ion-icon>Login Count:  5 <br>
+      <ion-icon name="person-circle"></ion-icon>Name: Wandile Khumalo <br>
+      <ion-icon name="mail"></ion-icon>Email: generalwandile41&#64;<br>
+      <ion-icon name="person-add"></ion-icon>Role: Admin <br>
+      <ion-icon name="calendar-number"></ion-icon>Login Count: 5 <br>
     </ion-card-content>
   </ion-card>
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="toggleProfile()">
+      <ion-icon name="person-circle"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>
