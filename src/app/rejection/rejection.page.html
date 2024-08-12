@@ -1,26 +1,59 @@
 <ion-header [translucent]="true">
-  <ion-toolbar></ion-toolbar>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+    </ion-buttons>
+    <ion-title class="heading">View Rejections</ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <div class="form-title">Rejection Reason</div> 
+  <div class="form-title">Document Evaluations Below</div>
+
+  <!-- Diamond Container -->
   <div class="diamond-container">
     <div class="diamond white-diamond"></div>
     <div class="diamond maroon-diamond"></div>
     <div class="diamond yellow-diamond"></div>
   </div>
-  <div class="form-container">
-    <div class="label-input-container">
-      <ion-label class="form-label" position="floating">Date</ion-label>
-      <ion-input class="text-input" type="date"></ion-input>
+
+<!-- Check if there are no declined documents -->
+<div *ngIf="showNoDocumentsCard && !getDocumentsToDisplay().length" class="no-documents">
+  <div class="card">
+    <div class="textBox">
+      <div class="head">No Rejected Documents</div>
+      <span>Please check back later.</span>
     </div>
-    <div class="label-input-container">
-      <ion-label class="form-label" position="floating">By Who</ion-label>
-      <ion-input class="text-input" type="text"></ion-input>
-    </div>
-    <div class="label-input-container">
-      <ion-label class="form-label" position="floating">Reason</ion-label>
-      <ion-textarea class="text-input"></ion-textarea>
+    <br>
+    <div class="🤚">
+      <div class="👉"></div>
+      <div class="👉"></div>
+      <div class="👉"></div>
+      <div class="👉"></div>
+      <div class="🌴"></div>		
+      <div class="👍"></div>
     </div>
   </div>
-</ion-content>
+</div>
+
+<!-- Declined Documents Container -->
+<div *ngIf="!showNoDocumentsCard && getDocumentsToDisplay().length" class="declined-documents-wrapper">
+  <div class="declined-documents-container1">
+    <!-- Display documents in vertical groups of 3 -->
+    <div class="document-list1">
+      <div class="document-group1" *ngFor="let doc of getDocumentsToDisplay(); let i = index">
+        <div class="card1">
+          <div class="textBox">
+            <div class="head"><strong>Document Name:</strong> {{ doc.documentName }}</div>
+            <div class="text">
+              <p><strong>Email:</strong> {{ doc.email }}</p>
+              <p><strong>Upload Date:</strong> {{ doc.uploadDate }}</p>
+              <p><strong>Comment:</strong> {{ doc.comment }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

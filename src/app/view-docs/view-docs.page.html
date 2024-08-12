@@ -17,8 +17,8 @@
   <ion-title>All Documents</ion-title>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" (input)="filterDocuments()">
-    <ion-button class="search-button" (click)="filterDocuments()">Search</ion-button>
+    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
+    <ion-button class="search-button">Search</ion-button>
   </div>
   <div class="view-docs-container">
     <div class="side-panel">
@@ -52,7 +52,7 @@
                 [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
                 (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
-              <td>{{doc.name}}</td>
+              <td>{{doc.documentName}}</td>
               <td>{{doc.status}}</td>
             </tr>
           </tbody>
@@ -72,7 +72,7 @@
                 [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
                 (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
-              <td>{{doc.name}}</td>
+              <td>{{doc.documentName}}</td>
               <td>{{doc.status}}</td>
             </tr>
           </tbody>
@@ -92,7 +92,7 @@
                 [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
                 (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
-              <td>{{doc.name}}</td>
+              <td>{{doc.documentName}}</td>
               <td>{{doc.status}}</td>
             </tr>
           </tbody>
@@ -112,7 +112,7 @@
                 [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
                 (click)="selectRow(doc)">
               <td>{{doc.email}}</td>
-              <td>{{doc.name}}</td>
+              <td>{{doc.documentName}}</td>
               <td>{{doc.status}}</td>
             </tr>
           </tbody>

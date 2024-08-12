@@ -3,6 +3,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController, ToastController, LoadingController, NavController } from '@ionic/angular';
 import { AuthService } from '../Shared/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -23,7 +24,16 @@ export class RegisterPage implements OnInit {
   staffError!: string;
   role: string = '';
 
+  form: FormGroup;
+
+  passwordsMatch(formGroup: FormGroup): { [key: string]: boolean } | null {
+    const password = formGroup.get('password')?.value;
+    const confirmPassword = formGroup.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
+
   constructor(
+    private fb: FormBuilder,
     private alertController: AlertController,
     private toastController: ToastController,
     private db: AngularFirestore,
@@ -31,9 +41,26 @@ export class RegisterPage implements OnInit {
     private auth: AngularFireAuth,
     private auths: AuthService,
     private navCtrl: NavController
-  ) {}
+  ) {
+    this.form = this.fb.group({
+      password: ['', [Validators.required]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validators: this.passwordsMatch });
+  }
 
   ngOnInit() {}
+
+  validateEmailFormat() {
+    if (!this.emailRegex.test(this.email)) {
+      this.emailError = 'Please enter a valid email address.';
+    } else {
+      this.emailError = '';
+    }
+  }
+  
+  onSubmit() {
+    this.Validation(); // Call for validation logic when the form is submitted
+  }
 
   async Validation() {
     
