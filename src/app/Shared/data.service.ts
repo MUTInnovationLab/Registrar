@@ -6,11 +6,27 @@ import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../Model/user';
+import { DocumentItem } from '../Model/document-item';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
+  getDeclinedDocuments(): import("../Model/document-item").DocumentItem[] {
+    throw new Error('Method not implemented.');
+  }
+  setSharedDocuments(data: any[]) {
+    throw new Error('Method not implemented.');
+  }
+  updateDocument(id: string, arg1: { status: string; comment: string; }) {
+    throw new Error('Method not implemented.');
+  }
+  updateDocuments(updatedDocuments: { id: string; email: string; documentName: string; status: string; comment: string; }[]) {
+    throw new Error('Method not implemented.');
+  }
+  setDeclinedDocuments(declinedDocuments: DocumentItem[]) {
+    throw new Error('Method not implemented.');
+  }
 
   constructor(
     private afs: AngularFirestore,
