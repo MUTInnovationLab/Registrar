@@ -24,6 +24,7 @@ interface DocumentItem {
 })
 export class DataService {
   private allDocuments: DocumentItem[] = []; // Shared array to store all documents
+  private declinedDocuments: DocumentItem[] = []; // Array to store declined documents
 
   constructor(
     private afs: AngularFirestore,
@@ -207,5 +208,15 @@ export class DataService {
           .catch(error => reject(error));
       });
     });
+  }
+
+  // Method to set declined documents
+  setDeclinedDocuments(documents: DocumentItem[]): void {
+    this.declinedDocuments = documents;
+  }
+
+  // Method to get declined documents
+  getDeclinedDocuments(): DocumentItem[] {
+    return this.declinedDocuments;
   }
 }

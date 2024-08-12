@@ -36,15 +36,12 @@ export class ApprovalPage implements OnInit {
   }
 
   loadItems() {
-    this.items = this.dataService.getSharedDocuments(); // Get documents from the shared array
-    this.filteredItems = [...this.items]; // Initialize filteredItems with all documents
-
-    // Subscribe to changes in Firestore to keep the array updated
     this.dataService.getAllDocuments().subscribe(
       data => {
         console.log('Documents fetched:', data);
         this.items = data;
-        this.filteredItems = data; // Update filteredItems with new documents
+        this.filteredItems = [...data]; // Initialize filteredItems with all documents
+        this.dataService.setSharedDocuments(data); // Update shared documents in the service
       },
       error => {
         console.error('Error fetching documents:', error);
@@ -68,6 +65,7 @@ export class ApprovalPage implements OnInit {
       if (item.id) {
         await this.dataService.updateDocument(item.id, { status: item.status, comment: item.comment });
         this.showToast('Status updated successfully');
+        this.loadItems(); // Refresh the list after update
       } else {
         this.showToast('Document ID is missing');
       }
@@ -93,7 +91,6 @@ export class ApprovalPage implements OnInit {
 
   async saveChanges() {
     try {
-      // Ensure id is defined before including the document for update
       const updatedDocuments = this.items
         .filter(item => item.id) // Include only documents with ids
         .map(item => ({
@@ -103,15 +100,19 @@ export class ApprovalPage implements OnInit {
           status: item.status,
           comment: item.comment
         }));
-
+  
       await this.dataService.updateDocuments(updatedDocuments);
+  
+      const declinedDocuments = this.items.filter(item => item.status === 'declined');
+      this.dataService.setDeclinedDocuments(declinedDocuments); // Update declined documents in the service
+  
       this.showToast('Changes saved successfully');
     } catch (error) {
       console.error('Error saving changes: ', error);
       this.showToast('Error saving changes');
     }
   }
-
+  
   async showToast(message: string) {
     const toast = await this.toastCtrl.create({
       message,
