@@ -42,4 +42,5 @@ View(){
   swiperSlideChanged(e: any) {
     console.log('Changed', e);
   }
+  
 }
