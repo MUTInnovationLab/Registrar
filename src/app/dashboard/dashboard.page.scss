@@ -11,11 +11,15 @@
   
   margin-top: 80px;
   width: 300px;
-  background-color: #562520;
+  background-color: #054c5b;
   height: 87.5%;
   display: flex;
   flex-direction: column;
-  border-radius: 1px;
+  // border-radius: 1px;
+
+  border-radius: 30px;
+  box-shadow:  10px 10px 20px ,
+               -10px -10px 20px ;
 }
 
 .div1, .card1 {
@@ -33,7 +37,7 @@
   display: flex;
   justify-content: space-around; /* Space the buttons evenly */
   padding: 10px; /* Optional: Add some padding for better visual */
-  background-color: #f8f5f3; /* Ensure footer is visible */
+  background-color:#562520; /* Ensure footer is visible */
   position: sticky;
   bottom: 0; /* Stick to the bottom of the container */
 }
@@ -95,9 +99,13 @@ swiper-container {
   width: 100%;
   z-index: 10; 
   height: 60px;
-  margin-left: 5px;
-  background-color: #562520
+  margin-left: 1px;
+  background-color: #054c5b;
+
+  // border-radius: 30px;
+  box-shadow:  -20px -20px 30px ;
 }
+
 
 .info-section {
   display: flex; 
@@ -109,7 +117,7 @@ swiper-container {
 
 .info-section ion-card {
   margin: 0 10px; 
-  background-color:#054c5b;
+  background-color:#04272e;
   color: white;
   padding: 10px; 
 }
@@ -131,12 +139,17 @@ swiper-slide {
   width: 210px;
   text-align: center;
 
+  // border-radius: 10px;
+  box-shadow:  -2px -2px 4px ;
+
   &:hover {
     transform: translateY(-20px); 
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); 
   }
   
 }
+
+
 
 .menu-button {
   display: none;
@@ -148,7 +161,7 @@ swiper-slide {
   .div2 {
     display: none;
   }
-
+ 
   .menu-button {
     display: block;
     position: fixed;
