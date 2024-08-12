@@ -16,7 +16,7 @@ export class RejectionPage implements OnInit {
     private router: Router, 
     private dataService: DataService
   ) {}
-
+//num
   ngOnInit() {
     this.loadDeclinedDocuments();
   }
