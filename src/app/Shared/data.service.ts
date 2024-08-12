@@ -67,10 +67,14 @@ export class DataService {
     user.id = this.afs.createId();
     return this.afs.collection('/Modules').add(user);
   }
+  
+  
 
   getAllModules() {
     return this.afs.collection('/Modules').snapshotChanges();
   }
+
+  
 
   addStaff(user: User) {
     user.id = this.afs.createId();
@@ -86,13 +90,13 @@ export class DataService {
     this.addStaff(user);
   }
 
-  getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
+  getAllUserStaffNumbers(): Observable<{ staffNumber: string }[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         return {
-          staffNumber: data.staffNumber || '',
-          role: data.role || ''
+          staffNumber: data.staffNumber || ''
+        
         };
       }))
     );
