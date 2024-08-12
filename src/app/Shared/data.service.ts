@@ -90,13 +90,13 @@ export class DataService {
     this.addStaff(user);
   }
 
-  getAllUserStaffNumbers(): Observable<{ staffNumber: string }[]> {
+  getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         return {
-          staffNumber: data.staffNumber || ''
-        
+          staffNumber: data.staffNumber || '',
+          role: data.role || ''
         };
       }))
     );

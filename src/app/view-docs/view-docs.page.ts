@@ -81,10 +81,6 @@ export class ViewDocsPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['../']);
-  }
-
-  trackByDocument(index: number, doc: any): number {
-    return doc.id; // Assuming each document has a unique id
+    this.router.navigate(['/home']);
   }
 }

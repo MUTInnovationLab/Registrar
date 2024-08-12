@@ -19,9 +19,8 @@
   
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" 
-           [(ngModel)]="searchTerm" (input)="filterDocuments()">
-    <ion-button class="search-button" (click)="filterDocuments()" type="submit">Search</ion-button>
+    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
+    <ion-button class="search-button">Search</ion-button>
   </div>
 
   <div class="view-docs-container">
