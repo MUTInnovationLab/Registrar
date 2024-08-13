@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, DocumentChangeAction } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { finalize } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { User } from '../Model/user';
 
 interface DocumentItem {
@@ -22,13 +23,13 @@ interface DocumentItem {
   providedIn: 'root'
 })
 export class DataService {
-  private sharedDocuments: DocumentItem[] = [];
-  private declinedDocuments: DocumentItem[] = [];
+  private allDocuments: DocumentItem[] = []; // Shared array to store all documents
+  private declinedDocuments: DocumentItem[] = []; // Array to store declined documents
 
   constructor(
     private afs: AngularFirestore,
-    private auth: AngularFireAuth,
-    private storage: AngularFireStorage
+    private storage: AngularFireStorage,
+    private auth: AngularFireAuth
   ) {}
 
   // Upload document and store metadata in Firestore
@@ -75,7 +76,7 @@ export class DataService {
     return this.afs.collection('/Modules').add(user);
   }
 
-  private allDocuments: DocumentItem[] = [];
+  // private allDocuments: DocumentItem[] = [];
 
   getAllStaff(): Observable<any[]> {
     return this.afs.collection<User>('/registeredStaff').snapshotChanges().pipe(
@@ -97,9 +98,11 @@ export class DataService {
         uploadTask.snapshotChanges().pipe(
           finalize(() => {
             fileRef.getDownloadURL().subscribe(async url => {
+              // Get the current user's email
               const user = await this.auth.currentUser;
-              const email = user?.email || 'unknown@example.com';
+              const email = user?.email || 'unknown@example.com'; // Fallback if email is not available
 
+              // Save document info to Firestore
               this.afs.collection('uploads').add({
                 email: email,
                 documentName: file.name,
@@ -131,6 +134,7 @@ export class DataService {
     );
   }
 
+  // Method to get all uploaded documents and update the shared array
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
       map(actions => {
@@ -150,29 +154,103 @@ export class DataService {
   }
   
 
-  // Methods to manage shared and declined documents
-  setSharedDocuments(documents: DocumentItem[]) {
-    this.sharedDocuments = documents;
-  }
-
+  // Method to get documents from the shared array
   getSharedDocuments(): DocumentItem[] {
-    return this.sharedDocuments;
+    return this.allDocuments;
   }
 
 
   // Method to update a single document
-  updateDocument(id: string, updates: Partial<DocumentItem>): Promise<void> {
-    return this.afs.doc(`/uploads/${id}`).update(updates);
+  updateDocument(documentId: string, data: Partial<DocumentItem>): Promise<void> {
+    return this.afs.collection('/uploads').doc(documentId).update(data);
   }
 
-  // Method to update multiple documents in a batch
-  updateDocuments(documents: DocumentItem[]): Promise<void> {
+  // Method to batch update documents
+  updateDocuments(documents: { id: string; status: string; comment: string; }[]): Promise<void> {
     const batch = this.afs.firestore.batch();
+
     documents.forEach(doc => {
-      const docRef = this.afs.doc(`/uploads/${doc.id}`).ref;
-      batch.update(docRef, doc);
+      const docRef = this.afs.collection('/uploads').doc(doc.id).ref;
+      batch.update(docRef, { status: doc.status, comment: doc.comment });
     });
+
     return batch.commit();
+  }
+
+  // Method to add documents to a specific collection
+  // addDocuments(collectionName: string, documents: any[]) {
+  //   const batch = this.afs.firestore.batch();
+
+  //   documents.forEach(doc => {
+  //     const docRef = this.afs.collection(collectionName).doc(this.afs.createId()).ref;
+  //     batch.set(docRef, doc);
+  //   });
+
+  //   return batch.commit();
+  // }
+
+  // // Method to add modules
+  // addModules(user: User) {
+  //   user.id = this.afs.createId();
+  //   return this.afs.collection('/Modules').add(user);
+  // }
+
+  // // Method to get all modules
+  // getAllModules() {
+  //   return this.afs.collection('/Modules').snapshotChanges();
+  // }
+
+  // Method to add staff
+  addStaff(user: User) {
+    user.id = this.afs.createId();
+    return this.afs.collection('/registeredStaff').add(user);
+  }
+
+  // Method to delete staff
+  deleteStaff(user: User) {
+    return this.afs.doc('/registeredStaff/' + user.id).delete();
+  }
+
+  // Method to update user
+  updateUser(user: User) {
+    this.deleteStaff(user);
+    this.addStaff(user);
+  }
+
+  // Method to get all user staff numbers
+  getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        return {
+          staffNumber: data.staffNumber || '',
+          role: data.role || ''
+        };
+      }))
+    );
+  }
+
+  // Method to get all admin staff numbers
+  getAllAdminStaffNumbers(): Observable<{ staffNumber: string }[]> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as User;
+        return {
+          staffNumber: data.staffNumber || ''
+        };
+      }))
+    );
+  }
+
+  // Method to get document by name
+  getDocumentByName(documentName: string): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as DocumentItem;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
   }
 
   // Method to delete document by name

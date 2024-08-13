@@ -2,11 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../Shared/data.service';
 import { ToastController } from '@ionic/angular';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { AlertController, LoadingController, NavController } from '@ionic/angular';
-import { AuthService } from '../Shared/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 interface DocumentItem {
   id?: string;
@@ -31,14 +26,6 @@ export class ApprovalPage implements OnInit {
   filteredItems: DocumentItem[] = [];
 
   constructor(
-    private fb: FormBuilder,
-    private alertController: AlertController,
-    private toastController: ToastController,
-    private db: AngularFirestore,
-    private loadingController: LoadingController,
-    private auth: AngularFireAuth,
-    private auths: AuthService,
-    private navCtrl: NavController,
     private router: Router, 
     private dataService: DataService, 
     private toastCtrl: ToastController
@@ -127,32 +114,6 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error saving changes');
     }
   }
-
-  async updateDocumentStatus(docId: string, status: string, reason: string) {
-    try {
-      const user = await this.auth.currentUser;
-      if (user) {
-        const declinationTime = new Date().toISOString();
-        const email = user.email;
-  
-        await this.db.collection('rejected').doc(docId).set({
-          status: status,
-          declinationTime: declinationTime,
-          declinedBy: email,
-          reason: reason
-        });
-  
-        this.showToast('Document status updated successfully');
-      } else {
-        this.showToast('User is not authenticated');
-      }
-    } catch (error) {
-      console.error('Error updating document status:', error);
-      this.showToast('Error updating document status');
-    }
-  }
-  
-
   
   async showToast(message: string) {
     const toast = await this.toastCtrl.create({
