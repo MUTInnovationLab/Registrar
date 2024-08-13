@@ -10,61 +10,64 @@ import { Router } from '@angular/router';
 export class ViewDocsPage implements OnInit {
   activeTab: string = 'all';
   documents: any[] = [];
-  filteredDocuments: any[] = []; // For displaying filtered documents
-  approvedDocuments: any[] = [];
-  declinedDocuments: any[] = [];
-  suspendedDocuments: any[] = [];
+  filteredDocuments: any[] = [];
 
   allCount = 0;
   approvedCount = 0;
   declinedCount = 0;
   suspendedCount = 0;
 
-  searchTerm: string = ''; // For search input
+  searchTerm: string = '';
 
-  constructor(
-    private router: Router, 
-    private dataService: DataService
-  ) {}
+  constructor(private dataService: DataService, private router: Router) {}
 
   ngOnInit() {
     this.loadDocuments();
   }
 
   loadDocuments() {
-    this.documents = this.dataService.getSharedDocuments(); // Get documents from the shared array
-    this.filteredDocuments = [...this.documents]; // Initially, all documents are filtered
-    this.updateCounts();
-
-    // Subscribe to changes in Firestore to keep the array updated
-    this.dataService.getAllDocuments().subscribe(docs => {
+    this.dataService.getAllDocuments().subscribe((docs) => {
       this.documents = docs;
-      this.filteredDocuments = this.documents;
+      console.log('Documents Loaded:', this.documents);
       this.updateCounts();
+      this.filterDocuments(); // Initial filtering
     });
   }
 
   updateCounts() {
-    this.approvedDocuments = this.documents.filter(doc => doc.status === 'Approved');
-    this.declinedDocuments = this.documents.filter(doc => doc.status === 'Declined');
-    this.suspendedDocuments = this.documents.filter(doc => doc.status === 'Suspended');
-
     this.allCount = this.documents.length;
-    this.approvedCount = this.approvedDocuments.length;
-    this.declinedCount = this.declinedDocuments.length;
-    this.suspendedCount = this.suspendedDocuments.length;
+    this.approvedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'approved').length;
+    this.declinedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'declined').length;
+    this.suspendedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'suspended').length;
   }
 
   filterDocuments() {
-    this.filteredDocuments = this.documents.filter(doc => 
-      (doc.documentName?.toLowerCase().includes(this.searchTerm.toLowerCase()) || 
-       doc.email?.toLowerCase().includes(this.searchTerm.toLowerCase()))
-    );
-    this.updateCounts(); // Update the counts if necessary
+    let filtered = this.documents;
+
+    // Filter by active tab
+    if (this.activeTab !== 'all') {
+      filtered = filtered.filter(doc => doc.status.toLowerCase() === this.activeTab);
+    }
+
+    // Further filter by search term
+    if (this.searchTerm.trim()) {
+      const lowerSearchTerm = this.searchTerm.toLowerCase();
+      filtered = filtered.filter(doc =>
+        (doc.documentName || doc.fileName || '').toLowerCase().includes(lowerSearchTerm) ||
+        (doc.email || doc.uploadedBy || '').toLowerCase().includes(lowerSearchTerm) ||
+        (doc.status || 'N/A').toLowerCase().includes(lowerSearchTerm) ||
+        (doc.module || '').toLowerCase().includes(lowerSearchTerm) ||
+        (doc.uploadDate || doc.submissionDate || '').toLowerCase().includes(lowerSearchTerm)
+      );
+    }
+
+    this.filteredDocuments = filtered;
+    console.log('Filtered Documents:', this.filteredDocuments);
   }
 
   showDocuments(tab: string) {
     this.activeTab = tab;
+    this.filterDocuments();
   }
 
   selectedDocument: any;

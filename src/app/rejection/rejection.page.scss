@@ -323,7 +323,11 @@
   margin-bottom: 10px; /* Spacing between documents */
 }
 
-/* Card Styling */
+.card-wrapper {
+  position: relative;
+  margin-bottom: 16px; /* Adjust spacing between cards */
+}
+
 /* Card Styling */
 .card {
   width: 80vw; /* 80% of viewport width */
@@ -340,6 +344,7 @@
   margin-bottom: 80px;
   padding: 20px; /* Add padding for better spacing */
 }
+
 
 /* Card Title Styling */
 .card-title {
@@ -386,8 +391,34 @@
   margin-bottom: 10px;
 }
 
-/* Card Styling */
+.details-card {
+  margin-top: 8px; /* Space between card1 and details card */
+  position: absolute; /* Allows the details card to slide below the card1 */
+  width: 100%;
+  z-index: 1; /* Ensure details card is below card1 */
+  transform: translateY(0);
+}
+
+/* Details Card Visible State */
+.card1.active .details-card {
+  transform: translateY(0); /* Slide into view */
+  opacity: 1; /* Make visible */
+}
+
+/* For a smooth sliding effect when toggled */
+@keyframes slideIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Card Styling for Declined Documents */
+/* Base card styling */
 .card1 {
   width: 90vw; /* Responsive width */
   max-width: 400px; /* Maximum width */
@@ -399,10 +430,8 @@
   overflow: hidden; /* Hide overflow content */
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; /* Font family */
   font-size: 16px; /* Font size */
-  --gradient: linear-gradient(to bottom, #2eadff, #3d83ff, #7e61ff); /* Gradient for notification bar */
-  --color: #32a6ff; /* Color for text */
-
-  /* Notification border and glow effect */
+  --gradient: linear-gradient(to bottom, rgb(201, 145, 21), white, maroon); /* Gradient for notification bar */
+  --color: rgb(201, 145, 21); /* Color for text */
   &:before {
     position: absolute;
     content: "";
@@ -411,7 +440,6 @@
     background: #18181b; /* Dark background */
     z-index: 2;
   }
-
   &:after {
     position: absolute;
     content: "";
@@ -422,36 +450,30 @@
     transition: transform 300ms ease;
     z-index: 4;
   }
-
   &:hover:after {
     transform: translateX(0.15rem);
   }
-
   .textBox {
     position: relative;
     padding: 0.65rem 1.25rem;
     color: #99999d; /* Body text color */
     z-index: 5;
   }
-
   .head {
     color: var(--color); /* Title color */
     font-weight: 500;
     font-size: 1.1rem;
     margin-bottom: 0.4rem;
   }
-
   .text {
     p {
       margin: 0;
       line-height: 1.4;
     }
   }
-
   &:hover .textBox {
     transform: translateX(0.25rem);
   }
-
   .notiglow,
   .notiborderglow {
     position: absolute;
@@ -462,30 +484,35 @@
     opacity: 0;
     transition: opacity 300ms ease;
   }
-
   .notiglow {
     z-index: 3;
   }
-
   .notiborderglow {
     z-index: 1;
   }
-
   &:hover .notiglow {
     opacity: 0.1;
   }
-
   &:hover .notiborderglow {
     opacity: 0.1;
   }
 }
 
-/* Declined Documents Container Styling */
+
+/* Add spacing for better view when secondary card is displayed */
 .declined-documents-wrapper {
-  width: 100%; /* Full width */
+  padding: 1rem; /* Add padding for spacing */
+  position: relative; /* Ensure positioning context for cards */
   overflow-y: auto; /* Enable vertical scrolling */
   max-height: 100vh; /* Set max height to viewport height */
-  padding: 1rem; /* Add padding for spacing */
+}
+
+.details-card.show {
+  animation: slideIn 0.3s ease-in-out;
+  width: 90vw; /* Responsive width */
+  max-width: 400px; /* Maximum width */
+  height: auto; /* Auto height */
+  padding-bottom: 10px;
 }
 
 .declined-documents-container1 {

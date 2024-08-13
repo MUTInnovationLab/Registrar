@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { getAuth, deleteUser,updateEmail } from 'firebase/auth';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 @Component({
   selector: 'app-assign',
@@ -26,15 +28,16 @@ export class AssignPage implements OnInit {
 
   
   role = {
-    history: 'off',
-    score: 'off',
-    allApplicants: 'off',
-    addUser: 'off',
-    marks: 'off',
-    upcomingInterviews: 'off',
-    allUsers: 'off',
-    scheduleInterview: 'off',
-    createPost: 'off'
+    allUsers : 'off',
+    approval : 'off',
+    assign  : 'off',
+    dashboard : 'off',
+    rejection : 'off',
+    upload : 'off',
+    viewDocs : 'off'
+    
+
+    
   };
 
   constructor(
@@ -63,32 +66,32 @@ export class AssignPage implements OnInit {
 
   getAdduserValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.addUser = toggleValue;
+    this.role.assign = toggleValue;
   }
 
-  getHistoryValue(event: any) {
+  getAllusersValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.history = toggleValue;
+    this.role.allUsers = toggleValue;
   }
 
-  getScoreValue(event: any) {
+  getApprovalValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.score = toggleValue;
+    this.role.approval = toggleValue;
   }
 
-  getMarksValue(event: any) {
+  getDashboardValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.marks = toggleValue;
+    this.role.dashboard = toggleValue;
   }
 
-  getUpcomingValue(event: any) {
+  getRejectionValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role. upcomingInterviews = toggleValue;
+    this.role.rejection = toggleValue;
     console.log(this.role);
   }
-  getApplicantsValue(event: any) {
+  getUploadValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.allApplicants = toggleValue;
+    this.role.upload = toggleValue;
     console.log(this.role);
   }
   getAllUsersValue(event: any) {
@@ -96,97 +99,80 @@ export class AssignPage implements OnInit {
     this.role.allUsers = toggleValue;
     console.log(this.role);
   }
-  getScheduleInterviewValue(event: any) {
+  getViewDocsValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.scheduleInterview = toggleValue;
+    this.role.viewDocs = toggleValue;
     console.log(this.role);
   }
 
-  getCreatePost(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.createPost = toggleValue;
-    console.log(this.role);
-  }
+
 
   goToStaffProfile(): void {
     this.navController.navigateBack('/staffprofile');
   }
   
   
+  updateUser() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (user) {
+      const documentRef = this.db.doc(`registeredStaff/${user.uid}`).ref;
+  
+      // Update the Firestore document
+      updateDoc(documentRef, {
+        Name: this.name,
+        email: this.email,
+        staffNumber: this.staffNumber,
+        position: this.position,
+        role: this.role
+      })
+      .then(() => {
+        // Optionally, update the user's email in Firebase Authentication
+        updateEmail(user, this.email)
+          .then(() => {
+            alert('User updated successfully');
+          })
+          .catch((error) => {
+            alert(`Failed to update email: ${error.message}`);
+          });
+      })
+      .catch((error) => {
+        alert(`Failed to update user data: ${error.message}`);
+      });
+    } else {
+      alert('No user is signed in');
+    }
+  }
 
-
-
-
-
-
-
-updateUser() {
-//   const email = this.email; // Get the email from the input field
-
-//   this.db.collection('registeredStaff').ref.where('email', '==', email).get()
-//     .then((querySnapshot) => {
-//       const typedSnapshot = querySnapshot as firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>;
-
-//       if (typedSnapshot.empty) {
-//         alert('User not found');
-//         return;
-//       }
-
-//       const documentId = typedSnapshot.docs[0].id;
-
-//       this.db.collection('registeredStaff').doc(documentId).update({
-//         Name: this.name,
-//         email: this.email,
-//         staffNumber: this.staffNumber,
-//         position: this.position,
-//         role: this.role
-//       })
-//       .then(() => {
-//         alert('User updated successfully');
-//       })
-//       .catch((error: any) => {
-//         const errorMessage = error.message;
-//         alert(errorMessage);
-//       });
-//     })
-//     .catch((error: any) => {
-//       const errorMessage = error.message;
-//       alert(errorMessage);
-//     });
-}
-
-
-
-deleteUser() {
-  // const email = this.email; // Get the email from the input field
-
-  // this.db.collection('registeredStaff').ref.where('email', '==', email).get()
-  //   .then((querySnapshot) => {
-  //     const typedSnapshot = querySnapshot as firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>;
-
-  //     if (typedSnapshot.empty) {
-  //       alert('User not found');
-  //       return;
-  //     }
-
-  //     const documentId = typedSnapshot.docs[0].id;
-
-  //     this.db.collection('registeredStaff').doc(documentId).delete()
-  //       .then(() => {
-  //         alert('User deleted successfully');
-  //       })
-  //       .catch((error: any) => {
-  //         const errorMessage = error.message;
-  //         alert(errorMessage);
-  //       });
-  //   })
-  //   .catch((error: any) => {
-  //     const errorMessage = error.message;
-  //     alert(errorMessage);
-  //   });
-}
-
-
+  
+  deleteUser() {
+    const auth = getAuth();
+    const user = auth.currentUser;
+  
+    if (user) {
+      const documentRef = this.db.doc(`registeredStaff/${user.uid}`).ref;
+  
+      // Delete the Firestore document
+      deleteDoc(documentRef)
+      .then(() => {
+        // Optionally, delete the user from Firebase Authentication
+        deleteUser(user)
+          .then(() => {
+            alert('User deleted successfully');
+          })
+          .catch((error) => {
+            alert(`Failed to delete user from authentication: ${error.message}`);
+          });
+      })
+      .catch((error) => {
+        alert(`Failed to delete user data: ${error.message}`);
+      });
+    } else {
+      alert('No user is signed in');
+    }
+  }
+  
 
 
 
@@ -244,13 +230,13 @@ async goToAllUsers(): Promise<void> {
 }
 
 
-async goToAllApplicants(): Promise<void> {
+async goToApproval(): Promise<void> {
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.validation === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/all-applicants');
+      this.navController.navigateForward('/approval');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -260,17 +246,17 @@ async goToAllApplicants(): Promise<void> {
       toast.present();
     }
   } catch (error) {
-    console.error('Error navigating to All Applicants Page:', error);
+    console.error('Error navigating to approvalPage:', error);
   }
 }
 
-async goToHistory(): Promise<void> {
+async goToAssign(): Promise<void> {
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.history === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/history');
+      this.navController.navigateForward('/assign');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -280,17 +266,17 @@ async goToHistory(): Promise<void> {
       toast.present();
     }
   } catch (error) {
-    console.error('Error navigating to History Page:', error);
+    console.error('Error navigating to Assign Page:', error);
   }
 }
 
-async  goToStaff(): Promise<void> {
+async  goToDashboard(): Promise<void> {
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.allUsers === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/all-users');
+      this.navController.navigateForward('/dashboard');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -300,18 +286,18 @@ async  goToStaff(): Promise<void> {
       toast.present();
     }
   } catch (error) {
-    console.error('Error navigating to All Staff members Page:', error);
+    console.error('Error navigating to All Dashboard Page:', error);
   }
 }
 
-async goToGraded(): Promise<void> {
+async goToRejection(): Promise<void> {
 
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.marks === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/marks');
+      this.navController.navigateForward('/rejection');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -321,18 +307,18 @@ async goToGraded(): Promise<void> {
       toast.present();
     }
   } catch (error) {
-    console.error('Error navigating to Graded interviews Page:', error);
+    console.error('Error navigating to Graded rejection Page:', error);
   }
 }
 
-async goToScheduled(): Promise<void> {
+async goToUpload(): Promise<void> {
 
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.upcomingInterviews === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/scheduled-interviews');
+      this.navController.navigateForward('/upload');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -346,14 +332,14 @@ async goToScheduled(): Promise<void> {
   }
 }
 
-async goToScheduleInterview(): Promise<void> {
+async goToViewDocs(): Promise<void> {
 
   try {
     await this.getUser();
 
     if (this.userDocument && this.userDocument.role && this.userDocument.role.scheduleInterview === 'on') {
       // Navigate to the desired page
-      this.navController.navigateForward('/schedule-interviews');
+      this.navController.navigateForward('/view-docs');
     } else {
       const toast = await this.toastController.create({
         message: 'Unauthorized user.',
@@ -367,30 +353,10 @@ async goToScheduleInterview(): Promise<void> {
   }
 }
 
-async goToCreatePost(): Promise<void> {
-
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.createPost === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/createpost');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to Create post Page:', error);
-  }
-}
 
 
 goToMenuPage(): void {
-  this.navController.navigateForward('/dashboard').then(() => {
+  this.navController.navigateForward('/home').then(() => {
     window.location.reload();
   });
 }
@@ -413,7 +379,7 @@ async presentConfirmationAlert() {
          
           
           this.auth.signOut().then(() => {
-            this.navController.navigateForward("/sign-in");
+            this.navController.navigateForward("/login");
             this.presentToast()
       
       
@@ -436,15 +402,14 @@ async presentConfirmationAlert() {
 async Validation() {
   // Check if the specific role is selected
   if (
-    this.role.history === 'off' &&
-    this.role.score === 'off' &&
-    this.role.allApplicants === 'off' &&
-    this.role.addUser === 'off' &&
-    this.role.marks === 'off' &&
-    this.role.upcomingInterviews === 'off' &&
+    this.role.upload === 'off' &&
+    this.role.viewDocs === 'off' &&
+    this.role.rejection === 'off' &&
+    this.role.assign === 'off' &&
     this.role.allUsers === 'off' &&
-    this.role.scheduleInterview === 'off' &&
-    this.role.createPost === 'off'
+    this.role.dashboard === 'off' &&
+    this.role.allUsers === 'off' &&
+    this.role.approval === 'off' 
   ) {
     alert('Please select at least one role.');
     return;

@@ -57,10 +57,14 @@ export class DashboardPage implements OnInit, AfterViewInit {
   swiperSlideChanged(e: any) {
     console.log('Changed', e);
   }
+<<<<<<< HEAD
   downloadDocument(url: string) {
     window.open(url, '_blank');
   }
   previewDocument(url: string) {
     window.open(url, '_blank');
   }
+=======
+  
+>>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
 }
