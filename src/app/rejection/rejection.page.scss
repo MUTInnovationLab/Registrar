@@ -1,4 +1,18 @@
 /* Rejection Page Styling */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+ion-toolbar {
+  --background: #562520;;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px; /* Add padding for better spacing */
+}
 
 
 
