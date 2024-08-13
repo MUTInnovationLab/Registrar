@@ -1,4 +1,4 @@
-<!-- <ion-header [translucent]="true">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
@@ -12,7 +12,7 @@
 </div> 
 
 <div class="container">
-   <!-- <div>t</div> >
+    <div>t</div> >
 
    <div class="menu-button">
     <ion-item>
@@ -320,143 +320,4 @@
     <ion-button class="upload" (click)="Upload()">Upload</ion-button>
   <ion-button class="view" (click)="View()">View</ion-button>
     </div>
-</ion-content-->
-
-<!-- <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Dashboard</ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
-<ion-content [fullscreen]="true" style="--background:#054c5b;">
-
-  <div class="info-section">
-     <ion-card>
-       <ion-card-header>
-         <ion-card-title>Modules</ion-card-title>
-       </ion-card-header>
-       <ion-card-content>
-         <ion-list>
-           <ion-item *ngFor="let module of (modules$ | async)">
-             {{ module.name }}
-           </ion-item>
-         </ion-list>
-       </ion-card-content>
-     </ion-card>
- 
-     <ion-card>
-       <ion-card-header>
-         <ion-card-title>Progress Status</ion-card-title>
-       </ion-card-header>
-       <ion-card-content>
-         <ion-list>
-           <ion-item *ngFor="let status of (progressStatus$ | async)">
-             {{ status.description }}
-           </ion-item>
-         </ion-list>
-       </ion-card-content>
-     </ion-card>
-   </div> 
- 
-   <div class="container">
-     <div class="menu-button">
-       <ion-item>
-         <ion-icon name="book-outline"></ion-icon>
-         <ion-select>
-           <ion-select-option class="option">Information System 1</ion-select-option>
-           <ion-select-option>Information System 2</ion-select-option>
-           <ion-select-option>Information System 3</ion-select-option>
-           <ion-select-option>Information System 4</ion-select-option>
-           <ion-select-option>Information System 5</ion-select-option>
-           <ion-select-option>Information System 6</ion-select-option>
-         </ion-select>
-       </ion-item>
-     </div>
- 
-     <section class="div1" [ngClass]="{'show-menu': showMenu}">
-       <div class="card1">
-         <ul style="color: whitesmoke;">
-           <li *ngFor="let info of (modules$ | async)">
-             <ion-label>{{ info.name }}</ion-label>
-           </li>
-         </ul>
-       </div>
-       <div class="footer1">
-         <ion-button (click)="Upload()">Upload</ion-button>
-         <ion-button (click)="View()">View</ion-button>
-       </div>
-     </section>
- 
-     <section class="div2">
-       <div class="swiper-container-wrapper">
-         <ion-button class="prev-button" (click)="goPrev()">
-           <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
-         </ion-button>
- 
-         <swiper-container
-           #swiper
-           (slideChange)="swiperSlideChanged($event)"
-           [loop]="true"
-           [slidesPerView]="3"
-           [slidesPerGroup]="1"
-           [spaceBetween]="10"
-           [pagination]="{ clickable: true }">
- 
-           <swiper-slide *ngFor="let document of (documents$ | async)">
-             <ion-card class="Card">
-               <br>
-               <ion-card-subtitle>{{ document.module }}</ion-card-subtitle>
-               <ion-card style="margin-top: 90px;">
-                 <ion-card-content>
-                   {{ document.documentName }}
-                 </ion-card-content>
-               </ion-card>
-               <div style="margin-top: 70px;">
-                 <ion-button (click)="downloadDocument(document.url)">
-                   <ion-icon name="cloud-download"></ion-icon>
-                 </ion-button>
-                 <label for="">{{ document.status }}</label>
-                 <ion-button (click)="previewDocument(document.url)">
-                   <ion-icon name="eye"></ion-icon>
-                 </ion-button>
-               </div>
-             </ion-card>
-           </swiper-slide>
- 
-         </swiper-container>
- 
-         <ion-button class="next-button" (click)="goNext()">
-           <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
-         </ion-button>
-       </div>
-     </section>
- 
-     <section class="vertical">
-       <ion-card class="Card">
-         <br>
-         <ion-card-subtitle></ion-card-subtitle>
-         <ion-card style="margin-top: 90px;">
-           <ion-card-content>
-           </ion-card-content>
-         </ion-card>
-         <div style="margin-top: 110px;">
-           <ion-button>
-             <ion-icon name="cloud-download"></ion-icon>
-           </ion-button>
-           <label for=""></label>
-           <ion-button>
-             <ion-icon name="eye"></ion-icon>
-           </ion-button>
-         </div>
-       </ion-card>
-       <!-- Add more ion-cards as needed -->
-     </section>
- 
-   </div>
- 
-   <div class="menu-buttons">
-     <ion-button class="upload" (click)="Upload()">Upload</ion-button>
-     <ion-button class="view" (click)="View()">View</ion-button>
-   </div>
- </ion-content>
- 
+  </ion-content>

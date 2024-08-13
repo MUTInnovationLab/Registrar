@@ -38,7 +38,7 @@ export class DataService {
   }
 
   // Method to upload a document
-  async uploadDocument(file: File, date: string, module: string): Promise<void> {
+  async uploadDocument(file: File, date: string, module: string, email: string): Promise<void> {
     try {
       const filePath = `uploads/${file.name}`;
       const fileRef = this.storage.ref(filePath);
