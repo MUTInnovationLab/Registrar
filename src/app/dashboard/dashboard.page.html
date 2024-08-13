@@ -29,28 +29,20 @@
     
   </div>
 
-    <section class="div1" [ngClass]="{'show-menu': showMenu}">
-        <div class="card1">
-            <ul style="color: whitesmoke;">
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-                <li><ion-label>Information System 1</ion-label></li>
-            </ul>
-        </div>
-        <div class="footer1">
-            <ion-button (click)="Upload()">Upload</ion-button>
-            <ion-button (click)="View()">View</ion-button>
-        </div>
-    </section>
+  <section class="div1" [ngClass]="{'show-menu': showMenu}">
+    <div class="card1">
+        <ul style="color: whitesmoke;">
+            <li *ngFor="let document of documents$ | async">
+                <ion-label>{{document.module}}</ion-label>
+            </li>
+        </ul>
+    </div>
+    <div class="footer1">
+        <ion-button (click)="Upload()">Upload</ion-button>
+        <ion-button (click)="View()">View</ion-button>
+    </div>
+</section>
+
 
 
     <section class="div2">
@@ -58,266 +50,51 @@
         <ion-button class="prev-button" (click)="goPrev()">
           <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
         </ion-button>
-
-        <swiper-container
-          #swiper
-          (slideChange)="swiperSlideChanged($event)"
-          [loop]="true"
-          [slidesPerView]="3"
-          [slidesPerGroup]="1"
-          [spaceBetween]="10"
-          [pagination]="{ clickable: true }">
         
+        <swiper-container
+  #swiper
+  (slideChange)="swiperSlideChanged($event)"
+  [loop]="true"
+  [slidesPerView]="3"
+  [slidesPerGroup]="1"
+  [spaceBetween]="10"
+  [pagination]="{ clickable: true }">
+  
+  <swiper-slide *ngFor="let roleData of rolesData">
+    <ion-card class="Card">
+      <br>
+      <ion-card-subtitle>{{ roleData.role }}</ion-card-subtitle>
+      <ion-card style="margin-top: 90px;">
+        <ion-card-content>
+          {{ roleData.documentName }}
+        </ion-card-content>
+      </ion-card>
+      <div style="margin-top: 70px;">
+        <ion-button (click)="downloadDocument(roleData.url)">
+          <ion-icon name="cloud-download"></ion-icon>
+        </ion-button>
+        <label>{{ roleData.status }}</label>
+        <ion-button (click)="previewDocument(roleData.url)">
+          <ion-icon name="eye"></ion-icon>
+        </ion-button>
+      </div>
+    </ion-card>
+  </swiper-slide>
+</swiper-container>
 
-          <swiper-slide>
-            <ion-card class="Card">
-              <br>
-              <ion-card-subtitle >Lecturer</ion-card-subtitle>
-              <ion-card  style="margin-top: 90px;">
-                
-                <ion-card-content>
-                  S.E Ndlovu.pdf
-                </ion-card-content>
-              </ion-card>
-             <div style="margin-top: 70px;">
-              <ion-button>
-                <ion-icon name="cloud-download"></ion-icon>
-              </ion-button>
-              <label for="">Approved</label>
-              <ion-button>
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-             </div>
-            </ion-card>
-          </swiper-slide>
-
-          <swiper-slide>
-            <ion-card class="Card">
-              <br>
-              <ion-card-subtitle >HOD</ion-card-subtitle>
-              <ion-card  style="margin-top: 90px;">
-                
-                <ion-card-content>
-                  S.E Ndlovu.pdf
-                </ion-card-content>
-              </ion-card>
-             <div style="margin-top: 70px;">
-              <ion-button>
-                <ion-icon name="cloud-download"></ion-icon>
-              </ion-button>
-              <label for="">Approved</label>
-              <ion-button>
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-             </div>
-            </ion-card>
-          </swiper-slide>
-
-          <swiper-slide>
-            <ion-card class="Card">
-              <br>
-              <ion-card-subtitle >Registrar</ion-card-subtitle>
-              <ion-card  style="margin-top: 90px;">
-                
-                <ion-card-content>
-                  S.E Ndlovu.pdf
-                </ion-card-content>
-              </ion-card>
-             <div style="margin-top: 70px;">
-              <ion-button>
-                <ion-icon name="cloud-download"></ion-icon>
-              </ion-button>
-              <label for="">Approved</label>
-              <ion-button>
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-             </div>
-            </ion-card>
-          </swiper-slide>
-
-          <swiper-slide>
-            <ion-card class="Card">
-              <br>
-              <ion-card-subtitle >Finance</ion-card-subtitle>
-              <ion-card  style="margin-top: 90px;">
-                
-                <ion-card-content>
-                  S.E Ndlovu.pdf
-                </ion-card-content>
-              </ion-card>
-             <div style="margin-top: 70px;">
-              <ion-button>
-                <ion-icon name="cloud-download"></ion-icon>
-              </ion-button>
-              <label for="">Approved</label>
-              <ion-button>
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-             </div>
-            </ion-card>
-          </swiper-slide>
-
-          <swiper-slide>
-            <ion-card class="Card">
-              <br>
-              <ion-card-subtitle >Moderator</ion-card-subtitle>
-              <ion-card  style="margin-top: 90px;">
-                
-                <ion-card-content>
-                  S.E Ndlovu.pdf
-                </ion-card-content>
-              </ion-card>
-             <div style="margin-top: 70px;">
-              <ion-button>
-                <ion-icon name="cloud-download"></ion-icon>
-              </ion-button>
-              <label for="">Approved</label>
-              <ion-button>
-                <ion-icon name="eye"></ion-icon>
-              </ion-button>
-             </div>
-            </ion-card>
-          </swiper-slide>
-        </swiper-container>
 
         <ion-button class="next-button" (click)="goNext()">
           <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
         </ion-button>
       </div>
     </section>
-
-    <section class="vertical">
-
-      <ion-header [translucent]="true">
-        <ion-toolbar>
-          <ion-title>Dashboard</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-      <ion-card class="Card">
-        <br>
-        <ion-card-subtitle >Moderator</ion-card-subtitle>
-        <ion-card  style="margin-top: 90px;">
-          
-          <ion-card-content>
-            S.E Ndlovu.pdf
-          </ion-card-content>
-        </ion-card>
-       <div style="margin-top: 110px;">
-        <ion-button>
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label for="">Approved</label>
-        <ion-button>
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-       </div>
-      </ion-card>
-
-     <ion-footer class="menu-buttons">rtrtr</ion-footer>
-
-    </section>
-   
   </div>
 
-  
   <div class="menu-buttons">
     <ion-button class="upload" (click)="Upload()">Upload</ion-button>
   <ion-button class="view" (click)="View()">View</ion-button>
     </div>
   </ion-content>
+
+
+  
