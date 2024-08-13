@@ -5,8 +5,7 @@ import { ToastController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AlertController, LoadingController, NavController } from '@ionic/angular';
-import { AuthService } from '../Shared/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 interface DocumentItem {
   id?: string;
@@ -37,7 +36,6 @@ export class ApprovalPage implements OnInit {
     private db: AngularFirestore,
     private loadingController: LoadingController,
     private auth: AngularFireAuth,
-    private auths: AuthService,
     private navCtrl: NavController,
     private router: Router, 
     private dataService: DataService, 
@@ -54,7 +52,6 @@ export class ApprovalPage implements OnInit {
         console.log('Documents fetched:', data);
         this.items = data;
         this.filteredItems = [...data]; // Initialize filteredItems with all documents
-        this.dataService.setSharedDocuments(data); // Update shared documents in the service
       },
       error => {
         console.error('Error fetching documents:', error);
@@ -78,6 +75,13 @@ export class ApprovalPage implements OnInit {
       if (item.id) {
         await this.dataService.updateDocument(item.id, { status: item.status, comment: item.comment });
         this.showToast('Status updated successfully');
+        
+        // Check if the status is declined, if so, move it to the rejected collection
+        if (item.status.toLowerCase() === 'declined') {
+          await this.dataService.addDocumentToRejectedCollection(item);
+          this.showToast('Document moved to rejected collection');
+        }
+        
         this.loadItems(); // Refresh the list after update
       } else {
         this.showToast('Document ID is missing');
@@ -93,13 +97,8 @@ export class ApprovalPage implements OnInit {
   }
 
   resetForm() {
-    this.items = this.items.map(item => ({
-      ...item,
-      status: '',
-      comment: ''
-    }));
+    this.searchQuery = '';
     this.filteredItems = [...this.items];
-    this.showToast('Form reset successfully');
   }
 
   async saveChanges() {
@@ -111,9 +110,12 @@ export class ApprovalPage implements OnInit {
           email: item.email,
           documentName: item.documentName,
           status: item.status,
-          comment: item.comment
+          comment: item.comment,
+          uploadDate: item.uploadDate || '',  
+          module: item.module || ''
         }));
   
+      // Now using the updated method from DataService
       await this.dataService.updateDocuments(updatedDocuments);
   
       const declinedDocuments = this.items.filter(item => item.status === 'declined');
@@ -125,7 +127,7 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error saving changes');
     }
   }
-
+  
   async updateDocumentStatus(docId: string, status: string, reason: string) {
     try {
       const user = await this.auth.currentUser;
@@ -149,8 +151,6 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error updating document status');
     }
   }
-  
-
   
   async showToast(message: string) {
     const toast = await this.toastCtrl.create({

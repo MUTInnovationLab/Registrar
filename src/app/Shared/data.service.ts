@@ -23,8 +23,8 @@ interface DocumentItem {
   providedIn: 'root'
 })
 export class DataService {
-  private allDocuments: DocumentItem[] = []; // Shared array to store all documents
-  private declinedDocuments: DocumentItem[] = []; // Array to store declined documents
+  private allDocuments: DocumentItem[] = []; 
+  private declinedDocuments: DocumentItem[] = [];
 
   constructor(
     private afs: AngularFirestore,
@@ -37,55 +37,49 @@ export class DataService {
     return this.afs.collection<User>('/registeredStaff').snapshotChanges() as Observable<DocumentChangeAction<User>[]>;
   }
 
-  // Method to upload a document
-  async uploadDocument(file: File, date: string, module: string): Promise<void> {
-    try {
-      const filePath = `uploads/${file.name}`;
-      const fileRef = this.storage.ref(filePath);
-      const uploadTask = fileRef.put(file);
+  // Method to update multiple documents
+  async updateDocuments(documents: DocumentItem[]): Promise<void> {
+    const batch = this.afs.firestore.batch();
 
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.snapshotChanges().pipe(
-          finalize(() => {
-            fileRef.getDownloadURL().subscribe(async url => {
-              // Get the current user's email
-              const user = await this.auth.currentUser;
-              const email = user?.email || 'unknown@example.com'; // Fallback if email is not available
-
-              // Save document info to Firestore
-              this.afs.collection('uploads').add({
-                email: email,
-                documentName: file.name,
-                status: 'pending',
-                comment: '',
-                uploadDate: date,
-                module: module,
-                url: url,
-                uploadedAt: new Date()
-              }).then(() => resolve())
-                .catch(err => reject(new Error(`Failed to save document info: ${err.message}`)));
-            });
-          })
-        ).subscribe({
-          error: (err) => reject(new Error(`Failed to upload file: ${(err as any).message || err}`))
-        });
+    documents.forEach(doc => {
+      const docRef = this.afs.collection('uploads').doc(doc.id).ref;
+      batch.update(docRef, {
+        status: doc.status,
+        comment: doc.comment
       });
-    } catch (error: any) {
-      throw new Error(`Error uploading document: ${error.message || error}`);
+    });
+
+    try {
+      await batch.commit();
+      console.log('Documents updated successfully');
+    } catch (error: unknown) {
+      if (error instanceof Error){
+        throw new Error(`Failed to update documents: ${error.message}`);
+      } else{
+        throw new Error('Failed to update documents: An unknown error occurred');
+      }
     }
   }
 
-  // Method to get all uploaded documents and update the shared array
+  // Method to get all uploaded documents
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
-      map(actions => {
-        this.allDocuments = actions.map(a => {
-          const data = a.payload.doc.data() as DocumentItem;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        });
-        return this.allDocuments;
-      })
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as DocumentItem;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  // Method to get documents from the rejected collection
+  getRejectedDocuments(): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('rejected').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as DocumentItem;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
     );
   }
 
@@ -104,28 +98,14 @@ export class DataService {
     return this.afs.collection('/uploads').doc(documentId).update(data);
   }
 
-  // Method to batch update documents
-  updateDocuments(documents: { id: string; status: string; comment: string; }[]): Promise<void> {
-    const batch = this.afs.firestore.batch();
-
-    documents.forEach(doc => {
-      const docRef = this.afs.collection('/uploads').doc(doc.id).ref;
-      batch.update(docRef, { status: doc.status, comment: doc.comment });
-    });
-
-    return batch.commit();
-  }
-
-  // Method to add documents to a specific collection
-  addDocuments(collectionName: string, documents: any[]) {
-    const batch = this.afs.firestore.batch();
-
-    documents.forEach(doc => {
-      const docRef = this.afs.collection(collectionName).doc(this.afs.createId()).ref;
-      batch.set(docRef, doc);
-    });
-
-    return batch.commit();
+  // Method to add a document to the rejected collection
+  async addDocumentToRejectedCollection(document: DocumentItem): Promise<void> {
+    try {
+      await this.afs.collection('rejected').add(document);
+      console.log('Document added to rejected collection');
+    } catch (error: any) {
+      throw new Error(`Failed to add document to rejected collection: ${error.message}`);
+    }
   }
 
   // Method to add modules
@@ -158,65 +138,26 @@ export class DataService {
 
   // Method to get all user staff numbers
   getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
-    return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as User;
-        return {
-          staffNumber: data.staffNumber || '',
-          role: data.role || ''
-        };
-      }))
+    return this.afs.collection<User>('/registeredStaff', ref => ref.orderBy('staffNumber')).snapshotChanges().pipe(
+      map(staff => {
+        return staff.map(a => {
+          const data = a.payload.doc.data() as User;
+          return {
+            staffNumber: data.staffNumber,
+            role: data.role
+          };
+        });
+      })
     );
-  }
-
-  // Method to get all admin staff numbers
-  getAllAdminStaffNumbers(): Observable<{ staffNumber: string }[]> {
-    return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as User;
-        return {
-          staffNumber: data.staffNumber || ''
-        };
-      }))
-    );
-  }
-
-  // Method to get document by name
-  getDocumentByName(documentName: string): Observable<DocumentItem[]> {
-    return this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).snapshotChanges().pipe(
-      map(actions => actions.map(a => {
-        const data = a.payload.doc.data() as DocumentItem;
-        const id = a.payload.doc.id;
-        return { id, ...data };
-      }))
-    );
-  }
-
-  // Method to delete document by name
-  deleteDocumentByName(documentName: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
-        if (snapshot.empty) {
-          resolve(); // Resolve immediately if no documents found
-          return;
-        }
-
-        const batch = this.afs.firestore.batch();
-        snapshot.docs.forEach(doc => batch.delete(doc.ref));
-
-        batch.commit().then(() => resolve())
-          .catch(error => reject(error));
-      });
-    });
-  }
-
-  // Method to set declined documents
-  setDeclinedDocuments(documents: DocumentItem[]): void {
-    this.declinedDocuments = documents;
   }
 
   // Method to get declined documents
   getDeclinedDocuments(): DocumentItem[] {
     return this.declinedDocuments;
+  }
+
+  // Method to set declined documents
+  setDeclinedDocuments(documents: DocumentItem[]): void {
+    this.declinedDocuments = documents;
   }
 }
