@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../Shared/data.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController, LoadingController, NavController } from '@ionic/angular';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { FormBuilder } from '@angular/forms';
 
 interface DocumentItem {
   id?: string;
@@ -26,6 +29,13 @@ export class ApprovalPage implements OnInit {
   filteredItems: DocumentItem[] = [];
 
   constructor(
+    private fb: FormBuilder,
+    private alertController: AlertController,
+    private toastController: ToastController,
+    private db: AngularFirestore,
+    private loadingController: LoadingController,
+    private auth: AngularFireAuth,
+    private navCtrl: NavController,
     private router: Router, 
     private dataService: DataService, 
     private toastCtrl: ToastController
@@ -40,8 +50,7 @@ export class ApprovalPage implements OnInit {
       data => {
         console.log('Documents fetched:', data);
         this.items = data;
-        this.filteredItems = [...data]; // Initialize filteredItems with all documents
-        this.dataService.getSharedDocuments(); // Update shared documents in the service
+        this.filteredItems = [...data];
       },
       error => {
         console.error('Error fetching documents:', error);
@@ -65,7 +74,13 @@ export class ApprovalPage implements OnInit {
       if (item.id) {
         await this.dataService.updateDocument(item.id, { status: item.status, comment: item.comment });
         this.showToast('Status updated successfully');
-        this.loadItems(); // Refresh the list after update
+        
+        if (item.status.toLowerCase() === 'declined') {
+          await this.dataService.addDocumentToRejectedCollection(item);
+          this.showToast('Document moved to rejected collection');
+        }
+        
+        this.loadItems();
       } else {
         this.showToast('Document ID is missing');
       }
@@ -80,33 +95,28 @@ export class ApprovalPage implements OnInit {
   }
 
   resetForm() {
-    this.items = this.items.map(item => ({
-      ...item,
-      status: '',
-      comment: ''
-    }));
+    this.searchQuery = '';
     this.filteredItems = [...this.items];
-    this.showToast('Form reset successfully');
   }
 
   async saveChanges() {
     try {
       const updatedDocuments = this.items
-        .filter(item => item.id) // Include only documents with ids
+        .filter(item => item.id)
         .map(item => ({
           id: item.id!,
           email: item.email,
           documentName: item.documentName,
           status: item.status,
           comment: item.comment,
-          uploadDate: item.uploadDate,
-          module: item.module
+          uploadDate: item.uploadDate || '',
+          module: item.module || ''
         }));
   
       await this.dataService.updateDocuments(updatedDocuments);
   
       const declinedDocuments = this.items.filter(item => item.status === 'declined');
-      this.dataService.setDeclinedDocuments(declinedDocuments); // Update declined documents in the service
+      this.dataService.setDeclinedDocuments(declinedDocuments);
   
       this.showToast('Changes saved successfully');
     } catch (error) {
@@ -114,7 +124,31 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error saving changes');
     }
   }
+
+  async updateDocumentStatus(docId: string, status: string, reason: string) {
+    try {
+      const user = await this.auth.currentUser;
+      if (user) {
+        const declinationTime = new Date().toISOString();
+        const email = user.email;
   
+        await this.db.collection('rejected').doc(docId).set({
+          status: status,
+          declinationTime: declinationTime,
+          declinedBy: email,
+          reason: reason
+        });
+  
+        this.showToast('Document status updated successfully');
+      } else {
+        this.showToast('User is not authenticated');
+      }
+    } catch (error) {
+      console.error('Error updating document status:', error);
+      this.showToast('Error updating document status');
+    }
+  }
+
   async showToast(message: string) {
     const toast = await this.toastCtrl.create({
       message,
