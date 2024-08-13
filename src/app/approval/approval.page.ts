@@ -41,7 +41,7 @@ export class ApprovalPage implements OnInit {
         console.log('Documents fetched:', data);
         this.items = data;
         this.filteredItems = [...data]; // Initialize filteredItems with all documents
-        this.dataService.setSharedDocuments(data); // Update shared documents in the service
+        this.dataService.getSharedDocuments(); // Update shared documents in the service
       },
       error => {
         console.error('Error fetching documents:', error);
