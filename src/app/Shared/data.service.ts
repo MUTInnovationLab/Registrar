@@ -33,9 +33,19 @@ export class DataService {
   ) {}
 
   // Method to get all staff
-  getAllStaff(): Observable<DocumentChangeAction<User>[]> {
-    return this.afs.collection<User>('/registeredStaff').snapshotChanges() as Observable<DocumentChangeAction<User>[]>;
+  getAllStaff(): Observable<User[]> {
+    return this.afs.collection<User>('/registeredStaff').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as Omit<User, 'id'>; // Omit id from User type
+        const id = a.payload.doc.id;
+        return {
+          id, // Add the id explicitly
+          ...data // Spread the rest of the data
+        } as User & { id: string }; // Ensure id is included in the type
+      }))
+    );
   }
+
 
   // Method to upload a document
   async uploadDocument(file: File, date: string, module: string, email: string): Promise<void> {
