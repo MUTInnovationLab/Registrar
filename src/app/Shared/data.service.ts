@@ -276,6 +276,7 @@ import { Observable } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 import { User } from '../Model/user';
 import { AuthService } from './auth.service';
+import { collection } from 'firebase/firestore';
 
 interface DocumentItem {
   id?: string;
@@ -300,7 +301,8 @@ export class DataService {
     private afs: AngularFirestore,
     private auth: AngularFireAuth,
     private storage: AngularFireStorage,
-    private authService: AuthService
+    private authService: AuthService,
+    private db: AngularFirestore
   ) {}
 
   // Upload document and store metadata in Firestore
@@ -478,7 +480,7 @@ export class DataService {
   getDeclinedDocuments(): DocumentItem[] {
     return this.declinedDocuments;
   }
-
+//New methods
 
   // Method to delete document by name
   // deleteDocumentByName(documentName: string): Promise<void> {
@@ -497,6 +499,55 @@ export class DataService {
   //     });
   //   });
   // }
+
+ 
+
+
+  async addDocumentToRejectedCollection(document: DocumentItem): Promise<void> {
+    try {
+      await this.db.collection('rejected').add(document);
+      console.log('Document added to rejected collection');
+    } catch (error: any) {
+      throw new Error(`Failed to add document to rejected collection: ${error.message}`);
+    }
+  }
+
+  
+
+  getRejectedDocuments(): Observable<DocumentItem[]> {
+    return this.db.collection<DocumentItem>('rejected').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as DocumentItem;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+
+
+ 
+
+  addStaff(user: User) {
+    user.id = this.db.createId();
+    return this.db.collection('/Users').add(user);
+  }
+
+  // getAllStaff() {
+  //   return this.db.collection('/Users').snapshotChanges();
+  // }
+
+ 
+
+  getDocument(id: string) {
+    return this.db.collection('uploads').doc(id).valueChanges();
+  }
+
+ 
+
+ 
+
+ 
 
 
 }
