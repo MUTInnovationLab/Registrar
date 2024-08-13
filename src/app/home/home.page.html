@@ -8,7 +8,7 @@
 
   <ion-card class="main-card">
     <div class="dashboard-grid">
-      <ion-card class="dashboard-card" routerLink="/all-users">
+      <ion-card class="dashboard-card" (click)="goToAllUsers()">
         <ion-card-header>
           <ion-card-title>All Users</ion-card-title>
         </ion-card-header>
@@ -17,7 +17,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/approval">
+      <ion-card class="dashboard-card" (click)="goToApproval()">
         <ion-card-header>
           <ion-card-title>Approval</ion-card-title>
         </ion-card-header>
@@ -26,7 +26,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/assign">
+      <ion-card class="dashboard-card" (click)="goToAssign()">
         <ion-card-header>
           <ion-card-title>Assign</ion-card-title>
         </ion-card-header>
@@ -35,7 +35,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/dashboard">
+      <ion-card class="dashboard-card" (click)="goToDashboard()">
         <ion-card-header>
           <ion-card-title>Home</ion-card-title>
         </ion-card-header>
@@ -44,7 +44,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/rejection">
+      <ion-card class="dashboard-card" (click)="goToRejection()">
         <ion-card-header>
           <ion-card-title>Rejection</ion-card-title>
         </ion-card-header>
@@ -53,7 +53,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/upload">
+      <ion-card class="dashboard-card" (click)="goToUpload()">
         <ion-card-header>
           <ion-card-title>Upload</ion-card-title>
         </ion-card-header>
@@ -62,7 +62,7 @@
         </ion-card-content>
       </ion-card>
   
-      <ion-card class="dashboard-card" routerLink="/view-docs">
+      <ion-card class="dashboard-card" (click)="goToViewDocs()">
         <ion-card-header>
           <ion-card-title>View Documents</ion-card-title>
         </ion-card-header>

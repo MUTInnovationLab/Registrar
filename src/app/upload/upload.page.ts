@@ -14,6 +14,7 @@ export class UploadPage {
   selectedFileNames: string[] = [];
   showError = false;
   errorMessage: string = '';
+  email: string = '';
 
   constructor(private dataService: DataService, private toastController: ToastController) {}
 
@@ -49,7 +50,7 @@ export class UploadPage {
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i];
       try {
-        await this.dataService.uploadDocument(file, this.customDate, this.customModule);
+        await this.dataService.uploadDocument(file, this.customDate, this.customModule, this.email);
       } catch (error) {
         this.showError = true;
         // Cast the error to 'any' to access its properties

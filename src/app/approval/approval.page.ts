@@ -98,7 +98,9 @@ export class ApprovalPage implements OnInit {
           email: item.email,
           documentName: item.documentName,
           status: item.status,
-          comment: item.comment
+          comment: item.comment,
+          uploadDate: item.uploadDate,
+          module: item.module
         }));
   
       await this.dataService.updateDocuments(updatedDocuments);
