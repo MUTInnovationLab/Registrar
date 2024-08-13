@@ -32,7 +32,7 @@ export class DataService {
   ) {}
 
   // Upload document and store metadata in Firestore
-  uploadDocument(file: File, customDate: string, customModule: string, email: string): Observable<any> {
+  uploadDocuments(file: File, customDate: string, customModule: string, email: string): Observable<any> {
     const filePath = `uploads/${file.name}`;
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
@@ -82,7 +82,7 @@ export class DataService {
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         const id = a.payload.doc.id;
-        return { id, ...data };
+        return { ...data, id };
       }))
     );
   }
@@ -121,6 +121,15 @@ export class DataService {
       throw new Error(`Error uploading document: ${error.message || error}`);
     }
   }
+    getProgressStatus(): Observable<any[]> {
+    return this.afs.collection('/progressStatus').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any; // Replace 'any' with your progress status type
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
 
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
@@ -134,6 +143,12 @@ export class DataService {
       })
     );
   }
+  
+  // Method to get all modules
+  getAllModules() {
+    return this.afs.collection('/Modules').snapshotChanges();
+  }
+  
 
   // Methods to manage shared and declined documents
   setSharedDocuments(documents: DocumentItem[]) {
@@ -144,13 +159,6 @@ export class DataService {
     return this.sharedDocuments;
   }
 
-  setDeclinedDocuments(documents: DocumentItem[]) {
-    this.declinedDocuments = documents;
-  }
-
-  getDeclinedDocuments(): DocumentItem[] {
-    return this.declinedDocuments;
-  }
 
   // Method to update a single document
   updateDocument(id: string, updates: Partial<DocumentItem>): Promise<void> {
