@@ -22,6 +22,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ])
   ]
 })
+
 export class RejectionPage implements OnInit {
   declinedDocuments: DocumentItem[] = [];
   showNoDocumentsCard: boolean = true;
@@ -41,19 +42,20 @@ export class RejectionPage implements OnInit {
   }
 
   loadDeclinedDocuments() {
-    this.declinedDocuments = this.dataService.getDeclinedDocuments();
-    this.checkForDocuments();
+    this.dataService.getRejectedDocuments().subscribe(docs => {
+      this.declinedDocuments = docs;
+      this.checkForDocuments();
+    });
   }
 
-  getDocumentsToDisplay()  {
+  getDocumentsToDisplay() {
     return this.declinedDocuments;
   }
 
   checkForDocuments() {
-    this.declinedDocuments = this.getDocumentsToDisplay();
     this.showNoDocumentsCard = this.declinedDocuments.length === 0;
   }
-
+  
   goBack() {
     this.router.navigate(['/home']);
   }

@@ -6,6 +6,10 @@ html, body {
   font-family: Arial, sans-serif;
 }
 
+ion-content{
+  --background: #054c5b;
+}
+
 ion-toolbar {
   --background: #562520;;
   display: flex;
