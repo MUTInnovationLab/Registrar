@@ -22,7 +22,6 @@ interface DocumentItem {
   providedIn: 'root'
 })
 export class DataService {
-<<<<<<< HEAD
   private sharedDocuments: DocumentItem[] = [];
   private declinedDocuments: DocumentItem[] = [];
 
@@ -78,7 +77,6 @@ export class DataService {
     return this.afs.collection('/Modules').add(user);
   }
 
-=======
   private allDocuments: DocumentItem[] = []; // Shared array to store all documents
   private declinedDocuments: DocumentItem[] = []; // Array to store declined documents
 
@@ -191,21 +189,16 @@ export class DataService {
   }
 
   // Method to get all modules
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
   getAllModules() {
     return this.afs.collection('/Modules').snapshotChanges();
   }
 
-<<<<<<< HEAD
-=======
   // Method to add staff
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
   addStaff(user: User) {
     user.id = this.afs.createId();
     return this.afs.collection('/registeredStaff').add(user);
   }
 
-<<<<<<< HEAD
   getAllStaff() {
     return this.afs.collection<User>('/registeredStaff').snapshotChanges();
   }
@@ -214,25 +207,20 @@ export class DataService {
     this.afs.doc('/registeredStaff/' + user.id).delete();
   }
 
-=======
   // Method to delete staff
   deleteStaff(user: User) {
     return this.afs.doc('/registeredStaff/' + user.id).delete();
   }
 
   // Method to update user
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
   updateUser(user: User) {
     this.deleteStaff(user);
     this.addStaff(user);
   }
 
-<<<<<<< HEAD
   getAllUserStaffNumbers(): Observable<{ staffNumber: string, role: any }[]> {
-=======
   // Method to get all user staff numbers
   getAllUserStaffNumbers(): Observable<{ staffNumber: string; role: any }[]> {
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
@@ -244,12 +232,9 @@ export class DataService {
     );
   }
 
-<<<<<<< HEAD
   getAllAdminStaffNumbers(): Observable<string[]> {
-=======
   // Method to get all admin staff numbers
   getAllAdminStaffNumbers(): Observable<{ staffNumber: string }[]> {
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
     return this.afs.collection<User>('/registeredStaff', ref => ref.where('role', '==', 'Admin')).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
@@ -258,25 +243,21 @@ export class DataService {
     );
   }
 
-<<<<<<< HEAD
   getAllDocuments(): Observable<any[]> {
     return this.afs.collection('/uploads').snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as any; // Replace 'any' with your document type
-=======
   // Method to get document by name
   getDocumentByName(documentName: string): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).snapshotChanges().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as DocumentItem;
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
         const id = a.payload.doc.id;
         return { id, ...data };
       }))
     );
   }
 
-<<<<<<< HEAD
   getProgressStatus(): Observable<any[]> {
     return this.afs.collection('/progressStatus').snapshotChanges().pipe(
       map(actions => actions.map(a => {
@@ -316,7 +297,6 @@ export class DataService {
     });
     return batch.commit();
   }
-=======
   // Method to delete document by name
   deleteDocumentByName(documentName: string): Promise<void> {
     return new Promise((resolve, reject) => {
@@ -344,5 +324,4 @@ export class DataService {
   getDeclinedDocuments(): DocumentItem[] {
     return this.declinedDocuments;
   }
->>>>>>> 3962ae2a42a4faf65ebd23ebd1d5c1326360f16e
 }
