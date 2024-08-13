@@ -117,8 +117,12 @@ export class DataService {
     return this.db.collection('/Users').add(user);
   }
 
-  getStaff() {
-    return this.db.collection('/Users').snapshotChanges();
+  // getAllStaff() {
+  //   return this.db.collection('/Users').snapshotChanges();
+  // }
+
+  getAllStaff(): Observable<DocumentChangeAction<User>[]> {
+    return this.db.collection<User>('/Users').snapshotChanges();
   }
 
   getDocument(id: string) {
