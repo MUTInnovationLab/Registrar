@@ -11,6 +11,7 @@ export class ViewDocsPage implements OnInit {
   activeTab: string = 'all';
   documents: any[] = [];
   filteredDocuments: any[] = [];
+  selectedDocument: any;
 
   allCount = 0;
   approvedCount = 0;
@@ -18,6 +19,9 @@ export class ViewDocsPage implements OnInit {
   suspendedCount = 0;
 
   searchTerm: string = '';
+
+  // Properties for side panel functionality
+  isPanelHidden: boolean = false;
 
   constructor(private dataService: DataService, private router: Router) {}
 
@@ -70,7 +74,6 @@ export class ViewDocsPage implements OnInit {
     this.filterDocuments();
   }
 
-  selectedDocument: any;
 
   selectRow(doc: any) {
     this.selectedDocument = doc;
@@ -86,5 +89,10 @@ export class ViewDocsPage implements OnInit {
 
   trackByDocument(index: number, doc: any): number {
     return doc.id; // Assuming each document has a unique id
+  }
+
+  // Method to toggle the visibility of the side panel
+  toggleSidePanel() {
+    this.isPanelHidden = !this.isPanelHidden;
   }
 }
