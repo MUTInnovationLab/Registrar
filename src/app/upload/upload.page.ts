@@ -1,13 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
+import { AuthService } from '../Shared/auth.service'; // Import your AuthService
 import { ToastController } from '@ionic/angular';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-upload',
   templateUrl: './upload.page.html',
   styleUrls: ['./upload.page.scss'],
 })
-export class UploadPage {
+export class UploadPage implements OnInit {
   selectedFiles: FileList | null = null;
   customDate: string = '';
   customModule: string = '';
@@ -15,8 +17,38 @@ export class UploadPage {
   showError = false;
   errorMessage: string = '';
   email: string = '';
+  position: string = '';
 
-  constructor(private dataService: DataService, private toastController: ToastController) {}
+  constructor(
+    private dataService: DataService,
+    private authService: AuthService,
+    private toastController: ToastController
+  ) {}
+
+  ngOnInit() {
+    // Fetch the user's email and position when the component initializes
+    this.authService.getCurrentUserEmail().pipe(
+      switchMap(email => {
+        if (email) {
+          this.email = email;
+          return this.dataService.getAllStaff(); // Fetch all staff data
+        } else {
+          throw new Error('User not logged in');
+        }
+      }),
+      map(staff => staff.find(user => user.email === this.email)) // Find the current user
+    ).subscribe(
+      user => {
+        if (user) {
+          this.position = user.position; // Extract position
+          alert('Position is'+ this.position);
+        } else {
+          console.error('User not found in staff data');
+        }
+      },
+      error => console.error('Error fetching user data', error)
+    );
+  }
 
   onFileSelected(event: any): void {
     this.selectedFiles = event.target.files;
@@ -38,19 +70,19 @@ export class UploadPage {
   }
 
   async submit(): Promise<void> {
-    if (!this.selectedFiles || !this.customDate || !this.customModule) {
+    if (!this.selectedFiles || !this.customDate || !this.customModule || !this.position) {
       this.showError = true;
-      this.errorMessage = 'Please fill all fields and select files to upload.';
+      this.errorMessage = 'Please fill all fields, select files to upload, and ensure user data is loaded.';
       return;
     }
-  
+
     this.showError = false;
-  
+
     // Prepare and upload files
     for (let i = 0; i < this.selectedFiles.length; i++) {
       const file = this.selectedFiles[i];
       try {
-        await this.dataService.uploadDocument(file, this.customDate, this.customModule);
+        await this.dataService.uploadDocument(file, this.customDate, this.customModule, this.email, this.position);
       } catch (error) {
         this.showError = true;
         // Cast the error to 'any' to access its properties
@@ -58,17 +90,16 @@ export class UploadPage {
         return;
       }
     }
-  
+
     // Show success toast message
     this.showToast('Files uploaded successfully');
-  
+
     // Clear selections after upload
     this.selectedFiles = null;
     this.selectedFileNames = [];
     this.customDate = '';
     this.customModule = '';
   }
-  
 
   async showToast(message: string) {
     const toast = await this.toastController.create({

@@ -14,5 +14,6 @@ export interface DocumentItem {
     dateDeclined?: Date; // Optional property for the date declined
     declinedBy?: string; // Optional property for the user who declined
     reason?: string; // Optional property for the reason
+    position?: string; // Optional property for the position
   }
   

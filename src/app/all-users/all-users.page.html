@@ -6,24 +6,28 @@
         <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button aria-label="Profile">
+        <ion-icon slot="icon-only" name="person" class="profile-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="content-background">
-  <ion-title class="page-title">VIEW ALL USERS</ion-title>
-  
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search by email, staff number, or role..." class="search-input" 
-           [(ngModel)]="searchTerm" (input)="filterUsers()"> 
-    <ion-button class="search-button" (click)="filterUsers()">Search</ion-button>
+    <input type="text" placeholder="Search by email, staff number, or role..." 
+           class="search-input" 
+           [(ngModel)]="searchTerm" 
+           (ngModelChange)="filterUsers()">
   </div>
 
   <div class="table-container">
     <div class="table-wrapper">
       <table>
         <thead>
-          <tr class="titles">
+          <tr>
             <th>Email</th>
             <th>Staff Number</th>
             <th>Role</th>
@@ -33,7 +37,7 @@
           <tr *ngFor="let user of filteredUsers" class="details">
             <td>{{ user.email }}</td>
             <td>{{ user.staffNumber }}</td>
-            <td>{{ user.role }}</td>
+            <td>{{ user.position}}</td>
           </tr>
         </tbody>
       </table>
