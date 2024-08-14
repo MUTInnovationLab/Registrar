@@ -295,11 +295,19 @@ td, th {
 /* Other styles remain the same */
 
 /* Toggle Button for Small Screens */
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #562520;
+  }
+
 .toggle-panel-button {
     display: none;
     --background: #562520;
     color: white;
     padding: 10px;
+    margin-bottom: 10px;
     border-radius: 5px;
     position: fixed;
     top: 60px;

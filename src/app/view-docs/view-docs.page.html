@@ -19,7 +19,8 @@
   
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" (ngModelChange)="filterDocuments()"> <!-- Updated event -->
+    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
+    <ion-button class="search-button">Search</ion-button>
   </div>
 
   <!-- Toggle Button for Small Screens -->
