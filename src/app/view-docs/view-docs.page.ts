@@ -84,7 +84,7 @@ export class ViewDocsPage implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['/home']);
   }
 
   trackByDocument(index: number, doc: any): number {
