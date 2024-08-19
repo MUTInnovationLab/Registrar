@@ -80,12 +80,12 @@ export class DashboardPage implements OnInit, AfterViewInit {
   }
 
   private filterAndAssignDocuments(documents: any[], allUsers: User[]) {
-    const sharedModulesAndPositions = this.identifySharedModulesAndPositions(allUsers);
+    const sharedModules = this.identifySharedModules(allUsers);
 
     // Filter documents based on user modules and shared modules
     const relevantDocuments = documents.filter(doc => 
       this.userModules.includes(doc.module) ||
-      sharedModulesAndPositions.some(item => item.module === doc.module)
+      sharedModules.includes(doc.module)
     );
 
     this.assignDocumentsToRoles(relevantDocuments);
@@ -95,65 +95,110 @@ export class DashboardPage implements OnInit, AfterViewInit {
     });
   }
 
-  private identifySharedModulesAndPositions(allUsers: User[]): { module: string, position: string }[] {
-    const sharedModulesAndPositions: { module: string, position: string }[] = [];
+  private identifySharedModules(allUsers: User[]): string[] {
+    const sharedModules: string[] = [];
     allUsers.forEach(user => {
       if (user.position !== this.currentUserPosition) { // Exclude current user's position
         if (user.modules) {
           const commonModules = user.modules.filter(module => this.userModules.includes(module));
           commonModules.forEach(module => {
-            sharedModulesAndPositions.push({ module, position: user.position });
+            if (!sharedModules.includes(module)) {
+              sharedModules.push(module);
+            }
           });
         }
       }
     });
-    return sharedModulesAndPositions;
+    return sharedModules;
   }
 
   private async showSharedModulesAndPositions(allUsers: User[]) {
-    const sharedModulesAndPositions = this.identifySharedModulesAndPositions(allUsers);
-    const uniqueSharedModulesAndPositions = Array.from(new Set(
-      sharedModulesAndPositions.map(item => `${item.module}|${item.position}`)
-    )).map(item => {
-      const [module, position] = item.split('|');
-      return { module, position };
+    if (!this.documents$) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No documents available to display shared modules.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+
+    const sharedModules = this.identifySharedModules(allUsers);
+    const documents = await this.documents$.toPromise();
+
+    if (!documents) {
+      const alert = await this.alertController.create({
+        header: 'Error',
+        message: 'No documents found for shared modules.',
+        buttons: ['OK']
+      });
+      await alert.present();
+      return;
+    }
+
+    // Create a map to store positions by module
+    const modulePositionMap: { [module: string]: string[] } = {};
+
+    allUsers.forEach(user => {
+      if (user.position !== this.currentUserPosition) { // Exclude current user's position
+        if (user.modules) {
+          user.modules.forEach(module => {
+            if (this.userModules.includes(module)) {
+              if (!modulePositionMap[module]) {
+                modulePositionMap[module] = [];
+              }
+              if (!modulePositionMap[module].includes(user.position)) {
+                modulePositionMap[module].push(user.position);
+              }
+            }
+          });
+        }
+      }
     });
 
-    const alertMessage = uniqueSharedModulesAndPositions
-      .map(item => `Module: ${item.module}, Position: ${item.position}`)
-      .join('\n');
+    const alertMessage = sharedModules.map(module => {
+      const positions = modulePositionMap[module];
+      const moduleDocuments = documents.filter(doc => doc.module === module);
+      const documentInfo = moduleDocuments.length > 0
+        ? moduleDocuments.map(doc => `Document: ${doc.documentName}, URL: ${doc.url}`).join('\n')
+        : 'No document available';
+      const positionInfo = positions.length > 0
+        ? positions.map(pos => `Position: ${pos}`).join('\n')
+        : 'No positions available';
+      return `Module: ${module}\n${positionInfo}\n${documentInfo}`;
+    }).join('\n\n');
 
     const alert = await this.alertController.create({
-      header: 'Shared Modules and Positions',
-      message: alertMessage || 'No shared modules found.',
+      header: 'Shared Modules and Documents',
+      message: alertMessage || 'No documents found for shared modules.',
       buttons: ['OK']
     });
 
     await alert.present();
   }
 
-  private assignDocumentsToRoles(documents: any[]) {
-    // Initialize rolesData with empty documents
-    this.rolesData = this.rolesData.map(role => ({
-      ...role,
-      documentName: '',
-      url: '',
-      status: ''
-    }));
+  // private assignDocumentsToRoles(documents: any[]) {
+  //   // Initialize rolesData with empty documents
+  //   this.rolesData = this.rolesData.map(role => ({
+  //     ...role,
+  //     documentName: '',
+  //     url: '',
+  //     status: ''
+  //   }));
 
-    // Map documents to roles
-    documents.forEach(doc => {
-      const roleIndex = this.rolesData.findIndex(role => role.role === doc.position);
-      if (roleIndex !== -1) {
-        this.rolesData[roleIndex] = {
-          ...this.rolesData[roleIndex],
-          documentName: doc.documentName,
-          url: doc.url,
-          status: doc.status
-        };
-      }
-    });
-  }
+  //   // Map documents to roles
+  //   documents.forEach(doc => {
+  //     const roleIndex = this.rolesData.findIndex(role => role.role === doc.position);
+  //     if (roleIndex !== -1) {
+  //       this.rolesData[roleIndex] = {
+  //         ...this.rolesData[roleIndex],
+  //         documentName: doc.documentName,
+  //         url: doc.url,
+  //         status: doc.status
+  //       };
+  //     }
+  //   });
+  // }
 
   toggleMenu() {
     this.showMenu = !this.showMenu;
@@ -201,6 +246,44 @@ export class DashboardPage implements OnInit, AfterViewInit {
       });
     }
   }
+
+  private assignDocumentsToRoles(documents: any[]) {
+    // Initialize rolesData with empty documents
+    this.rolesData = this.rolesData.map(role => ({
+      ...role,
+      documentName: '',
+      url: '',
+      status: ''
+    }));
+  
+    // Create a map to hold documents for each role
+    const roleDocumentsMap: { [role: string]: any[] } = {};
+  
+    documents.forEach(doc => {
+      const role = doc.position;
+      if (!roleDocumentsMap[role]) {
+        roleDocumentsMap[role] = [];
+      }
+      roleDocumentsMap[role].push(doc);
+    });
+  
+    // Update rolesData with documents
+    this.rolesData = this.rolesData.map(role => {
+      const docs = roleDocumentsMap[role.role] || [];
+      if (docs.length > 0) {
+        // Assuming each role can have only one document (if more, adjust logic)
+        const doc = docs[0];
+        return {
+          ...role,
+          documentName: doc.documentName,
+          url: doc.url,
+          status: doc.status
+        };
+      }
+      return role;
+    });
+  }
+  
 
   private filterDocumentsForModule(documents: any[]): any[] {
     return documents.filter(doc => doc.module === this.selectedModule);

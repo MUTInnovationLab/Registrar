@@ -10,4 +10,5 @@ export interface User {
     phoneNumber: string;
     password: string;
     confirmPassword: string;
+    documentName:any;
 }
