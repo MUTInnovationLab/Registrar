@@ -18,6 +18,7 @@ export class UploadPage implements OnInit {
   errorMessage: string = '';
   email: string = '';
   position: string = '';
+  uploadedBy: string = '';
 
   constructor(
     private dataService: DataService,
@@ -41,6 +42,7 @@ export class UploadPage implements OnInit {
       user => {
         if (user) {
           this.position = user.position; // Extract position
+          
           alert('Position is'+ this.position);
         } else {
           console.error('User not found in staff data');

@@ -81,22 +81,22 @@ export class DashboardPage implements OnInit, AfterViewInit {
     window.open(url, '_blank');
   }
 
-  private assignDocumentsToRoles(documents: any[]) {
-    // Fill the rolesData array with documents
-    for (let i = 0; i < this.rolesData.length; i++) {
-      if (i < documents.length) {
-        // If there are enough documents, assign them
-        this.rolesData[i].documentName = documents[i].documentName;
-        this.rolesData[i].url = documents[i].url;
-        this.rolesData[i].status = documents[i].status;
-      } else {
-        // If not enough documents, set default values
-        this.rolesData[i].documentName = '';
-        this.rolesData[i].url = '';
-        this.rolesData[i].status = '';   
-      }
+private assignDocumentsToRoles(documents: any[]) {
+  // Fill the rolesData array with documents
+  for (let i = 0; i < this.rolesData.length; i++) {
+    if (i < documents.length) {
+      // If there are enough documents, assign them
+      this.rolesData[i].documentName = documents[i].documentName;
+      this.rolesData[i].url = documents[i].url;
+      this.rolesData[i].status = documents[i].status;
+    } else {
+      // If not enough documents, set default values
+      this.rolesData[i].documentName = '';
+      this.rolesData[i].url = '';
+      this.rolesData[i].status = '';
     }
   }
-  
+}
+
  
 }

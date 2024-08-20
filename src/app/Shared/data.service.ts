@@ -403,13 +403,38 @@ export class DataService {
         if (!email) {
           return []; // Return an empty array if no email is available
         }
-        return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email)).snapshotChanges().pipe(
+        return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email) ).snapshotChanges().pipe(
           map(actions => {
             return actions.map(a => {
               const data = a.payload.doc.data() as DocumentItem;
               const id = a.payload.doc.id;
               return { ...data, id }; // Ensure the ID is included in the returned object
             });
+          })
+        );
+      })
+    );
+  }
+
+  getUserRecentDocument(): Observable<DocumentItem | undefined> {
+    return this.authService.getCurrentUserEmail().pipe(
+      switchMap(email => {
+        if (!email) {
+          return [undefined]; // Return undefined if no email is available
+        }
+        return this.afs.collection<DocumentItem>('uploads', ref => ref
+          .where('email', '==', email)
+          .orderBy('uploadedAt', 'desc')
+          .limit(1)
+        ).snapshotChanges().pipe(
+          map(actions => {
+            if (actions.length === 0) {
+              return undefined; // Return undefined if no document found
+            }
+            const a = actions[0];
+            const data = a.payload.doc.data() as DocumentItem;
+            const id = a.payload.doc.id;
+            return { ...data, id }; // Ensure the ID is included in the returned object
           })
         );
       })
@@ -542,12 +567,5 @@ export class DataService {
   getDocument(id: string) {
     return this.db.collection('uploads').doc(id).valueChanges();
   }
-
- 
-
- 
-
- 
-
 
 }
