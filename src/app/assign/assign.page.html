@@ -40,17 +40,33 @@
             <ion-item>
               <ion-label position="floating">Position</ion-label>
               <ion-select [(ngModel)]="position" name="position" (ionChange)="positionError = null">
-                <ion-select-option value="HR">External Moderator</ion-select-option>
-                <ion-select-option value="Admin">Finance</ion-select-option>
-                <ion-select-option value="Interviewer">Examination Officer</ion-select-option>
-                <ion-select-option value="Clerk">Human Resource</ion-select-option>
-                <ion-select-option value="Panel Member">Deputy Registrar</ion-select-option>
-                <ion-select-option> HOD</ion-select-option>
-                <ion-select-option>Lecturer</ion-select-option>
+                <ion-select-option value="External Moderator">External Moderator</ion-select-option>
+                <ion-select-option value="Finance">Finance</ion-select-option>
+                <ion-select-option value="Examination Officer">Examination Officer</ion-select-option>
+                <ion-select-option value="Human Resource">Human Resource</ion-select-option>
+                <ion-select-option value="Deputy Registrar">Deputy Registrar</ion-select-option>
+                <ion-select-option value="HOD"> HOD</ion-select-option>
+                <ion-select-option value="Lecturer">Lecturer</ion-select-option>
               </ion-select>
               <ion-icon name="briefcase" slot="start"></ion-icon>
                   <div class="error-message" *ngIf="positionError">{{ positionError }}</div>
             </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Modules</ion-label>
+              <ion-select [(ngModel)]="modules" name="modules" (ionChange)="modulesError = null" multiple="true">
+                <ion-select-option value="IS1">IS1</ion-select-option>
+                <ion-select-option value="TP2">TP2</ion-select-option>
+                <ion-select-option value="SS1">SS1</ion-select-option>
+                <ion-select-option value="DS2">DS2</ion-select-option>
+                <ion-select-option value="Research">Research</ion-select-option>
+                <ion-select-option value="Data Science">Data Science</ion-select-option>
+                <ion-select-option value="IT Skills">IT Skills</ion-select-option>
+              </ion-select>
+              <ion-icon name="briefcase" slot="start"></ion-icon>
+              <div class="error-message" *ngIf="modulesError">{{ modulesError }}</div>
+            </ion-item>
+            
             
 
             <ion-item>

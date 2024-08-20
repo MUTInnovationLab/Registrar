@@ -25,19 +25,24 @@
     
   </div>
 
-  <section class="div1" [ngClass]="{'show-menu': showMenu}">
-    <div class="card1">
-        <ul style="color: whitesmoke;">
-            <li *ngFor="let document of documents$ | async">
-                <ion-label>{{document.module}}</ion-label>
-            </li>
-        </ul>
-    </div>
-    <div class="footer1">
-        <ion-button (click)="Upload()">Upload</ion-button>
-        <ion-button (click)="View()">View</ion-button>
-    </div>
+<!-- dashboard.page.html -->
+
+<section class="div1" [ngClass]="{'show-menu': showMenu}">
+  <div class="card1">
+    <ul style="color: whitesmoke;">
+      <li *ngFor="let module of userModules" (click)="onModuleClick(module)" style="cursor: pointer;">
+        <ion-label>{{ module }}</ion-label>
+      </li>
+    </ul>
+  </div>
+  <div class="footer1">
+    <ion-button (click)="Upload()">Upload</ion-button>
+    <ion-button (click)="View()">View</ion-button>
+  </div>
 </section>
+
+
+
 
 
 

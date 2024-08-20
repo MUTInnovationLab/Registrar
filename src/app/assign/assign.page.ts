@@ -14,12 +14,14 @@ export class AssignPage implements OnInit {
 
   nameError :any;
   positionError :any;
+  modulesError: any;
   staffError : any;
   emailError: any;
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   name:any;
   email:any;
   position:any;
+  modules:any;
   staffNumber:any;
 
   userDocument:any;
@@ -125,6 +127,7 @@ export class AssignPage implements OnInit {
         email: this.email,
         staffNumber: this.staffNumber,
         position: this.position,
+        modules: this.modules,
         role: this.role
       })
       .then(() => {
@@ -419,6 +422,7 @@ async Validation() {
   this.emailError = null;
   this.staffError = null;
   this.positionError = null;
+  this.modulesError = null;
   this.nameError = null;
 
   if (!this.name) {
@@ -445,6 +449,12 @@ async Validation() {
     return;
   }
 
+  if (!this.modules) {
+    this.modulesError = 'Please enter moduls.';
+    alert('Please enter position.');
+    return;
+  }
+
   if (!this.staffNumber) {
     this.staffError = 'Please enter staff number.';
     alert('Please enter staff number.');
@@ -465,7 +475,9 @@ async Validation() {
         email: this.email,
         staffNumber: this.staffNumber,
         position: this.position,
+        modules: this.modules,
         role: this.role
+        
       });
       alert("Staff registered successfully");
 
@@ -473,6 +485,7 @@ async Validation() {
       this.name = '';
       this.email = '';
       this.position = '';
+      this.modules = '';
       this.staffNumber = '';
 
       // Sign out the newly created user
