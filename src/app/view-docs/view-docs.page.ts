@@ -29,10 +29,12 @@ export class ViewDocsPage implements OnInit {
     this.dataService.getAllDocuments().subscribe((docs) => {
       this.documents = docs;
       console.log('Documents Loaded:', this.documents);
+      this.documents.forEach(doc => console.log('Document URL:', doc.url));
       this.updateCounts();
       this.filterDocuments(); // Initial filtering
     });
   }
+  
 
   updateCounts() {
     this.allCount = this.documents.length;
@@ -74,11 +76,13 @@ export class ViewDocsPage implements OnInit {
 
   selectRow(doc: any) {
     this.selectedDocument = doc;
+    
   }
 
   isSelected(doc: any): boolean {
     return this.selectedDocument === doc;
   }
+  
 
   goBack() {
     this.router.navigate(['../']);

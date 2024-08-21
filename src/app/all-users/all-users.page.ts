@@ -37,17 +37,22 @@ export class AllUsersPage implements OnInit {
     const term = this.searchTerm.trim().toLowerCase();
     
     if (term) {
-      this.filteredUsers = this.users.filter(user =>
-        user.email.toLowerCase().includes(term) ||
-        user.staffNumber.toLowerCase().includes(term) ||
-        user.role.toLowerCase().includes(term)
-      );
+      this.filteredUsers = this.users.filter(user => {
+        const email = user.email ? user.email.toLowerCase() : '';
+        const staffNumber = user.staffNumber ? user.staffNumber.toLowerCase() : '';
+        const position = user.position ? user.position.toLowerCase() : '';
+        
+        return email.includes(term) ||
+               staffNumber.includes(term) ||
+               position.includes(term);
+      });
     } else {
       this.filteredUsers = [...this.users];
     }
     
     console.log('Filtered Users:', this.filteredUsers); // Check the filtered results
   }
+  
   
   goBack() {
     this.router.navigate(['/home']); // Update this to your actual route

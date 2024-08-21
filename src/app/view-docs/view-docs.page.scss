@@ -18,14 +18,72 @@ ion-buttons {
     align-items: center;
 }
 
-
-
 ion-title {
     padding: 10px 5px;
     margin: 5px 15px;
     color: white;
     text-align: center;
 }
+.blinking-eye {
+    animation: blink-animation 3s infinite ease-in-out; /* Blink animation every 3 seconds */
+}
+
+@keyframes blink-animation {
+    0%, 90%, 100% {
+        opacity: 1; /* Fully visible */
+    }
+    95% {
+        opacity: 0; /* Invisible (eye closed) */
+    }
+}
+
+.diamond-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Spacing between diamonds and content */
+    gap: 8px;
+  }
+  
+  /* Diamond Shape Styling */
+  /* Diamond Shape Styling */
+.diamond {
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: changeColor 3s infinite; /* Add animation */
+}
+
+/* Define keyframes for color changes */
+@keyframes changeColor {
+    0% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+    33% {
+        background-color: #800000; /* Maroon Diamond */
+    }
+    66% {
+        background-color: #FFCF33; /* Yellow Diamond */
+    }
+    100% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+}
+
+/* Specific Classes for Diamonds */
+.white-diamond {
+    animation-delay: 0s; /* Start immediately */
+}
+
+.maroon-diamond {
+    animation-delay: 1s; /* Start after 1 second */
+}
+
+.yellow-diamond {
+    animation-delay: 2s; /* Start after 2 seconds */
+}
+
+  
 
 .back-icon {
     --background: #562520;;
@@ -78,7 +136,10 @@ ion-title {
     border: 1px solid #562520;;
     border-radius: 5px;
     margin-right: 10px;
+    background-color: white; /* Set background color */
     max-width: 100%; /* Ensure it doesn't overflow */
+    color: black; /* Set text color to white */
+
 }
 
 .search-button {
