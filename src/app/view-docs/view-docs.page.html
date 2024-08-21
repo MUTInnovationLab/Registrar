@@ -23,10 +23,16 @@
   </div>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" (ngModelChange)="filterDocuments()"> <!-- Updated event -->
+    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
+    <ion-button class="search-button">Search</ion-button>
   </div>
 
-  <div class="view-docs-container">
+  <!-- Toggle Button for Small Screens -->
+  <ion-button class="toggle-panel-button" (click)="toggleSidePanel()">
+    <ion-icon slot="icon-only" name="menu"></ion-icon>
+  </ion-button>
+
+  <div class="view-docs-container" [ngClass]="{'hide-panel': isPanelHidden}">
     <div class="side-panel">
       <ul>
         <li (click)="showDocuments('all')" [ngClass]="{'select': activeTab === 'all'}">
@@ -80,11 +86,3 @@
     </div>
   </div>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-title class="slogan">
-      Designed with <ion-icon name="heart" class="heart-icon"></ion-icon> by MUT INNOVATION LAB
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>

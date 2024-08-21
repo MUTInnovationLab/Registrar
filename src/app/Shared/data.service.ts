@@ -349,6 +349,8 @@ export class DataService {
     return this.afs.collection('/Modules').add(user);
   }
 
+ 
+
   private allDocuments: DocumentItem[] = [];
 
   getAllStaff(): Observable<any[]> {
@@ -356,9 +358,29 @@ export class DataService {
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as User;
         const id = a.payload.doc.id;
-        return {  ...data };
+        return { ...data, id }; // Correctly include 'id' without duplication
       }))
     );
+  }
+
+  getUserByEmail(email: string): Observable<User | undefined> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('email', '==', email))
+      .snapshotChanges().pipe(
+        map(actions => {
+          if (actions.length > 0) {
+            const data = actions[0].payload.doc.data() as User;
+            const id = actions[0].payload.doc.id;
+            return { ...data, id };
+          } else {
+            return undefined;
+          }
+        })
+      );
+  }
+
+  // New method to get a user by ID
+  getUserById(userId: string): Observable<User | undefined> {
+    return this.afs.collection<User>('/registeredStaff').doc(userId).valueChanges();
   }
 
   async uploadDocument(file: File, date: string, module: string, email: string, position:string): Promise<void> {
@@ -395,6 +417,12 @@ export class DataService {
     } catch (error: any) {
       throw new Error(`Error uploading document: ${error.message || error}`);
     }
+  }
+  
+  getDocumentsForModules(modules: string[]): Observable<any[]> {
+    return this.afs.collection('documents', ref => 
+      ref.where('module', 'in', modules)
+    ).valueChanges();
   }
 
   getAllDocuments(): Observable<DocumentItem[]> {
