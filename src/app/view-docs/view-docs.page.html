@@ -23,9 +23,12 @@
   </div>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
-    <ion-button class="search-button">Search</ion-button>
+    <input type="text" placeholder="Search documents..." 
+           class="search-input" 
+           [(ngModel)]="searchTerm" 
+           (ngModelChange)="filterDocuments()">  <!-- Trigger filtering when the search term changes -->
   </div>
+  
 
   <!-- Toggle Button for Small Screens -->
   <ion-button class="toggle-panel-button" (click)="toggleSidePanel()">
