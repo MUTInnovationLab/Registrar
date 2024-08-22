@@ -50,7 +50,15 @@ const routes: Routes = [
   {
     path: 'assign',
     loadChildren: () => import('./assign/assign.module').then( m => m.AssignPageModule)
+  },  {
+    path: 'modules',
+    loadChildren: () => import('./modules/modules.module').then( m => m.ModulesPageModule)
   },
+  {
+    path: 'notification',
+    loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
+  },
+
 
   
 
