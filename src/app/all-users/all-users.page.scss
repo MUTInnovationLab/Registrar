@@ -12,10 +12,68 @@ ion-toolbar {
     align-items: center;
     padding: 0 20px; /* Add padding for better spacing */
 }
+ion-title {
+    text-align: center;
+    flex-grow: 1; /* Ensure it takes up available space */
+    position: absolute; /* Position it in the center */
+    left: 50%;
+    transform: translateX(-50%); /* Center it horizontally */
+    font-size: 20px; /* Adjust font size as needed */
+    color: white;
+}
 
 ion-buttons {
     display: flex;
     align-items: center;
+}
+/* Diamond Shape Styling */
+/* Diamond Container for Horizontal Layout and Top Positioning */
+.diamond-container {
+    display: flex;
+    flex-direction: row; /* Change to horizontal layout */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    width: 100%; /* Full width */
+    margin: 10px 0; /* Add margin to position it above search area */
+    gap: 8px; /* Adjust spacing between diamonds */
+}
+
+/* Diamond Shape Styling */
+.diamond {
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: changeColor 3s infinite; /* Add animation */
+}
+
+/* Define keyframes for color changes */
+@keyframes changeColor {
+    0% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+    33% {
+        background-color: #800000; /* Maroon Diamond */
+    }
+    66% {
+        background-color: #FFCF33; /* Yellow Diamond */
+    }
+    100% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+}
+
+/* Specific Classes for Diamonds */
+.white-diamond {
+    animation-delay: 0s; /* Start immediately */
+}
+
+.maroon-diamond {
+    animation-delay: 1s; /* Start after 1 second */
+}
+
+.yellow-diamond {
+    animation-delay: 2s; /* Start after 2 seconds */
 }
 
 
@@ -64,6 +122,8 @@ ion-buttons {
     border: 1px solid #562520;;
     border-radius: 5px;
     margin-right: 10px;
+    background-color: #F8F9FA;
+    color: black;
     max-width: 100%; /* Ensure it doesn't overflow */
 }
 
