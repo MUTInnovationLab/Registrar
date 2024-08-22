@@ -16,7 +16,11 @@
 
 <ion-content class="content-background">
   <ion-title>{{ activeTab.charAt(0).toUpperCase() + activeTab.slice(1) }} Documents</ion-title>
-  
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
     <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
@@ -55,18 +59,25 @@
             <th>Status</th>
             <th>Module</th>
             <th>Upload Date</th>
+            <th>Open Document</th>
+
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let doc of filteredDocuments; let i = index" 
               [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
               (click)="selectRow(doc)">
-            <td>{{ doc.email || doc.uploadedBy }}</td>
-            <td>{{ doc.documentName || doc.fileName }}</td>
-            <td>{{ doc.status || 'N/A' }}</td>
-            <td>{{ doc.module }}</td>
-            <td>{{ doc.uploadDate || doc.submissionDate }}</td>
-          </tr>
+              <td>{{ doc.email || doc.uploadedBy }}</td>
+              <td>{{ doc.documentName || doc.fileName }}</td>
+              <td>{{ doc.status || 'N/A' }}</td>
+              <td>{{ doc.module }}</td>
+              <td>{{ doc.uploadDate || doc.submissionDate }}</td>
+              <td>
+                <a [href]="doc.url" target="_blank">
+                  <ion-icon name="eye-outline" class="blinking-eye" style="font-size: 24px; margin-left: 25px;"></ion-icon>
+              </a> 
+              </td>
+            </tr>
         </tbody>
       </table>
       <div *ngIf="filteredDocuments.length === 0" class="empty-state">

@@ -425,24 +425,37 @@ export class DataService {
     ).valueChanges();
   }
 
+  // getAllDocuments(): Observable<DocumentItem[]> {
+  //   return this.authService.getCurrentUserEmail().pipe(
+  //     switchMap(email => {
+  //       if (!email) {
+  //         return []; // Return an empty array if no email is available
+  //       }
+  //       return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email)).snapshotChanges().pipe(
+  //         map(actions => {
+  //           return actions.map(a => {
+  //             const data = a.payload.doc.data() as DocumentItem;
+  //             const id = a.payload.doc.id;
+  //             return { ...data, id }; // Ensure the ID is included in the returned object
+  //           });
+  //         })
+  //       );
+  //     })
+  //   );
+  // }
+
   getAllDocuments(): Observable<DocumentItem[]> {
-    return this.authService.getCurrentUserEmail().pipe(
-      switchMap(email => {
-        if (!email) {
-          return []; // Return an empty array if no email is available
-        }
-        return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email) ).snapshotChanges().pipe(
-          map(actions => {
-            return actions.map(a => {
-              const data = a.payload.doc.data() as DocumentItem;
-              const id = a.payload.doc.id;
-              return { ...data, id }; // Ensure the ID is included in the returned object
-            });
-          })
-        );
+    return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { ...data, id }; // Ensure the ID is included in the returned object
+        });
       })
     );
   }
+  
 
   getUserRecentDocument(): Observable<DocumentItem | undefined> {
     return this.authService.getCurrentUserEmail().pipe(

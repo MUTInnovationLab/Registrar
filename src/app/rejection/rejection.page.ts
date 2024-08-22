@@ -24,6 +24,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 })
 
 export class RejectionPage implements OnInit {
+  
   declinedDocuments: DocumentItem[] = [];
   showNoDocumentsCard: boolean = true;
 
