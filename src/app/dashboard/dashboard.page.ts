@@ -27,12 +27,13 @@ export class DashboardPage implements OnInit, AfterViewInit {
 
   rolesData = [
     { role: 'Lecturer', documentName: '', url: '', status: '' },
-    { role: 'External Moderator', documentName: '', url: '', status: '' },
-    { role: 'Finance', documentName: '', url: '', status: '' },
-    { role: 'Examination Officer', documentName: '', url: '', status: '' },
-    { role: 'Human Resource', documentName: '', url: '', status: '' },
+    { role: 'HOD', documentName: '', url: '', status: '' },
     { role: 'Deputy Registrar', documentName: '', url: '', status: '' },
-    { role: 'HOD', documentName: '', url: '', status: '' }
+    { role: 'Examination Officer', documentName: '', url: '', status: '' },
+    { role: 'Finance', documentName: '', url: '', status: '' },
+    { role: 'Human Resource', documentName: '', url: '', status: '' },
+    { role: 'External Moderator', documentName: '', url: '', status: '' },
+    
   ];
 
   constructor(

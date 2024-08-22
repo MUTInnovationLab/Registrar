@@ -76,7 +76,7 @@ export class ApprovalPage implements OnInit {
         this.showToast('Status updated successfully');
         
         if (item.status.toLowerCase() === 'declined') {
-          // await this.dataService.addDocumentToRejectedCollection(item);
+          await this.dataService.addDocumentToRejectedCollection(item);
           this.showToast('Document moved to rejected collection');
         }
         
