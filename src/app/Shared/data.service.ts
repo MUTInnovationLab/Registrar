@@ -305,6 +305,29 @@ export class DataService {
     private db: AngularFirestore
   ) {}
 
+  getFaculties(): string[] {
+    return ['Faculty of Engineering', 'Faculty of Management Sciences', 'Faculty of Natural Sciences'];
+  }
+
+  getDepartmentsByFaculty(faculty: string): string[] {
+    switch (faculty) {
+      case 'Faculty of Engineering':
+        return [
+          'Department of Chemical Engineering',
+          'Department of Civil Engineering and Survey',
+          'Department of Construction Management and Quantity Surveying',
+          'Department of Electrical Engineering',
+          'Department of Mechanical Engineering'
+        ];
+      case 'Faculty of Management Sciences':
+        return []; // To be populated
+      case 'Faculty of Natural Sciences':
+        return []; // To be populated
+      default:
+        return [];
+    }
+  }
+
   // Upload document and store metadata in Firestore
   uploadDocuments(file: File, customDate: string, customModule: string, email: string): Observable<any> {
     const filePath = `uploads/${file.name}`;
