@@ -378,6 +378,34 @@ export class DataService {
       );
   }
 
+  getDocumentsExcludingEmail(excludedEmail: string): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('uploads', ref =>
+      ref.where('email', '!=', excludedEmail)
+    ).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { ...data, id }; // Ensure the ID is included in the returned object
+        });
+      })
+    );
+  }
+
+  getDocumentsByModules(modules: string[]): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('uploads', ref =>
+      ref.where('module', 'in', modules)
+    ).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { ...data, id }; // Ensure the ID is included in the returned object
+        });
+      })
+    );
+  }
+
   // New method to get a user by ID
   getUserById(userId: string): Observable<User | undefined> {
     return this.afs.collection<User>('/registeredStaff').doc(userId).valueChanges();
@@ -425,24 +453,7 @@ export class DataService {
     ).valueChanges();
   }
 
-  // getAllDocuments(): Observable<DocumentItem[]> {
-  //   return this.authService.getCurrentUserEmail().pipe(
-  //     switchMap(email => {
-  //       if (!email) {
-  //         return []; // Return an empty array if no email is available
-  //       }
-  //       return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email)).snapshotChanges().pipe(
-  //         map(actions => {
-  //           return actions.map(a => {
-  //             const data = a.payload.doc.data() as DocumentItem;
-  //             const id = a.payload.doc.id;
-  //             return { ...data, id }; // Ensure the ID is included in the returned object
-  //           });
-  //         })
-  //       );
-  //     })
-  //   );
-  // }
+
 
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
@@ -456,8 +467,6 @@ export class DataService {
     );
   }
   
-
-
   // Methods to manage shared and declined documents
   setSharedDocuments(documents: DocumentItem[]) {
     this.sharedDocuments = documents;
@@ -521,28 +530,6 @@ export class DataService {
   getDeclinedDocuments(): DocumentItem[] {
     return this.declinedDocuments;
   }
-//New methods
-
-  // Method to delete document by name
-  // deleteDocumentByName(documentName: string): Promise<void> {
-  //   return new Promise((resolve, reject) => {
-  //     this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
-  //       if (snapshot.empty) {
-  //         resolve(); // Resolve immediately if no documents found
-  //         return;
-  //       }
-
-  //       const batch = this.afs.firestore.batch();
-  //       snapshot.docs.forEach(doc => batch.delete(doc.ref));
-
-  //       batch.commit().then(() => resolve())
-  //         .catch(error => reject(error));
-  //     });
-  //   });
-  // }
-
- 
-
 
   async addDocumentToRejectedCollection(document: DocumentItem): Promise<void> {
     try {
@@ -565,30 +552,13 @@ export class DataService {
     );
   }
 
-
-
- 
-
   addStaff(user: User) {
     user.id = this.db.createId();
     return this.db.collection('/Users').add(user);
   }
 
-  // getAllStaff() {
-  //   return this.db.collection('/Users').snapshotChanges();
-  // }
-
- 
-
   getDocument(id: string) {
     return this.db.collection('uploads').doc(id).valueChanges();
   }
-
- 
-
- 
-
- 
-
 
 }

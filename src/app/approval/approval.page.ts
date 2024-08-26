@@ -28,6 +28,8 @@ export class ApprovalPage implements OnInit {
   searchQuery: string = '';
   items: DocumentItem[] = [];
   filteredItems: DocumentItem[] = [];
+  userModules: string[] = [];
+  currentUserEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -48,36 +50,42 @@ export class ApprovalPage implements OnInit {
   }
   
   loadItems() {
-    this.authService.getCurrentUser().subscribe(
-      user => {
-        if (user && user.email) {
-          this.dataService.getAllDocuments().subscribe(
-            data => {
-              console.log('Documents fetched:', data);
-              // Filter the items based on the current user's email
-              this.items = data.filter(item => item.email === user.email);
-              this.filteredItems = [...this.items];
-            },
-            error => {
-              console.error('Error fetching documents:', error);
-              this.showToast('Error fetching documents');
-            }
-          );
-        } else {
-          this.showToast('User is not authenticated');
-        }
-      },
-      error => {
-        console.error('Error fetching current user:', error);
-        this.showToast('Error fetching current user');
+    this.authService.getCurrentUser().subscribe(user => {
+      if (user && user.email) {
+        this.currentUserEmail = user.email;
+        
+        this.dataService.getUserByEmail(this.currentUserEmail).subscribe(userData => {
+          if (userData && userData.modules) {
+            this.userModules = userData.modules;
+            
+            // Fetch documents that belong to the user's modules
+            this.dataService.getDocumentsByModules(this.userModules).subscribe(
+              data => {
+                // Exclude documents associated with the current user's email
+                this.items = data.filter(item => item.email !== this.currentUserEmail);
+                this.filteredItems = [...this.items];
+              },
+              error => {
+                console.error('Error fetching documents:', error);
+                this.showToast('Error fetching documents');
+              }
+            );
+          } else {
+            this.showToast('User modules not found');
+          }
+        });
+      } else {
+        this.showToast('User is not authenticated');
       }
-    );
+    }, error => {
+      console.error('Error fetching current user:', error);
+      this.showToast('Error fetching current user');
+    });
   }
-  
 
   filterItems(event: any) {
     const query = event.target.value.toLowerCase();
-    this.filteredItems = this.items.filter(item => 
+    this.filteredItems = this.items.filter(item =>
       item.email.toLowerCase().includes(query) ||
       item.documentName.toLowerCase().includes(query) ||
       item.status.toLowerCase().includes(query) ||
