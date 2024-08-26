@@ -305,6 +305,73 @@ export class DataService {
     private db: AngularFirestore
   ) {}
 
+   // Method to create a new notification
+   createNewNotification(notification: any): Promise<void> {
+    const notificationId = this.afs.createId(); // Generate a unique ID for the notification
+    return this.afs.collection('notifications').doc(notificationId).set(notification);
+  }
+
+  // Method to edit an existing notification
+  editExistingNotification(notificationId: string, updates: Partial<any>): Promise<void> {
+    return this.afs.collection('notifications').doc(notificationId).update(updates);
+  }
+
+  // Method to schedule reminders
+  scheduleReminder(notificationId: string, reminderDate: Date): Promise<void> {
+    return this.afs.collection('notifications').doc(notificationId).update({
+      reminderDate: reminderDate
+    });
+  }
+
+  // Method to view notification logs
+  viewNotificationLogs(): Observable<any[]> {
+    return this.afs.collection('notifications').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any; // Replace 'any' with your notification type
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  // Method to send a reminder to the approval board if no action is taken within 2 days
+  sendReminderIfNoAction(notificationId: string, checkDate: Date): Promise<void> {
+    const notificationRef = this.afs.collection('notifications').doc(notificationId);
+    return notificationRef.get().toPromise().then(docSnapshot => {
+      if (docSnapshot?.exists) {
+        const notification = docSnapshot.data() as NotificationData; // Replace NotificationData with your actual type
+        const reminderSent = notification.reminderSent || false;
+  
+        if (!reminderSent && new Date() > checkDate) {
+          // Logic to send the reminder
+          // Example: update the document to mark the reminder as sent
+          return notificationRef.update({ reminderSent: true });
+        }
+      }
+      return Promise.resolve();
+    });
+  }
+  
+  getNotifications(): Observable<any[]> {
+    return this.afs.collection('notifications').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any; // Replace 'any' with your notification type
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+  addNotification(notification: any): Promise<void> {
+    return this.afs.collection('notifications').add(notification).then(() => {
+      console.log('Notification added successfully');
+    });
+  }
+
+  updateNotification(notificationId: string, updates: Partial<any>): Promise<void> {
+    return this.afs.collection('notifications').doc(notificationId).update(updates);
+  }
+  
   // Upload document and store metadata in Firestore
   uploadDocuments(file: File, customDate: string, customModule: string, email: string): Observable<any> {
     const filePath = `uploads/${file.name}`;
