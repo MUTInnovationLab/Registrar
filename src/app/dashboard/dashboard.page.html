@@ -1,18 +1,50 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Dashboard</ion-title>
+    <ion-buttons slot="start">
+      <div class="icon-container">
+        <ion-icon name="close-circle-outline" (click)="goBack()" class="backIcon"></ion-icon>
+        <div class="tooltip">Logout</div>
+      </div>
+    </ion-buttons>
+    <ion-title class="centered-label">External Moderator Processor</ion-title>
   </ion-toolbar>
-</ion-header> >
+  
+
+  <!-- Navigation Bar with Table Headers -->
+  <ion-toolbar class="header-toolbar">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <div class="position" ><ion-icon name="briefcase-outline"></ion-icon> Position: {{ currentUserPosition }}</div>
+        </ion-col>
+        <ion-col size="2">
+          <ion-router-link href="/view-docs" class="nav-header"><ion-icon name="documents-outline"></ion-icon> My Documents</ion-router-link>
+        </ion-col>
+        <ion-col size="2">
+          <ion-router-link href="/rejection" class="nav-header"><ion-icon name="document-lock-outline"></ion-icon> Rejected Documents</ion-router-link>
+        </ion-col>
+        <ion-col size="2">
+          <ion-router-link href="/status" class="nav-header"><ion-icon name="chevron-down-circle-outline"></ion-icon> No. Modules: {{ userModules.length }}</ion-router-link>
+        </ion-col>
+        <ion-col size="2">
+          <ion-router-link href="/comment" class="nav-header"><ion-icon name="albums-outline"></ion-icon> Course</ion-router-link>
+        </ion-col>
+       
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
 
 <ion-content [fullscreen]="true" style="--background:#562520;">
 
  <div class="info-section">
-<ion-card >Modules</ion-card>   
-<ion-card>Progress Status</ion-card>
+<ion-card ><ion-icon name="book-outline"></ion-icon> Modules</ion-card>   
+<ion-card><ion-icon name="trending-up-outline"></ion-icon> Progress Status</ion-card>
 </div> 
 
 <div class="container">
-    <div>t</div> >
+    
 
    <div class="menu-button">
     <ion-item>
@@ -40,8 +72,8 @@
     </ul>
   </div>
   <div class="footer1">
-    <ion-button (click)="Upload()">Upload</ion-button>
-    <ion-button (click)="View()">View</ion-button>
+    <ion-button (click)="Upload()"><ion-icon name="cloud-upload-outline"></ion-icon> Upload</ion-button>
+    <ion-button (click)="View()"><ion-icon name="checkmark-done-circle-outline"></ion-icon> Approval</ion-button>
   </div>
 </section>
 

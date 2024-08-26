@@ -301,7 +301,7 @@ export class DataService {
     private afs: AngularFirestore,
     private auth: AngularFireAuth,
     private storage: AngularFireStorage,
-    private authService: AuthService,
+    
     private db: AngularFirestore
   ) {}
 

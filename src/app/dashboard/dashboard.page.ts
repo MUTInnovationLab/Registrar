@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { AuthService } from '../Shared/auth.service';
 import { User } from '../Model/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
@@ -40,7 +41,8 @@ export class DashboardPage implements OnInit, AfterViewInit {
     private navController: NavController,
     private authService: AuthService,
     private dataService: DataService,
-    private alertController: AlertController
+    private alertController: AlertController,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -78,6 +80,10 @@ export class DashboardPage implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.swiper = this.swiperRef?.nativeElement.swiper;
+  }
+
+  goBack() {
+    this.router.navigate(['/login']);
   }
 
   private filterAndAssignDocuments(documents: any[], allUsers: User[]) {
@@ -120,17 +126,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
       return { module, position };
     });
 
-    const alertMessage = uniqueSharedModulesAndPositions
-      .map(item => `Module: ${item.module}, Position: ${item.position}`)
-      .join('\n');
-
-    const alert = await this.alertController.create({
-      header: 'Shared Modules and Positions',
-      message: alertMessage || 'No shared modules found.',
-      buttons: ['OK']
-    });
-
-    await alert.present();
+    
   }
 
   private assignDocumentsToRoles(documents: any[]) {
@@ -165,7 +161,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
   }
 
   View() {
-    this.navController.navigateForward('/view-docs');
+    this.navController.navigateForward('/approval');
   }
 
   goNext() {
