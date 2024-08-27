@@ -5,6 +5,7 @@ import { ToastController, AlertController, LoadingController, NavController } fr
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormBuilder } from '@angular/forms';
+import { AuthService } from '../Shared/auth.service';
 
 interface DocumentItem {
   id?: string;
@@ -27,6 +28,8 @@ export class ApprovalPage implements OnInit {
   searchQuery: string = '';
   items: DocumentItem[] = [];
   filteredItems: DocumentItem[] = [];
+  userModules: string[] = [];
+  currentUserEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -38,30 +41,51 @@ export class ApprovalPage implements OnInit {
     private navCtrl: NavController,
     private router: Router, 
     private dataService: DataService, 
+    private authService: AuthService,
     private toastCtrl: ToastController
   ) {}
 
   ngOnInit(): void {
     this.loadItems();
   }
-
+  
   loadItems() {
-    this.dataService.getAllDocuments().subscribe(
-      data => {
-        console.log('Documents fetched:', data);
-        this.items = data;
-        this.filteredItems = [...data];
-      },
-      error => {
-        console.error('Error fetching documents:', error);
-        this.showToast('Error fetching documents');
+    this.authService.getCurrentUser().subscribe(user => {
+      if (user && user.email) {
+        this.currentUserEmail = user.email;
+        
+        this.dataService.getUserByEmail(this.currentUserEmail).subscribe(userData => {
+          if (userData && userData.modules) {
+            this.userModules = userData.modules;
+            
+            // Fetch documents that belong to the user's modules
+            this.dataService.getDocumentsByModules(this.userModules).subscribe(
+              data => {
+                // Exclude documents associated with the current user's email
+                this.items = data.filter(item => item.email !== this.currentUserEmail);
+                this.filteredItems = [...this.items];
+              },
+              error => {
+                console.error('Error fetching documents:', error);
+                this.showToast('Error fetching documents');
+              }
+            );
+          } else {
+            this.showToast('User modules not found');
+          }
+        });
+      } else {
+        this.showToast('User is not authenticated');
       }
-    );
+    }, error => {
+      console.error('Error fetching current user:', error);
+      this.showToast('Error fetching current user');
+    });
   }
 
   filterItems(event: any) {
     const query = event.target.value.toLowerCase();
-    this.filteredItems = this.items.filter(item => 
+    this.filteredItems = this.items.filter(item =>
       item.email.toLowerCase().includes(query) ||
       item.documentName.toLowerCase().includes(query) ||
       item.status.toLowerCase().includes(query) ||
