@@ -301,25 +301,39 @@
   <ng-template #notificationsList>
     <!-- Existing Notifications List Section -->
     <ion-item class="custom-item">
-      <ion-select placeholder="Course Type" class="custom-input">
+      <ion-select placeholder="Course Type" [(ngModel)]="filter.courseType" class="custom-input" (ionChange)="applyFilters()">
+        <ion-select-option value="">All</ion-select-option>
         <ion-select-option value="semester">Semester</ion-select-option>
         <ion-select-option value="annual">Annual</ion-select-option>
       </ion-select>
-      <ion-select placeholder="Status" class="custom-input">
+    
+      <ion-select placeholder="Status" [(ngModel)]="filter.status" class="custom-input" (ionChange)="applyFilters()">
+        <ion-select-option value="">All</ion-select-option>
         <ion-select-option value="pending">Pending</ion-select-option>
         <ion-select-option value="approved">Approved</ion-select-option>
         <ion-select-option value="reminder-sent">Reminder Sent</ion-select-option>
       </ion-select>
-      <ion-datetime presentation="date" placeholder="Date Range" class="custom-input"></ion-datetime>
+    
+      <div class="date-picker-container">
+        <label class="date-label">Start Date:</label>
+        <ion-datetime [(ngModel)]="filter.dateRange.start" placeholder="Start Date" (ionChange)="applyFilters()" class="custom-input"></ion-datetime>
+      </div>
+    
+      <div class="date-picker-container">
+        <label class="date-label">End Date:</label>
+        <ion-datetime [(ngModel)]="filter.dateRange.end" placeholder="End Date" (ionChange)="applyFilters()" class="custom-input"></ion-datetime>
+      </div>
     </ion-item>
+    
+    
 
     <ion-list>
-      <ion-item-sliding *ngFor="let notification of notifications">
+      <ion-item-sliding *ngFor="let notification of filteredNotifications">
         <ion-item (click)="toggleNotificationDetails(notification)" class="custom-item">
           <ion-label>
             <h2>{{notification.courseName}}</h2>
             <p>{{notification.courseType}} | {{notification.lecturer}}</p>
-            <p>{{notification.date}}</p>
+            <p>{{notification.date | date}}</p>
           </ion-label>
           <ion-chip [color]="notification.status === 'Approved' ? 'success' : 'warning'">
             {{notification.status}}

@@ -270,13 +270,17 @@
 
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Observable } from 'rxjs';
 import { finalize, map, switchMap } from 'rxjs/operators';
 import { User } from '../Model/user';
 import { AuthService } from './auth.service';
 import { collection } from 'firebase/firestore';
+import { AppNotification, NotificationLog } from '../Model/notification';
+
+
+
 
 interface DocumentItem {
   id?: string;
@@ -301,9 +305,32 @@ export class DataService {
     private afs: AngularFirestore,
     private auth: AngularFireAuth,
     private storage: AngularFireStorage,
-    private authService: AuthService,
+    private firestore: AngularFirestore,
     private db: AngularFirestore
   ) {}
+
+  getFaculties(): string[] {
+    return ['Faculty of Engineering', 'Faculty of Management Sciences', 'Faculty of Natural Sciences'];
+  }
+
+  getDepartmentsByFaculty(faculty: string): string[] {
+    switch (faculty) {
+      case 'Faculty of Engineering':
+        return [
+          'Department of Chemical Engineering',
+          'Department of Civil Engineering and Survey',
+          'Department of Construction Management and Quantity Surveying',
+          'Department of Electrical Engineering',
+          'Department of Mechanical Engineering'
+        ];
+      case 'Faculty of Management Sciences':
+        return []; // To be populated
+      case 'Faculty of Natural Sciences':
+        return []; // To be populated
+      default:
+        return [];
+    }
+  }
 
   // Upload document and store metadata in Firestore
   uploadDocuments(file: File, customDate: string, customModule: string, email: string): Observable<any> {
@@ -378,6 +405,34 @@ export class DataService {
       );
   }
 
+  getDocumentsExcludingEmail(excludedEmail: string): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('uploads', ref =>
+      ref.where('email', '!=', excludedEmail)
+    ).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { ...data, id }; // Ensure the ID is included in the returned object
+        });
+      })
+    );
+  }
+
+  getDocumentsByModules(modules: string[]): Observable<DocumentItem[]> {
+    return this.afs.collection<DocumentItem>('uploads', ref =>
+      ref.where('module', 'in', modules)
+    ).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data() as DocumentItem;
+          const id = a.payload.doc.id;
+          return { ...data, id }; // Ensure the ID is included in the returned object
+        });
+      })
+    );
+  }
+
   // New method to get a user by ID
   getUserById(userId: string): Observable<User | undefined> {
     return this.afs.collection<User>('/registeredStaff').doc(userId).valueChanges();
@@ -425,24 +480,7 @@ export class DataService {
     ).valueChanges();
   }
 
-  // getAllDocuments(): Observable<DocumentItem[]> {
-  //   return this.authService.getCurrentUserEmail().pipe(
-  //     switchMap(email => {
-  //       if (!email) {
-  //         return []; // Return an empty array if no email is available
-  //       }
-  //       return this.afs.collection<DocumentItem>('uploads', ref => ref.where('email', '==', email)).snapshotChanges().pipe(
-  //         map(actions => {
-  //           return actions.map(a => {
-  //             const data = a.payload.doc.data() as DocumentItem;
-  //             const id = a.payload.doc.id;
-  //             return { ...data, id }; // Ensure the ID is included in the returned object
-  //           });
-  //         })
-  //       );
-  //     })
-  //   );
-  // }
+
 
   getAllDocuments(): Observable<DocumentItem[]> {
     return this.afs.collection<DocumentItem>('uploads').snapshotChanges().pipe(
@@ -456,33 +494,6 @@ export class DataService {
     );
   }
   
-
-  getUserRecentDocument(): Observable<DocumentItem | undefined> {
-    return this.authService.getCurrentUserEmail().pipe(
-      switchMap(email => {
-        if (!email) {
-          return [undefined]; // Return undefined if no email is available
-        }
-        return this.afs.collection<DocumentItem>('uploads', ref => ref
-          .where('email', '==', email)
-          .orderBy('uploadedAt', 'desc')
-          .limit(1)
-        ).snapshotChanges().pipe(
-          map(actions => {
-            if (actions.length === 0) {
-              return undefined; // Return undefined if no document found
-            }
-            const a = actions[0];
-            const data = a.payload.doc.data() as DocumentItem;
-            const id = a.payload.doc.id;
-            return { ...data, id }; // Ensure the ID is included in the returned object
-          })
-        );
-      })
-    );
-  }
-
-
   // Methods to manage shared and declined documents
   setSharedDocuments(documents: DocumentItem[]) {
     this.sharedDocuments = documents;
@@ -546,28 +557,6 @@ export class DataService {
   getDeclinedDocuments(): DocumentItem[] {
     return this.declinedDocuments;
   }
-//New methods
-
-  // Method to delete document by name
-  // deleteDocumentByName(documentName: string): Promise<void> {
-  //   return new Promise((resolve, reject) => {
-  //     this.afs.collection<DocumentItem>('uploads', ref => ref.where('documentName', '==', documentName)).get().subscribe(snapshot => {
-  //       if (snapshot.empty) {
-  //         resolve(); // Resolve immediately if no documents found
-  //         return;
-  //       }
-
-  //       const batch = this.afs.firestore.batch();
-  //       snapshot.docs.forEach(doc => batch.delete(doc.ref));
-
-  //       batch.commit().then(() => resolve())
-  //         .catch(error => reject(error));
-  //     });
-  //   });
-  // }
-
- 
-
 
   async addDocumentToRejectedCollection(document: DocumentItem): Promise<void> {
     try {
@@ -590,23 +579,74 @@ export class DataService {
     );
   }
 
-
-
- 
-
   addStaff(user: User) {
     user.id = this.db.createId();
     return this.db.collection('/Users').add(user);
   }
 
-  // getAllStaff() {
-  //   return this.db.collection('/Users').snapshotChanges();
-  // }
-
- 
-
   getDocument(id: string) {
     return this.db.collection('uploads').doc(id).valueChanges();
   }
+  
+  // Method to get notifications with filters
+  getNotifications(courseType?: string, status?: string, dateRange?: { start: Date | null, end: Date | null }): Observable<AppNotification[]> {
+    let query: AngularFirestoreCollection<AppNotification> = this.firestore.collection('notifications');
 
-}
+    // Apply filters to the query
+    if (courseType) {
+      query = this.firestore.collection('notifications', ref => ref.where('courseType', '==', courseType));
+    }
+
+    if (status) {
+      query = this.firestore.collection('notifications', ref => ref.where('status', '==', status));
+    }
+
+    if (dateRange?.start && dateRange?.end) {
+      query = this.firestore.collection('notifications', ref => 
+        ref.where('date', '>=', dateRange.start).where('date', '<=', dateRange.end)
+      );
+    }
+
+    return query.valueChanges();
+  }
+
+  // Method to get all notification logs
+  getNotificationLogs(): Observable<AppNotification[]> {
+    return this.afs.collection('/notificationLogs').snapshotChanges().pipe(
+      map(actions => actions.map(a => {
+        const data = a.payload.doc.data() as any; // Replace 'any' with your NotificationLog type
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      }))
+    );
+  }
+
+    // Method to add a new notification
+    addNotification(notification: AppNotification): Promise<string> {
+      // Create a new document reference with an auto-generated ID
+      const notificationRef = this.afs.collection('notifications').doc(); 
+      notification.id = notificationRef.ref.id; // Set the document ID
+      // Set the document data
+      return notificationRef.set(notification).then(() => {
+        // Return the document ID
+        return notificationRef.ref.id;
+         
+      });
+    }
+    
+  
+    // Method to update an existing notification
+    updateNotification(id: string, updates: Partial<any>): Promise<void> { // Replace 'any' with your Notification type
+      return this.afs.collection('/notifications').doc(id).update(updates);
+    }
+  
+    // Method to schedule a reminder
+    scheduleReminder(reminderData: any): Promise<void> {
+      return this.firestore.collection('reminders').doc(reminderData.notificationId).set(reminderData);
+    }
+  
+    // Method to send a reminder
+    sendReminder(reminderData: any): Promise<void> {
+      return this.firestore.collection('reminders').doc(reminderData.notificationId).set(reminderData);
+    }
+} 
