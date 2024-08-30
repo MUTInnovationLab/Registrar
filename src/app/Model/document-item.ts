@@ -10,5 +10,10 @@ export interface DocumentItem {
     module: string;         // Module or category of the document
     url?: string;           // URL to access the document
     uploadedAt?: Date;      // Timestamp of when the document was uploaded
+    showDetails?: boolean; // Optional property for showing details
+    dateDeclined?: Date; // Optional property for the date declined
+    declinedBy?: string; // Optional property for the user who declined
+    reason?: string; // Optional property for the reason
+    position?: string; // Optional property for the position
   }
   

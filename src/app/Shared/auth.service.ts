@@ -22,6 +22,11 @@ export class AuthService {
       );
     }
     
+    getCurrentUser(): Observable<any> {
+      return this.fauth.authState.pipe(
+        map(user => user ? user : null) // Return the user object or null
+      );
+    }
   
     async registerUser(email:string, password:string){
   
@@ -36,6 +41,12 @@ export class AuthService {
     {
   
       return await this.fauth.signOut()
+    }
+
+    getCurrentUserEmail(): Observable<string | null> {
+      return this.fauth.authState.pipe(
+        map(user => user ? user.email : null)
+      );
     }
     
   

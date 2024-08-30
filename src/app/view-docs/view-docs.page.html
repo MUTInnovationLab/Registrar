@@ -1,12 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="back-icon" (click)="goBack()">Back
-        <ion-icon slot="icon" name="arrow-back" class="back-icon"></ion-icon>
+      <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
+        Back
+        <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-button>
+      <ion-button aria-label="Profile">
         <ion-icon slot="icon-only" name="person" class="profile-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -14,118 +15,77 @@
 </ion-header>
 
 <ion-content class="content-background">
-  <ion-title>All Documents</ion-title>
+  <ion-title>{{ activeTab.charAt(0).toUpperCase() + activeTab.slice(1) }} Documents</ion-title>
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input" [(ngModel)]="searchTerm" >
-    <ion-button class="search-button">Search</ion-button>
+    <input type="text" placeholder="Search documents..." 
+           class="search-input" 
+           [(ngModel)]="searchTerm" 
+           (ngModelChange)="filterDocuments()">  <!-- Trigger filtering when the search term changes -->
   </div>
-  <div class="view-docs-container">
+  
+
+  <!-- Toggle Button for Small Screens -->
+  <ion-button class="toggle-panel-button" (click)="toggleSidePanel()">
+    <ion-icon slot="icon-only" name="menu"></ion-icon>
+  </ion-button>
+
+  <div class="view-docs-container" [ngClass]="{'hide-panel': isPanelHidden}">
     <div class="side-panel">
       <ul>
         <li (click)="showDocuments('all')" [ngClass]="{'select': activeTab === 'all'}">
-          All Documents <span class="count-circle">{{allCount}}</span>
+          All Documents <span class="count-circle">{{ allCount }}</span>
         </li>
         <li (click)="showDocuments('approved')" [ngClass]="{'select': activeTab === 'approved'}">
-          Approved <span class="count-circle">{{approvedCount}}</span>
+          Approved <span class="count-circle">{{ approvedCount }}</span>
         </li>
         <li (click)="showDocuments('declined')" [ngClass]="{'select': activeTab === 'declined'}">
-          Declined <span class="count-circle">{{declinedCount}}</span>
+          Declined <span class="count-circle">{{ declinedCount }}</span>
         </li>
         <li (click)="showDocuments('suspended')" [ngClass]="{'select': activeTab === 'suspended'}">
-          Suspended <span class="count-circle">{{suspendedCount}}</span>
+          Suspended <span class="count-circle">{{ suspendedCount }}</span>
         </li>
       </ul>
     </div>
+
     <div class="table-container">
-      <div class="table-wrapper" *ngIf="activeTab === 'all'">
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Document Name</th>
-              <th>Status</th>
+      <table>
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Document Name</th>
+            <th>Status</th>
+            <th>Module</th>
+            <th>Upload Date</th>
+            <th>Open Document</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let doc of filteredDocuments; let i = index" 
+              [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+              (click)="selectRow(doc)">
+              <td>{{ doc.email || doc.uploadedBy }}</td>
+              <td>{{ doc.documentName || doc.fileName }}</td>
+              <td>{{ doc.status || 'N/A' }}</td>
+              <td>{{ doc.module }}</td>
+              <td>{{ doc.uploadDate || doc.submissionDate }}</td>
+              <td>
+                <a [href]="doc.url" target="_blank">
+                  <ion-icon name="eye-outline" class="blinking-eye" style="font-size: 24px; margin-left: 25px;"></ion-icon>
+              </a> 
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of filteredDocuments; let i = index" 
-                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
-                (click)="selectRow(doc)">
-              <td>{{doc.email}}</td>
-              <td>{{doc.documentName}}</td>
-              <td>{{doc.status}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrapper" *ngIf="activeTab === 'approved'">
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Document Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of approvedDocuments; let i = index" 
-                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
-                (click)="selectRow(doc)">
-              <td>{{doc.email}}</td>
-              <td>{{doc.documentName}}</td>
-              <td>{{doc.status}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrapper" *ngIf="activeTab === 'declined'">
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Document Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of declinedDocuments; let i = index" 
-                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
-                (click)="selectRow(doc)">
-              <td>{{doc.email}}</td>
-              <td>{{doc.documentName}}</td>
-              <td>{{doc.status}}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="table-wrapper" *ngIf="activeTab === 'suspended'">
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Document Name</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let doc of suspendedDocuments; let i = index" 
-                [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
-                (click)="selectRow(doc)">
-              <td>{{doc.email}}</td>
-              <td>{{doc.documentName}}</td>
-              <td>{{doc.status}}</td>
-            </tr>
-          </tbody>
-        </table>
+        </tbody>
+      </table>
+      <div *ngIf="filteredDocuments.length === 0" class="empty-state">
+        <p>No documents found for the current selection.</p>
       </div>
     </div>
   </div>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <ion-title class="slogan">
-      Designed with <ion-icon name="heart" class="heart-icon"></ion-icon> by MUT INNOVATION LAB
-    </ion-title>
-  </ion-toolbar>
-</ion-footer>

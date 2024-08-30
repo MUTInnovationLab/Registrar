@@ -1,0 +1,386 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search notifications"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+   Conditionally display either the notifications list or the manage notifications section 
+  <ng-container *ngIf="showManageNotifications; else notificationsList">
+     Manage Notifications Section 
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Manage Notifications</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="activeSection">
+          <ion-segment-button value="create" (click)="toggleSection('create')">Create</ion-segment-button>
+          <ion-segment-button value="edit" (click)="toggleSection('edit')">Edit</ion-segment-button>
+          <ion-segment-button value="schedule" (click)="toggleSection('schedule')">Schedule</ion-segment-button>
+          <ion-segment-button value="logs" (click)="toggleSection('logs')">Logs</ion-segment-button>
+        </ion-segment>
+
+        Create New Notification Interface 
+        <ion-item *ngIf="activeSection === 'create'">
+          <ion-label position="stacked">Course Name</ion-label>
+          <ion-input placeholder="Enter Course Name" [(ngModel)]="newNotification.courseName"></ion-input>
+
+          <ion-label position="stacked">Course Type</ion-label>
+          <ion-select [(ngModel)]="newNotification.courseType">
+            <ion-select-option value="semester">Semester</ion-select-option>
+            <ion-select-option value="annual">Annual</ion-select-option>
+          </ion-select>
+
+          <ion-label position="stacked">Lecturer</ion-label>
+          <ion-input placeholder="Enter Lecturer Name" [(ngModel)]="newNotification.lecturer"></ion-input>
+
+          <ion-label position="stacked">Date</ion-label>
+          <ion-datetime [(ngModel)]="newNotification.date"></ion-datetime>
+
+          <ion-button expand="block" color="primary" (click)="saveNewNotification()">Save Notification</ion-button>
+        </ion-item>
+
+       Edit Existing Notifications Interface
+        <ion-item *ngIf="activeSection === 'edit'">
+          <ion-label position="stacked">Select Notification</ion-label>
+          <ion-select [(ngModel)]="selectedNotification" (ionChange)="loadNotificationDetails()">
+            <ion-select-option *ngFor="let notification of notifications" [value]="notification">
+              {{notification.courseName}} - {{notification.lecturer}}
+            </ion-select-option>
+          </ion-select>
+
+          <ion-label position="stacked">Course Name</ion-label>
+          <ion-input *ngIf="selectedNotification" [(ngModel)]="selectedNotification.courseName"></ion-input>
+
+          <ion-label position="stacked">Course Type</ion-label>
+          <ion-select *ngIf="selectedNotification" [(ngModel)]="selectedNotification.courseType">
+            <ion-select-option value="semester">Semester</ion-select-option>
+            <ion-select-option value="annual">Annual</ion-select-option>
+          </ion-select>
+
+          <ion-label position="stacked">Lecturer</ion-label>
+          <ion-input *ngIf="selectedNotification" [(ngModel)]="selectedNotification.lecturer"></ion-input>
+
+          <ion-label position="stacked">Date</ion-label>
+          <ion-datetime *ngIf="selectedNotification" [(ngModel)]="selectedNotification.date"></ion-datetime>
+
+          <ion-button expand="block" color="primary" (click)="updateNotification()">Update Notification</ion-button>
+        </ion-item>
+
+         Schedule Reminders Interface 
+        <ion-item *ngIf="activeSection === 'schedule'">
+          <ion-label position="stacked">Reminder Timing</ion-label>
+          <ion-select [(ngModel)]="reminderSchedule">
+            <ion-select-option value="2days">2 Days After Initial Notification</ion-select-option>
+            <ion-select-option value="1week">1 Week After Initial Notification</ion-select-option>
+            <ion-select-option value="custom">Custom</ion-select-option>
+          </ion-select>
+
+          <ion-item *ngIf="reminderSchedule === 'custom'">
+            <ion-label position="stacked">Custom Days</ion-label>
+            <ion-input type="number" placeholder="Enter number of days" [(ngModel)]="customDays"></ion-input>
+          </ion-item>
+
+          <ion-button expand="block" color="primary" (click)="scheduleReminder()">Set Reminder Schedule</ion-button>
+        </ion-item>
+
+         View Notification Logs Interface 
+        <ion-item *ngIf="activeSection === 'logs'">
+          <ion-list>
+            <ion-item *ngFor="let log of notificationLogs">
+              <ion-label>
+                <h2>{{log.courseName}}</h2>
+                <p>{{log.date}} | {{log.status}}</p>
+                <p>Reminder Sent: {{log.reminderSent}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #notificationsList>
+     Existing Notifications List Section 
+    <ion-item>
+      <ion-select placeholder="Course Type">
+        <ion-select-option value="semester">Semester</ion-select-option>
+        <ion-select-option value="annual">Annual</ion-select-option>
+      </ion-select>
+      <ion-select placeholder="Status">
+        <ion-select-option value="pending">Pending</ion-select-option>
+        <ion-select-option value="approved">Approved</ion-select-option>
+        <ion-select-option value="reminder-sent">Reminder Sent</ion-select-option>
+      </ion-select>
+      <ion-datetime presentation="date" placeholder="Date Range"></ion-datetime>
+    </ion-item>
+
+    <ion-list>
+      <ion-item-sliding *ngFor="let notification of notifications">
+        <ion-item (click)="toggleNotificationDetails(notification)">
+          <ion-label>
+            <h2>{{notification.courseName}}</h2>
+            <p>{{notification.courseType}} | {{notification.lecturer}}</p>
+            <p>{{notification.date}}</p>
+          </ion-label>
+          <ion-chip [color]="notification.status === 'Approved' ? 'success' : 'warning'">
+            {{notification.status}}
+          </ion-chip>
+          <ion-icon name="chevron-down-outline" *ngIf="!notification.expanded"></ion-icon>
+          <ion-icon name="chevron-up-outline" *ngIf="notification.expanded"></ion-icon>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option (click)="sendReminder(notification)" color="primary">
+            <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <ion-item *ngIf="notification.expanded">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>Notification Details</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Course:</strong> {{notification.courseName}}</p>
+              <p><strong>Type:</strong> {{notification.courseType}}</p>
+              <p><strong>Lecturer:</strong> {{notification.lecturer}}</p>
+              <p><strong>Date:</strong> {{notification.date}}</p>
+              <p><strong>Status:</strong> {{notification.status}}</p>
+              <p><strong>Reminder Sent:</strong> {{notification.reminderSent}}</p>
+              <ion-button expand="block" color="primary" (click)="approveNotification(notification)">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Approve
+              </ion-button>
+              <ion-button expand="block" color="danger" (click)="rejectNotification(notification)">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Reject
+              </ion-button>
+              <ion-button expand="block" color="secondary" (click)="sendReminder(notification)">
+                <ion-icon name="send-outline" slot="start"></ion-icon>
+                Send Reminder Now
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ng-template>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="block" fill="clear">Back to Dashboard</ion-button>
+    <ion-button expand="block" fill="clear" (click)="toggleManageNotifications()">Manage Notifications</ion-button>
+    <ion-button expand="block" fill="clear">Settings</ion-button>
+  </ion-toolbar>
+</ion-footer> -->
+
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Notifications</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search notifications"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Conditionally display either the notifications list or the manage notifications section -->
+  <ng-container *ngIf="showManageNotifications; else notificationsList">
+    <!-- Manage Notifications Section -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Manage Notifications</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-segment [(ngModel)]="activeSection" color="primary">
+          <ion-segment-button value="create" (click)="toggleSection('create')">Create</ion-segment-button>
+          <ion-segment-button value="edit" (click)="toggleSection('edit')">Edit</ion-segment-button>
+          <ion-segment-button value="schedule" (click)="toggleSection('schedule')">Schedule</ion-segment-button>
+          <ion-segment-button value="logs" (click)="toggleSection('logs')">Logs</ion-segment-button>
+        </ion-segment>
+
+        <!-- Create New Notification Interface -->
+        <ion-item *ngIf="activeSection === 'create'" class="custom-item">
+          <ion-label position="stacked">Course Name</ion-label>
+          <ion-input placeholder="Enter Course Name" [(ngModel)]="newNotification.courseName" class="custom-input"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'create'" class="custom-item">
+          <ion-label position="stacked">Course Type</ion-label>
+          <ion-select [(ngModel)]="newNotification.courseType" class="custom-input">
+            <ion-select-option value="semester">Semester</ion-select-option>
+            <ion-select-option value="annual">Annual</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'create'" class="custom-item">
+          <ion-label position="stacked">Lecturer</ion-label>
+          <ion-input placeholder="Enter Lecturer Email" [(ngModel)]="newNotification.lecturer" class="custom-input"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'create'" class="custom-item">
+          <ion-label position="stacked">Date</ion-label>
+          <ion-datetime [(ngModel)]="newNotification.date" class="custom-input"></ion-datetime>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" (click)="saveNewNotification()">Save Notification</ion-button>
+
+        <!-- Edit Existing Notifications Interface -->
+        <ion-item *ngIf="activeSection === 'edit'" class="custom-item">
+          <ion-label position="stacked">Select Notification</ion-label>
+          <ion-select [(ngModel)]="selectedNotification" (ionChange)="loadNotificationDetails()" class="custom-input">
+            <ion-select-option *ngFor="let notification of notifications" [value]="notification">
+              {{notification.courseName}} - {{notification.lecturer}}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'edit'" class="custom-item">
+          <ion-label position="stacked">Course Name</ion-label>
+          <ion-input *ngIf="selectedNotification" [(ngModel)]="selectedNotification.courseName" class="custom-input"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'edit'" class="custom-item">
+          <ion-label position="stacked">Course Type</ion-label>
+          <ion-select *ngIf="selectedNotification" [(ngModel)]="selectedNotification.courseType" class="custom-input">
+            <ion-select-option value="semester">Semester</ion-select-option>
+            <ion-select-option value="annual">Annual</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'edit'" class="custom-item">
+          <ion-label position="stacked">Lecturer</ion-label>
+          <ion-input *ngIf="selectedNotification" [(ngModel)]="selectedNotification.lecturer" class="custom-input"></ion-input>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'edit'" class="custom-item">
+          <ion-label position="stacked">Date</ion-label>
+          <ion-datetime *ngIf="selectedNotification" [(ngModel)]="selectedNotification.date" class="custom-input"></ion-datetime>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" (click)="updateNotification()">Update Notification</ion-button>
+
+        <!-- Schedule Reminders Interface -->
+        <ion-item *ngIf="activeSection === 'schedule'" class="custom-item">
+          <ion-label position="stacked">Reminder Timing</ion-label>
+          <ion-select [(ngModel)]="reminderSchedule" class="custom-input">
+            <ion-select-option value="2days">2 Days After Initial Notification</ion-select-option>
+            <ion-select-option value="1week">1 Week After Initial Notification</ion-select-option>
+            <ion-select-option value="custom">Custom</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="activeSection === 'schedule' && reminderSchedule === 'custom'" class="custom-item">
+          <ion-label position="stacked">Custom Days</ion-label>
+          <ion-input type="number" placeholder="Enter number of days" [(ngModel)]="customDays" class="custom-input"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" color="primary" (click)="scheduleReminder()">Set Reminder Schedule</ion-button>
+
+        <!-- View Notification Logs Interface -->
+        <ion-item *ngIf="activeSection === 'logs'">
+          <ion-list>
+            <ion-item *ngFor="let log of notificationLogs">
+              <ion-label>
+                <h2>{{log.courseName}}</h2>
+                <p>{{log.date}} | {{log.status}}</p>
+                <p>Reminder Sent: {{log.reminderSent}}</p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #notificationsList>
+    <!-- Existing Notifications List Section -->
+    <ion-item class="custom-item">
+      <ion-select placeholder="Course Type" [(ngModel)]="filter.courseType" class="custom-input" (ionChange)="applyFilters()">
+        <ion-select-option value="">All</ion-select-option>
+        <ion-select-option value="semester">Semester</ion-select-option>
+        <ion-select-option value="annual">Annual</ion-select-option>
+      </ion-select>
+    
+      <ion-select placeholder="Status" [(ngModel)]="filter.status" class="custom-input" (ionChange)="applyFilters()">
+        <ion-select-option value="">All</ion-select-option>
+        <ion-select-option value="pending">Pending</ion-select-option>
+        <ion-select-option value="approved">Approved</ion-select-option>
+        <ion-select-option value="reminder-sent">Reminder Sent</ion-select-option>
+      </ion-select>
+    
+      <div class="date-picker-container">
+        <label class="date-label">Start Date:</label>
+        <ion-datetime [(ngModel)]="filter.dateRange.start" placeholder="Start Date" (ionChange)="applyFilters()" class="custom-input"></ion-datetime>
+      </div>
+    
+      <div class="date-picker-container">
+        <label class="date-label">End Date:</label>
+        <ion-datetime [(ngModel)]="filter.dateRange.end" placeholder="End Date" (ionChange)="applyFilters()" class="custom-input"></ion-datetime>
+      </div>
+    </ion-item>
+    
+    
+
+    <ion-list>
+      <ion-item-sliding *ngFor="let notification of filteredNotifications">
+        <ion-item (click)="toggleNotificationDetails(notification)" class="custom-item">
+          <ion-label>
+            <h2>{{notification.courseName}}</h2>
+            <p>{{notification.courseType}} | {{notification.lecturer}}</p>
+            <p>{{notification.date | date}}</p>
+          </ion-label>
+          <ion-chip [color]="notification.status === 'Approved' ? 'success' : 'warning'">
+            {{notification.status}}
+          </ion-chip>
+          <ion-icon name="chevron-down-outline" *ngIf="!notification.expanded"></ion-icon>
+          <ion-icon name="chevron-up-outline" *ngIf="notification.expanded"></ion-icon>
+        </ion-item>
+
+        <ion-item-options side="end">
+          <ion-item-option (click)="sendReminder(notification)" color="primary">
+            <ion-icon slot="icon-only" name="send-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+
+        <ion-item *ngIf="notification.expanded" class="custom-item">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle>Notification Details</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p><strong>Course:</strong> {{notification.courseName}}</p>
+              <p><strong>Type:</strong> {{notification.courseType}}</p>
+              <p><strong>Lecturer:</strong> {{notification.lecturer}}</p>
+              <p><strong>Date:</strong> {{notification.date}}</p>
+              <p><strong>Status:</strong> {{notification.status}}</p>
+              <p><strong>Reminder Sent:</strong> {{notification.reminderSent}}</p>
+              <ion-button expand="block" color="primary" (click)="approveNotification(notification)">
+                <ion-icon name="checkmark-outline" slot="start"></ion-icon>
+                Approve
+              </ion-button>
+              <ion-button expand="block" color="danger" (click)="rejectNotification(notification)">
+                <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+                Reject
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  </ng-template>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar class="custom-footer">
+    <ion-button (click)="toggleManageNotifications()">
+      <ion-icon slot="start" name="settings-outline"></ion-icon>
+      Manage Notifications
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

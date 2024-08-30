@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="back-button" (click)="goBack()">Back</ion-button>
@@ -19,7 +19,7 @@
     <ion-grid>
       <ion-row>
         <ion-col size="12" class="search-container">
-          <!-- Search bar for filtering documents -->
+          
           <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
         </ion-col>
       </ion-row>
@@ -29,6 +29,7 @@
             <thead>
               <tr>
                 <th>Email</th>
+                <th>Module</th>
                 <th>Document Name</th>
                 <th>Status</th>
                 <th>Comment</th>
@@ -37,6 +38,7 @@
             <tbody>
               <tr *ngFor="let item of filteredItems">
                 <td>{{ item.email }}</td>
+                <td>{{item.modules}}</td>
                 <td>{{ item.documentName }}</td>
                 <td>
                   <ion-select [(ngModel)]="item.status" (ionChange)="onStatusChange(item)">
@@ -63,5 +65,66 @@
       </div>
     </ion-grid>
   </div>
+</ion-content>
+ -->
+
+
+ <ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Navigation Bar with Table Headers -->
+  <ion-toolbar class="header-toolbar">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="2">
+          <div class="nav-header">Email</div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="nav-header">Module</div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="nav-header">Document Name</div>
+        </ion-col>
+        <ion-col size="2">
+          <div class="nav-header">Status</div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="nav-header">Comment</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="table-container">
+        <table>
+          <tbody>
+            <tr *ngFor="let item of filteredItems">
+              <td>{{ item.email }}</td>
+              <td>{{item.module}}</td>
+              <td>{{ item.documentName }}</td>
+              <td>
+                <ion-select [(ngModel)]="item.status" (ionChange)="onStatusChange(item)">
+                  <ion-select-option value="approved">Approved</ion-select-option>
+                  <ion-select-option value="declined">Declined</ion-select-option>
+                  <ion-select-option value="suspended">Suspended</ion-select-option>
+                </ion-select>
+              </td>
+              <td>
+                <ion-input [(ngModel)]="item.comment" placeholder="Add comment" class="comment-input"></ion-input>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 

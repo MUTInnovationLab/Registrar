@@ -1,12 +1,12 @@
 html, body {
-    height: 100%;
+    height: fit-content;
     margin: 0;
     overflow: hidden;
     font-family: Arial, sans-serif;
 }
 
 ion-toolbar {
-    --background: maroon;
+    --background: #562520;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -18,17 +18,76 @@ ion-buttons {
     align-items: center;
 }
 
-
-
 ion-title {
     padding: 10px 5px;
     margin: 5px 15px;
     color: white;
     text-align: center;
 }
+.blinking-eye {
+    animation: blink-animation 3s infinite ease-in-out; /* Blink animation every 3 seconds */
+}
+
+@keyframes blink-animation {
+    0%, 90%, 100% {
+        opacity: 1; /* Fully visible */
+    }
+    95% {
+        opacity: 0; /* Invisible (eye closed) */
+    }
+}
+
+.diamond-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px; /* Spacing between diamonds and content */
+    gap: 8px;
+  }
+  
+  /* Diamond Shape Styling */
+  /* Diamond Shape Styling */
+.diamond {
+    width: 50px;
+    height: 50px;
+    background-color: transparent;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: changeColor 3s infinite; /* Add animation */
+}
+
+/* Define keyframes for color changes */
+@keyframes changeColor {
+    0% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+    33% {
+        background-color: #800000; /* Maroon Diamond */
+    }
+    66% {
+        background-color: #FFCF33; /* Yellow Diamond */
+    }
+    100% {
+        background-color: #F8F9FA; /* White Diamond */
+    }
+}
+
+/* Specific Classes for Diamonds */
+.white-diamond {
+    animation-delay: 0s; /* Start immediately */
+}
+
+.maroon-diamond {
+    animation-delay: 1s; /* Start after 1 second */
+}
+
+.yellow-diamond {
+    animation-delay: 2s; /* Start after 2 seconds */
+}
+
+  
 
 .back-icon {
-    --background: maroon;
+    --background: #562520;;
     color: white;
     padding: 8px;
     border-radius: 50%;
@@ -42,7 +101,7 @@ ion-title {
 }
 
 .profile-icon {
-    --background: maroon;
+    --background: #562520;;
     color: black;
     padding: 8px;
     border-radius: 60%;
@@ -68,21 +127,24 @@ ion-title {
 }
 
 .search-icon {
-    color: maroon;
+    color: #562520;;
     margin-right: 10px;
 }
 
 .search-input {
     flex: 1;
     padding: 10px;
-    border: 1px solid maroon;
+    border: 1px solid #562520;;
     border-radius: 5px;
     margin-right: 10px;
+    background-color: white; /* Set background color */
     max-width: 100%; /* Ensure it doesn't overflow */
+    color: black; /* Set text color to white */
+
 }
 
 .search-button {
-    --background: maroon;
+    --background: #562520;;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -103,7 +165,7 @@ ion-title {
 }
 
 .side-panel {
-    background-color: maroon;
+    background-color: #562520;;
     padding: 10px;
     margin-right: 10px;
     border-radius: 5px;
@@ -123,7 +185,7 @@ ion-title {
     padding: 10px;
     cursor: pointer;
     margin-bottom: 10px;
-    background-color: maroon;
+    background-color: #562520;;
     border-radius: 5px;
     text-align: left;
     position: relative;
@@ -143,7 +205,7 @@ ion-title {
 
 .count-circle {
     background-color: white;
-    color: maroon;
+    color: #562520;;
     border-radius: 50%;
     padding: 5px 10px;
     position: absolute;
@@ -152,16 +214,17 @@ ion-title {
     transform: translateY(-50%);
 }
 
+
 .table-container {
     flex: 1;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-height: fit-content;
+    max-height: 68vh;
     width: 100%;
     position: relative;
-    overflow: hidden; /* Prevents overflow */
+    overflow-y: auto; 
 }
 
 .table-wrapper {
@@ -174,12 +237,12 @@ ion-title {
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 }
 
 thead {
-    background-color: maroon;
-    position: sticky;
+    background-color: #562520;;
+    position: relative;
     top: 0;
     z-index: 1;
 }
@@ -237,27 +300,16 @@ td, th {
     transform: scale(1.005);
 }
 
-ion-footer {
-    background-color: maroon;
-}
-
-ion-footer ion-title {
-    color: white;
-    text-align: center;
-}
-
-.heart-icon {
-    color: red;
-}
-
 @media (max-width: 768px) {
     .view-docs-container {
         flex-direction: column;
     }
 
     .side-panel {
-        width: 100%;
+        width: 94.5%;
         margin-bottom: 10px;
+        position: fixed;
+        z-index: 1000; /* Ensure it's on top of other elements */
     }
 
     .table-container {
@@ -274,6 +326,12 @@ ion-footer ion-title {
 @media (max-width: 480px) {
     ion-title {
         font-size: 16px;
+    }
+
+    .side-panel{
+        padding: 10px;
+        width: 94.5%;
+        margin-right: 5%;
     }
 
     .side-panel ul {
@@ -295,3 +353,89 @@ ion-footer ion-title {
         font-size: small;
     }
 }
+
+/* Other styles remain the same */
+
+/* Toggle Button for Small Screens */
+
+.empty-state {
+    text-align: center;
+    padding: 20px;
+    color: #562520;
+  }
+
+.toggle-panel-button {
+    display: none;
+    --background: #562520;
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    z-index: 1100;
+}
+
+@media (max-width: 768px) {
+    .toggle-panel-button {
+        display: block;
+    }
+
+    .view-docs-container.hide-panel .side-panel {
+        display: none;
+    }
+
+    .view-docs-container {
+        flex-direction: column;
+    }
+
+    .side-panel {
+        width: 100%;
+        margin-bottom: 10px;
+        position: fixed;
+        z-index: 1000; /* Ensure it's on top of other elements */
+    }
+
+    .table-container {
+        width: 100%;
+    }
+
+    .slogan {
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
+    }
+}
+
+@media (max-width: 480px) {
+    ion-title {
+        font-size: 16px;
+    }
+
+    .side-panel {
+        padding: 10px;
+        width: 100%;
+        margin-right: 5%;
+    }
+
+    .side-panel ul {
+        font-size: 14px;
+    }
+
+    .table-container {
+        padding: 10px;
+    }
+
+    th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .slogan {
+        overflow: hidden; /* Prevents overflow */
+        max-width: auto;
+        font-size: small;
+    }
+}
+

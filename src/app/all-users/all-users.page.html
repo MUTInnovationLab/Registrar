@@ -1,39 +1,55 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-    <ion-button class="back-icon" (click)="goBack()" >Back
-      <ion-icon slot="icon" name="arrow-back"  class="back-icon"></ion-icon>
-    </ion-button>
-  </ion-buttons>
+      <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
+        Back
+        <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button aria-label="Profile">
+        <ion-icon slot="icon-only" name="person" class="profile-icon"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="content-background">
-  <ion-title class="page-title">VIEW ALL USERS</ion-title>
+  <ion-title>All Users</ion-title>
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search documents..." class="search-input">
-    <ion-button class="search-button">Search</ion-button>
+    <input type="text" placeholder="Search by email, staff number, or role..." 
+           class="search-input" 
+           [(ngModel)]="searchTerm" 
+           (ngModelChange)="filterUsers()">
   </div>
 
   <div class="table-container">
     <div class="table-wrapper">
       <table>
         <thead>
-          <tr class="titles">
+          <tr>
             <th>Email</th>
             <th>Staff Number</th>
             <th>Role</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of users" class="details">
-            <td>{{user.email}}</td>
-            <td>{{user.staffNumber}}</td>
-            <td>{{user.role}}</td>
+          <tr *ngFor="let user of filteredUsers" class="details">
+            <td>{{ user.email }}</td>
+            <td>{{ user.staffNumber }}</td>
+            <td>{{ user.position}}</td>
           </tr>
         </tbody>
       </table>
+      <div *ngIf="filteredUsers.length === 0" class="empty-state">
+        <p>No users found.</p>
+      </div>
     </div>
   </div>
 </ion-content>
