@@ -366,7 +366,7 @@ async goToModules(): Promise<void> {
   try {
     await this.getUser();
 
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.scheduleInterview === 'on') {
+    if (this.userDocument && this.userDocument.role && this.userDocument.role.viewmodules === 'on') {
       // Navigate to the desired page
       this.navController.navigateForward('/modules');
     } else {
@@ -432,6 +432,7 @@ async presentConfirmationAlert() {
 async Validation() {
   // Check if the specific role is selected
   if (
+    this.role.modules === 'off' &&
     this.role.upload === 'off' &&
     this.role.viewDocs === 'off' &&
     this.role.rejection === 'off' &&
