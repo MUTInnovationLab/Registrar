@@ -36,8 +36,8 @@ export class AssignPage implements OnInit {
     dashboard : 'off',
     rejection : 'off',
     upload : 'off',
-    viewDocs : 'off'
-    
+    viewDocs : 'off',
+    modules: 'off'
 
     
   };
@@ -104,6 +104,11 @@ export class AssignPage implements OnInit {
   getViewDocsValue(event: any) {
     const toggleValue = event.target.checked ? 'on' : 'off';
     this.role.viewDocs = toggleValue;
+    console.log(this.role);
+  }
+  getModulesValue(event: any) {
+    const toggleValue = event.target.checked ? 'on' : 'off';
+    this.role.modules = toggleValue;
     console.log(this.role);
   }
 
@@ -355,6 +360,28 @@ async goToViewDocs(): Promise<void> {
     console.error('Error navigating to Schedule interview Page:', error);
   }
 }
+
+async goToModules(): Promise<void> {
+
+  try {
+    await this.getUser();
+
+    if (this.userDocument && this.userDocument.role && this.userDocument.role.scheduleInterview === 'on') {
+      // Navigate to the desired page
+      this.navController.navigateForward('/modules');
+    } else {
+      const toast = await this.toastController.create({
+        message: 'Unauthorized user.',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
+    }
+  } catch (error) {
+    console.error('Error navigating to View Modules Page:', error);
+  }
+}
+
 
 
 

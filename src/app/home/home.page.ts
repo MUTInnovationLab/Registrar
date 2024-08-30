@@ -94,6 +94,10 @@ export class HomePage {
             authorized = this.userDocument.role.rejection === 'on';
             message = 'Unauthorized user for rejection page.';
             break;
+            case 'modules':
+              authorized = this.userDocument.role.modules === 'on';
+              message = 'Unauthorized user for modules page.';
+              break;
           default:
             authorized = false;
             message = 'Invalid page.';
@@ -139,6 +143,11 @@ export class HomePage {
   goToApproval(): Promise<void> {
       return this.navigateBasedOnRole('approval');
     }
+
+  // Navigation back to home
+  goToModules(): Promise<void> {
+    return this.navigateBasedOnRole('modules');
+  }  
   
 
 }
