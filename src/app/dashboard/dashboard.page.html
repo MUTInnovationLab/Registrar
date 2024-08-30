@@ -49,13 +49,9 @@
    <div class="menu-button">
     <ion-item>
       <ion-icon name="book-outline"></ion-icon>
-     <ion-select >
-      <ion-select-option class="option">Information System 1</ion-select-option>
-      <ion-select-option>Information System 2</ion-select-option>
-      <ion-select-option>Information System 3</ion-select-option>
-      <ion-select-option>Information System 4</ion-select-option>
-      <ion-select-option>Information System 5</ion-select-option>
-      <ion-select-option>Information System 6</ion-select-option>
+     <ion-select  *ngFor="let document of documents$ | async">
+      <ion-select-option class="option">{{document.module}}</ion-select-option>
+      
      </ion-select>
      </ion-item>
     
@@ -127,11 +123,7 @@
     </section>
   </div>
 
-  <div class="menu-buttons">
-    <ion-button class="upload" (click)="Upload()">Upload</ion-button>
-  <ion-button class="view" (click)="View()">View</ion-button>
-    </div>
+ 
   </ion-content>
 
 
-  
