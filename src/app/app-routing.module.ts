@@ -58,6 +58,14 @@ const routes: Routes = [
     path: 'notification',
     loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
   },
+  {
+    path: 'board',
+    loadChildren: () => import('./board/board.module').then( m => m.BoardPageModule)
+  },
+  {
+    path: 'display-board',
+    loadChildren: () => import('./display-board/display-board.module').then( m => m.DisplayBoardPageModule)
+  },
 
 
   

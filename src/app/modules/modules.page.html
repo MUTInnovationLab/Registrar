@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
@@ -17,9 +17,9 @@
     <div class="diamond yellow-diamond"></div>
   </div>
 
-  <!-- Dropdowns Container -->
+  
   <div class="dropdown-container">
-    <!-- Faculties Dropdown -->
+    
     <ion-item>
       <ion-label>All Faculties</ion-label>
       <ion-select [(ngModel)]="selectedFaculty" (ionChange)="loadDepartments()">
@@ -29,7 +29,7 @@
       </ion-select>
     </ion-item>
 
-    <!-- Departments Dropdown -->
+   
     <ion-item>
       <ion-label>Departments</ion-label>
       <ion-select [(ngModel)]="selectedDepartment" (ionChange)="loadCourses()">
@@ -39,7 +39,7 @@
       </ion-select>
     </ion-item>
 
-    <!-- Courses Dropdown -->
+    
     <ion-item>
       <ion-label>Courses</ion-label>
       <ion-select [(ngModel)]="selectedCourse" (ionChange)="loadModules()">
@@ -49,7 +49,7 @@
       </ion-select>
     </ion-item>
 
-    <!-- Modules Dropdown -->
+   
     <ion-item>
       <ion-label>Modules</ion-label>
       <ion-select [(ngModel)]="selectedModule">
@@ -60,7 +60,7 @@
     </ion-item>
   </div>
 
-  <!-- Buttons Container -->
+  
   <div class="buttons-container">
     <ion-button class="add-icon" (click)="promptAction('faculty', 'Add')" aria-label="ADD">
       ADD Faculty
@@ -113,4 +113,4 @@
       <ion-icon slot="start" name="update-icon" class="update-icon"></ion-icon>
     </ion-button>
   </div>
-</ion-content>
+</ion-content> -->

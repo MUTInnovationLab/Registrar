@@ -9,6 +9,50 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="background">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Faculty</ion-label> -->
+          <ion-select [(ngModel)]="selectedFaculty" (ionChange)="onFacultyChange()" placeholder="Select Faculty">
+            <ion-select-option *ngFor="let faculty of faculties" [value]="faculty.id">{{ faculty.facultyName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Department</ion-label> -->
+          <ion-select [(ngModel)]="selectedDepartment" (ionChange)="onDepartmentChange()" placeholder="Select Department" [disabled]="!selectedFaculty">
+            <ion-select-option *ngFor="let department of departments" [value]="department.departmentName">{{ department.departmentName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Course</ion-label> -->
+          <ion-select [(ngModel)]="selectedCourse" (ionChange)="onCourseChange()" placeholder="Select Course" [disabled]="!selectedDepartment">
+            <ion-select-option *ngFor="let course of courses" [value]="course.courseName">{{ course.courseName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Module</ion-label> -->
+          <ion-select [(ngModel)]="selectedModule" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
+            <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+      
+    </ion-row>
+  </ion-grid>
+  
   <ion-grid class="grid-container">
     <ion-row>
       <ion-col size="12" class="info">
@@ -52,25 +96,15 @@
                   <div class="error-message" *ngIf="positionError">{{ positionError }}</div>
             </ion-item>
 
-            <ion-item>
-              <ion-label position="floating">Modules</ion-label>
-              <ion-select [(ngModel)]="modules" name="modules" (ionChange)="modulesError = null" multiple="true">
-                <ion-select-option value="IS1">IS1</ion-select-option>
-                <ion-select-option value="TP2">TP2</ion-select-option>
-                <ion-select-option value="SS1">SS1</ion-select-option>
-                <ion-select-option value="DS2">DS2</ion-select-option>
-                <ion-select-option value="Research">Research</ion-select-option>
-                <ion-select-option value="Data Science">Data Science</ion-select-option>
-                <ion-select-option value="IT Skills">Maths</ion-select-option>
-                <ion-select-option value="IT Skills">IT Skills</ion-select-option>
-                <ion-select-option value="IT Skills">Design</ion-select-option>
-                <ion-select-option value="IT Skills">Automation</ion-select-option>
-                
-
-              </ion-select>
-              <ion-icon name="briefcase" slot="start"></ion-icon>
-              <div class="error-message" *ngIf="modulesError">{{ modulesError }}</div>
-            </ion-item>
+            
+        
+                <ion-item>
+                  <!-- <ion-label>Module</ion-label> -->
+                  <ion-select [(ngModel)]="selectedModule" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
+                    <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              
             
             
 

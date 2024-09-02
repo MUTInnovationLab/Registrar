@@ -1,0 +1,80 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Academia Management</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Faculty</ion-label> -->
+          <ion-select [(ngModel)]="selectedFaculty" (ionChange)="onFacultyChange()" placeholder="Select Faculty">
+            <ion-select-option *ngFor="let faculty of faculties" [value]="faculty.id">{{ faculty.facultyName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Department</ion-label> -->
+          <ion-select [(ngModel)]="selectedDepartment" (ionChange)="onDepartmentChange()" placeholder="Select Department" [disabled]="!selectedFaculty">
+            <ion-select-option *ngFor="let department of departments" [value]="department.departmentName">{{ department.departmentName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Course</ion-label> -->
+          <ion-select [(ngModel)]="selectedCourse" (ionChange)="onCourseChange()" placeholder="Select Course" [disabled]="!selectedDepartment">
+            <ion-select-option *ngFor="let course of courses" [value]="course.courseName">{{ course.courseName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+
+      <ion-col size="3">
+        <ion-item>
+          <!-- <ion-label>Module</ion-label> -->
+          <ion-select [(ngModel)]="selectedModule" placeholder="Select Module" [disabled]="!selectedCourse">
+            <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div style="display: flex; justify-content: center; align-items: center;">
+    <ion-button (click)="populateFields()">Populate</ion-button>
+    <ion-button (click)="clearInputs()">Clear</ion-button>
+  </div>
+
+  <form (ngSubmit)="submitForm()">
+    <ion-item>
+      <ion-label position="stacked">Faculty Name</ion-label>
+      <ion-input [(ngModel)]="facultyName" name="facultyName" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Department Name</ion-label>
+      <ion-input [(ngModel)]="departmentName" name="departmentName" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Course Name</ion-label>
+      <ion-input [(ngModel)]="courseName" name="courseName" required></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Module Name</ion-label>
+      <ion-input [(ngModel)]="moduleName" name="moduleName" required></ion-input>
+    </ion-item>
+
+    <div class="button-container">
+      <ion-button style="--background: #054c5b;" expand="block"  type="submit">Add</ion-button>
+      <ion-button expand="block"  (click)="updateModule()">Update</ion-button>
+      <ion-button expand="block" color="danger" (click)="deleteModule()">Delete</ion-button>
+    </div>
+      </form>
+</ion-content>

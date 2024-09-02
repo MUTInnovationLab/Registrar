@@ -4,6 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
 import { getAuth, deleteUser,updateEmail } from 'firebase/auth';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { DataService } from '../Shared/data.service';
 
 @Component({
   selector: 'app-assign',
@@ -11,6 +12,17 @@ import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
   styleUrls: ['./assign.page.scss'],
 })
 export class AssignPage implements OnInit {
+  faculties: any[] = [];
+  departments: any[] = [];
+  courses: any[] = [];
+  modules: any[] = [];
+
+  selectedFaculty: string = '';
+  selectedDepartment: string = '';
+  selectedCourse: string = '';
+  selectedModule: string = '';  // Add this line
+
+
 
   nameError :any;
   positionError :any;
@@ -21,7 +33,7 @@ export class AssignPage implements OnInit {
   name:any;
   email:any;
   position:any;
-  modules:any;
+  // modules:any;
   staffNumber:any;
 
   userDocument:any;
@@ -48,7 +60,8 @@ export class AssignPage implements OnInit {
     private db: AngularFirestore,
     private loadingController: LoadingController,
     private auth: AngularFireAuth,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private dataService: DataService
   ) {
     this.navController = navCtrl;
   }
@@ -60,7 +73,46 @@ export class AssignPage implements OnInit {
 
 
   ngOnInit() {
-    
+    this.loadFaculties();
+  }
+
+  loadFaculties() {
+    this.dataService.getFaculties().subscribe((faculties: any[]) => {
+      this.faculties = faculties;
+    });
+  }
+
+  onFacultyChange() {
+    this.departments = [];
+    this.courses = [];
+    this.modules = [];
+    this.selectedDepartment = ''; // Reset selection
+    this.selectedCourse = ''; // Reset selection
+    this.selectedModule = ''; // Reset selection
+
+    this.dataService.getDepartments(this.selectedFaculty).subscribe((departments: any[]) => {
+      this.departments = departments;
+    });
+  }
+
+  onDepartmentChange() {
+    this.courses = [];
+    this.modules = [];
+    this.selectedCourse = ''; // Reset selection
+    this.selectedModule = ''; // Reset selection
+
+    this.dataService.getCourses(this.selectedFaculty, this.selectedDepartment).subscribe((courses: any[]) => {
+      this.courses = courses;
+    });
+  }
+
+  onCourseChange() {
+    this.modules = [];
+    this.selectedModule = ''; // Reset selection
+
+    this.dataService.getModules(this.selectedFaculty, this.selectedDepartment, this.selectedCourse).subscribe((modules: any[]) => {
+      this.modules = modules;
+    });
   }
 
   // Getter functions to access form control values easily in the template
@@ -513,7 +565,7 @@ async Validation() {
       this.name = '';
       this.email = '';
       this.position = '';
-      this.modules = '';
+      // this.modules = '';
       this.staffNumber = '';
 
       // Sign out the newly created user
