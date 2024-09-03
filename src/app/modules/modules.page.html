@@ -1,42 +1,116 @@
-<ion-header>
+<!-- <ion-header>
   <ion-toolbar>
-
     <ion-buttons slot="start">
       <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
         Back
         <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
       </ion-button>
     </ion-buttons>
-
     <ion-title>Modules Page</ion-title>
-
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="content-background">
-
   <div class="diamond-container">
     <div class="diamond white-diamond"></div>
     <div class="diamond maroon-diamond"></div>
     <div class="diamond yellow-diamond"></div>
   </div>
 
-  <ion-item>
-    <ion-label>All Faculties</ion-label>
-    <ion-select [(ngModel)]="selectedFaculty" (ionChange)="onFacultyChange()">
-      <ion-select-option *ngFor="let faculty of faculties" [value]="faculty">
-        {{ faculty }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+  
+  <div class="dropdown-container">
+    
+    <ion-item>
+      <ion-label>All Faculties</ion-label>
+      <ion-select [(ngModel)]="selectedFaculty" (ionChange)="loadDepartments()">
+        <ion-select-option *ngFor="let faculty of faculties" [value]="faculty">
+          {{ faculty }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
-  <ion-item>
-    <ion-label>Departments</ion-label>
-    <ion-select [(ngModel)]="selectedDepartment">
-      <ion-select-option *ngFor="let department of departments" [value]="department">
-        {{ department }}
-      </ion-select-option>
-    </ion-select>
-  </ion-item>
+   
+    <ion-item>
+      <ion-label>Departments</ion-label>
+      <ion-select [(ngModel)]="selectedDepartment" (ionChange)="loadCourses()">
+        <ion-select-option *ngFor="let department of departments" [value]="department">
+          {{ department }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
 
-</ion-content>
+    
+    <ion-item>
+      <ion-label>Courses</ion-label>
+      <ion-select [(ngModel)]="selectedCourse" (ionChange)="loadModules()">
+        <ion-select-option *ngFor="let course of courses" [value]="course">
+          {{ course }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+   
+    <ion-item>
+      <ion-label>Modules</ion-label>
+      <ion-select [(ngModel)]="selectedModule">
+        <ion-select-option *ngFor="let module of modules" [value]="module">
+          {{ module }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+
+  
+  <div class="buttons-container">
+    <ion-button class="add-icon" (click)="promptAction('faculty', 'Add')" aria-label="ADD">
+      ADD Faculty
+      <ion-icon slot="start" name="add-icon" class="add-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="add-icon" (click)="promptAction('department', 'Add')" aria-label="ADD">
+      ADD Department
+      <ion-icon slot="start" name="add-icon" class="add-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="add-icon" (click)="promptAction('course', 'Add')" aria-label="ADD">
+      ADD Course
+      <ion-icon slot="start" name="add-icon" class="add-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="add-icon" (click)="promptAction('module', 'Add')" aria-label="ADD">
+      ADD Module
+      <ion-icon slot="start" name="add-icon" class="add-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button class="delete-icon" (click)="promptAction('faculty', 'Delete')" aria-label="DELETE">
+      DELETE Faculty
+      <ion-icon slot="start" name="delete-icon" class="delete-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="delete-icon" (click)="promptAction('department', 'Delete')" aria-label="DELETE">
+      DELETE Department
+      <ion-icon slot="start" name="delete-icon" class="delete-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="delete-icon" (click)="promptAction('course', 'Delete')" aria-label="DELETE">
+      DELETE Course
+      <ion-icon slot="start" name="delete-icon" class="delete-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="delete-icon" (click)="promptAction('module', 'Delete')" aria-label="DELETE">
+      DELETE Module
+      <ion-icon slot="start" name="delete-icon" class="delete-icon"></ion-icon>
+    </ion-button>
+
+    <ion-button class="update-icon" (click)="promptAction('faculty', 'Update')" aria-label="UPDATE">
+      UPDATE Faculty
+      <ion-icon slot="start" name="update-icon" class="update-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="update-icon" (click)="promptAction('department', 'Update')" aria-label="UPDATE">
+      UPDATE Department
+      <ion-icon slot="start" name="update-icon" class="update-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="update-icon" (click)="promptAction('course', 'Update')" aria-label="UPDATE">
+      UPDATE Course
+      <ion-icon slot="start" name="update-icon" class="update-icon"></ion-icon>
+    </ion-button>
+    <ion-button class="update-icon" (click)="promptAction('module', 'Update')" aria-label="UPDATE">
+      UPDATE Module
+      <ion-icon slot="start" name="update-icon" class="update-icon"></ion-icon>
+    </ion-button>
+  </div>
+</ion-content> -->

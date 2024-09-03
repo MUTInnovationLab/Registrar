@@ -6,14 +6,14 @@ html, body {
 }
 
 ion-toolbar {
-    --background: #562520;;
+    --background: #562520;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px; /* Add padding for better spacing */
+    padding: 0 20px;
 }
 
-ion-toolbar ion-title{
+ion-toolbar ion-title {
     padding-right: 100px;
     font-size: medium;
 }
@@ -23,12 +23,16 @@ ion-buttons {
     align-items: center;
 }
 
-.content-background{
+.content-background {
     --background: #054c5b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
 .back-icon {
-    --background: #562520;;
+    --background: #562520;
     color: white;
     padding: 8px;
     border-radius: 50%;
@@ -67,10 +71,9 @@ ion-title {
     justify-content: center;
     margin-bottom: 20px; /* Spacing between diamonds and content */
     gap: 8px;
-  }
-  
-  /* Diamond Shape Styling */
-  /* Diamond Shape Styling */
+}
+
+/* Diamond Shape Styling */
 .diamond {
     width: 50px;
     height: 50px;
@@ -108,4 +111,48 @@ ion-title {
     animation-delay: 2s; /* Start after 2 seconds */
 }
 
+/* Styling for the dropdown container */
+.dropdown-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
 
+ion-item {
+    flex: 1 1 100%; /* Default to full width */
+    max-width: 100%;
+    margin: 10px;
+}
+
+/* Responsive Layout */
+@media (min-width: 768px) {
+    ion-item {
+        flex: 1 1 auto; /* Allow items to take up available space */
+        max-width: calc(25% - 20px); /* Adjust width as needed */
+    }
+}
+
+/* Styling for the buttons container */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+ion-button {
+    --background: #562520;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out, color 0.2s ease-in-out;
+}
+
+ion-button:hover {
+    --background: #054c5b;
+    color: rgb(201, 145, 21);
+}

@@ -1,0 +1,90 @@
+/* Header Styles */
+ion-header {
+    --background: #054c5b;
+    --color: #ffffff;
+  }
+  
+  ion-title {
+    color: #ffffff;
+  }
+  
+  /* Toolbar Styles */
+  ion-toolbar {
+    --background: #054c5b;
+    --color: #ffffff;
+  }
+  
+  /* Select & Button Styles */
+  ion-select {
+    --placeholder-color: #562520;
+  }
+  
+  ion-button {
+    --background: #c99115;
+    --color: #ffffff;
+    --border-radius: 4px;
+  }
+  
+  ion-button[expand="block"] {
+    --background: #c99115;
+  }
+  
+  ion-button[color="danger"] {
+    --background: #562520;
+  }
+  
+  /* Form Input Styles */
+  ion-input {
+    --background: #ffffff;
+    --color: #054c5b;
+    --border-color: #054c5b;
+    padding: 10px; /* Ensure padding so that text doesn’t get cut off */
+  }
+  
+  ion-item {
+    --border-color: #054c5b;
+  }
+  
+  /* Label Styles */
+  ion-item ion-label {
+    margin-bottom: 15px;
+    color: #562520;
+    font-size: 20px; /* Adjust font size if needed */
+  }
+  
+  /* Grid and Layout Styles */
+  ion-grid {
+    margin-top: 20px;
+  }
+  
+  ion-col {
+    padding: 10px;
+  }
+  
+  /* General Content Styles */
+  ion-content {
+    --background: #f4f4f4;
+  }
+  
+  /* Button Container Styles */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Space buttons evenly */
+    margin-top: 20px; /* Adjust space above buttons if needed */
+  }
+  
+  /* Button Styles */
+  .button-container ion-button {
+    flex: 1; /* Ensure buttons take up equal space */
+    margin: 0 5px; /* Space between buttons */
+    --background: #c99115; /* Default button color */
+    --color: #ffffff; /* Button text color */
+    --border-radius: 4px; /* Button border radius */
+  }
+  
+  /* Danger Button Specific Styles */
+  .button-container ion-button[color="danger"] {
+    --background: #562520; /* Danger button color */
+  }
+  
+  
