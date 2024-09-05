@@ -78,76 +78,135 @@ export class LoginPage implements OnInit {
     this.log();
   }
 
+  // async log() {
+  //   const loader = await this.loadingController.create({
+  //     message: 'Signing in',
+  //     cssClass: 'custom-loader-class'
+  //   });
+  //   await loader.present();
+
+  //   this.auth.signInWithEmailAndPassword(this.email, this.password)
+  //     .then((userCred) => {
+  //       if (userCred) {
+  //         this.db.collection('registeredStudents', ref => ref.where('email', '==', this.email))
+  //           .get()
+  //           .toPromise()
+  //           .then((querySnapshot: any) => {
+  //             querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
+  //               const id = doc.id;
+  //               const userData = doc.data();
+  //               const loginCount = userData.loginCount || 0;
+  //               const newLoginCount = loginCount + 1;
+
+  //               this.db.collection("registeredStudents").doc(id).update({ loginCount: newLoginCount });
+  //             });
+  //           });
+
+  //         this.db.collection("registeredStudents")
+  //           .ref.where("email", "==", this.email.trim())
+  //           .get()
+  //           .then((querySnapshot) => {
+  //             loader.dismiss();
+  //             if (!querySnapshot.empty) {
+  //               this.navCtrl.navigateForward("/dashboard");
+  //             } else {
+  //               this.navCtrl.navigateForward("/home");
+  //             }
+  //           })
+  //           .catch((error) => {
+  //             loader.dismiss();
+  //             const errorMessage = error.message;
+  //             console.error("Error checking registered students:", errorMessage);
+  //           });
+  //       }
+  //     })
+  //     .catch(async (error) => {
+  //       loader.dismiss();
+  //       const errorMessage = error.message;
+  //       if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." 
+  //       || errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
+  //         const toast = this.toastController.create({
+  //           message: 'Invalid email or password',
+  //           duration: 2000,
+  //           color: 'danger'
+  //         });
+  //         (await toast).present();
+  //       } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
+  //         const toast = this.toastController.create({
+  //           message: 'Incorrectly formatted email',
+  //           duration: 2000,
+  //           color: 'danger'
+  //         });
+  //         (await toast).present();
+  //       } else {
+  //         const toast = this.toastController.create({
+  //           message: 'Error signing in: ' + errorMessage,
+  //           duration: 2000,
+  //           color: 'danger'
+  //         });
+  //         (await toast).present();
+  //       }
+  //     });
+  // }
+
   async log() {
     const loader = await this.loadingController.create({
-      message: 'Signing in',
-      cssClass: 'custom-loader-class'
+        message: 'Signing in',
+        cssClass: 'custom-loader-class'
     });
     await loader.present();
 
-    this.auth.signInWithEmailAndPassword(this.email, this.password)
-      .then((userCred) => {
-        if (userCred) {
-          this.db.collection('registeredStudents', ref => ref.where('email', '==', this.email))
-            .get()
-            .toPromise()
-            .then((querySnapshot: any) => {
-              querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
-                const id = doc.id;
-                const userData = doc.data();
-                const loginCount = userData.loginCount || 0;
-                const newLoginCount = loginCount + 1;
+    try {
+        // Hard-coded admin credentials
+        const adminCredentials = [
+            { email: 'admin1@gmail.com', password: 'admin1' },
+            { email: 'admin2@gmail.com', password: 'admin2' },
+            { email: 'admin3@gmail.com', password: 'admin3' }
+        ];
 
-                this.db.collection("registeredStudents").doc(id).update({ loginCount: newLoginCount });
-              });
-            });
-
-          this.db.collection("registeredStudents")
-            .ref.where("email", "==", this.email.trim())
-            .get()
-            .then((querySnapshot) => {
-              loader.dismiss();
-              if (!querySnapshot.empty) {
-                this.navCtrl.navigateForward("/dashboard");
-              } else {
-                this.navCtrl.navigateForward("/home");
-              }
-            })
-            .catch((error) => {
-              loader.dismiss();
-              const errorMessage = error.message;
-              console.error("Error checking registered students:", errorMessage);
-            });
-        }
-      })
-      .catch(async (error) => {
-        loader.dismiss();
-        const errorMessage = error.message;
-        if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." 
-        || errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
-          const toast = this.toastController.create({
-            message: 'Invalid email or password',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
-        } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
-          const toast = this.toastController.create({
-            message: 'Incorrectly formatted email',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
+        // Check if the user is an admin
+        const isAdmin = adminCredentials.some(admin => admin.email === this.email && admin.password === this.password);
+        
+        if (isAdmin) {
+            loader.dismiss();
+            this.navCtrl.navigateForward("/home");
         } else {
-          const toast = this.toastController.create({
+            // If not an admin, check if the user is a staff member
+            const staffQuery = this.db.collection('registeredStaff', ref => 
+                ref.where('email', '==', this.email)
+                   .where('staffNumber', '==', this.password) // Treat password field as staffNumber for staff login
+            );
+            const staffSnapshot = await staffQuery.get().toPromise();
+
+            loader.dismiss();
+
+            if (staffSnapshot && !staffSnapshot.empty) {
+                this.navCtrl.navigateForward("/dashboard");
+            } else {
+                const toast = await this.toastController.create({
+                    message: 'User not found',
+                    duration: 2000,
+                    color: 'danger'
+                });
+                await toast.present();
+            }
+        }
+    } catch (error) {
+        loader.dismiss();
+        const errorMessage = (error as Error).message;
+        const toast = await this.toastController.create({
             message: 'Error signing in: ' + errorMessage,
             duration: 2000,
             color: 'danger'
-          });
-          (await toast).present();
-        }
-      });
-  }
+        });
+        await toast.present();
+    }
+}
+
+
+
+
+  
 
   async getUserData(email: string) {
     try {
