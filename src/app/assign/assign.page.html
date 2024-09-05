@@ -44,7 +44,7 @@
       <ion-col size="3">
         <ion-item>
           <!-- <ion-label>Module</ion-label> -->
-          <ion-select [(ngModel)]="selectedModule" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
+          <ion-select [(ngModel)]="selectedModules" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
             <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
           </ion-select>
         </ion-item>
@@ -100,7 +100,7 @@
         
                 <ion-item>
                   <!-- <ion-label>Module</ion-label> -->
-                  <ion-select [(ngModel)]="selectedModule" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
+                  <ion-select [(ngModel)]="selectedModules" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
                     <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
                   </ion-select>
                 </ion-item>

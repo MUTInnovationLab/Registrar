@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
-import { getAuth, deleteUser,updateEmail } from 'firebase/auth';
+import { getAuth, deleteUser, updateEmail } from 'firebase/auth';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { DataService } from '../Shared/data.service';
 
@@ -20,38 +20,31 @@ export class AssignPage implements OnInit {
   selectedFaculty: string = '';
   selectedDepartment: string = '';
   selectedCourse: string = '';
-  selectedModule: string = '';  // Add this line
+  selectedModules: string[] = []; // Change to an array for multiple selection
 
+  nameError: string | null = null;
+  positionError: string | null = null;
+  modulesError: string | null = null;
+  staffError: string | null = null;
+  emailError: string | null = null;
 
-
-  nameError :any;
-  positionError :any;
-  modulesError: any;
-  staffError : any;
-  emailError: any;
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  name:any;
-  email:any;
-  position:any;
-  // modules:any;
-  staffNumber:any;
+  name: string = '';
+  email: string = '';
+  position: string = '';
+  staffNumber: string = '';
 
-  userDocument:any;
+  userDocument: any;
 
-  navController: NavController;
-
-  
   role = {
-    allUsers : 'off',
-    approval : 'off',
-    assign  : 'off',
-    dashboard : 'off',
-    rejection : 'off',
-    upload : 'off',
-    viewDocs : 'off',
+    allUsers: 'off',
+    approval: 'off',
+    assign: 'off',
+    dashboard: 'off',
+    rejection: 'off',
+    upload: 'off',
+    viewDocs: 'off',
     modules: 'off'
-
-    
   };
 
   constructor(
@@ -62,15 +55,7 @@ export class AssignPage implements OnInit {
     private auth: AngularFireAuth,
     private navCtrl: NavController,
     private dataService: DataService
-  ) {
-    this.navController = navCtrl;
-  }
-
-  
-  goToView(): void {
-    this.navController.navigateBack('/staffprofile');
-  }
-
+  ) {}
 
   ngOnInit() {
     this.loadFaculties();
@@ -86,9 +71,9 @@ export class AssignPage implements OnInit {
     this.departments = [];
     this.courses = [];
     this.modules = [];
-    this.selectedDepartment = ''; // Reset selection
-    this.selectedCourse = ''; // Reset selection
-    this.selectedModule = ''; // Reset selection
+    this.selectedDepartment = '';
+    this.selectedCourse = '';
+    this.selectedModules = [];
 
     this.dataService.getDepartments(this.selectedFaculty).subscribe((departments: any[]) => {
       this.departments = departments;
@@ -98,8 +83,8 @@ export class AssignPage implements OnInit {
   onDepartmentChange() {
     this.courses = [];
     this.modules = [];
-    this.selectedCourse = ''; // Reset selection
-    this.selectedModule = ''; // Reset selection
+    this.selectedCourse = '';
+    this.selectedModules = [];
 
     this.dataService.getCourses(this.selectedFaculty, this.selectedDepartment).subscribe((courses: any[]) => {
       this.courses = courses;
@@ -108,503 +93,244 @@ export class AssignPage implements OnInit {
 
   onCourseChange() {
     this.modules = [];
-    this.selectedModule = ''; // Reset selection
+    this.selectedModules = [];
 
     this.dataService.getModules(this.selectedFaculty, this.selectedDepartment, this.selectedCourse).subscribe((modules: any[]) => {
       this.modules = modules;
     });
   }
 
-  // Getter functions to access form control values easily in the template
- 
-
   getAdduserValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.assign = toggleValue;
+    this.role.assign = event.target.checked ? 'on' : 'off';
   }
 
-  getAllusersValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.allUsers = toggleValue;
+  getAllUsersValue(event: any) {
+    this.role.allUsers = event.target.checked ? 'on' : 'off';
   }
 
   getApprovalValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.approval = toggleValue;
+    this.role.approval = event.target.checked ? 'on' : 'off';
   }
 
   getDashboardValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.dashboard = toggleValue;
+    this.role.dashboard = event.target.checked ? 'on' : 'off';
   }
 
   getRejectionValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.rejection = toggleValue;
-    console.log(this.role);
+    this.role.rejection = event.target.checked ? 'on' : 'off';
   }
+
   getUploadValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.upload = toggleValue;
-    console.log(this.role);
+    this.role.upload = event.target.checked ? 'on' : 'off';
   }
-  getAllUsersValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.allUsers = toggleValue;
-    console.log(this.role);
-  }
+
   getViewDocsValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.viewDocs = toggleValue;
-    console.log(this.role);
+    this.role.viewDocs = event.target.checked ? 'on' : 'off';
   }
+
   getModulesValue(event: any) {
-    const toggleValue = event.target.checked ? 'on' : 'off';
-    this.role.modules = toggleValue;
-    console.log(this.role);
+    this.role.modules = event.target.checked ? 'on' : 'off';
   }
 
-
-
-  goToStaffProfile(): void {
-    this.navController.navigateBack('/staffprofile');
-  }
-  
-  
-  updateUser() {
+  async updateUser() {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (user) {
       const documentRef = this.db.doc(`registeredStaff/${user.uid}`).ref;
-  
-      // Update the Firestore document
-      updateDoc(documentRef, {
-        Name: this.name,
-        email: this.email,
-        staffNumber: this.staffNumber,
-        position: this.position,
-        modules: this.modules,
-        role: this.role
-      })
-      .then(() => {
-        // Optionally, update the user's email in Firebase Authentication
-        updateEmail(user, this.email)
-          .then(() => {
-            alert('User updated successfully');
-          })
-          .catch((error) => {
-            alert(`Failed to update email: ${error.message}`);
-          });
-      })
-      .catch((error) => {
-        alert(`Failed to update user data: ${error.message}`);
-      });
+
+      try {
+        await updateDoc(documentRef, {
+          Name: this.name,
+          email: this.email,
+          staffNumber: this.staffNumber,
+          position: this.position,
+          modules: this.selectedModules, // Update this line
+          role: this.role
+        });
+
+        if (this.email) {
+          await updateEmail(user, this.email);
+        }
+
+        alert('User updated successfully');
+      } catch (error) {
+        alert(`Failed to update user data: ${error}`);
+      }
     } else {
       alert('No user is signed in');
     }
   }
 
-  
-  deleteUser() {
+  async deleteUser() {
     const auth = getAuth();
     const user = auth.currentUser;
-  
+
     if (user) {
       const documentRef = this.db.doc(`registeredStaff/${user.uid}`).ref;
-  
-      // Delete the Firestore document
-      deleteDoc(documentRef)
-      .then(() => {
-        // Optionally, delete the user from Firebase Authentication
-        deleteUser(user)
-          .then(() => {
-            alert('User deleted successfully');
-          })
-          .catch((error) => {
-            alert(`Failed to delete user from authentication: ${error.message}`);
-          });
-      })
-      .catch((error) => {
-        alert(`Failed to delete user data: ${error.message}`);
-      });
+
+      try {
+        await deleteDoc(documentRef);
+        await deleteUser(user);
+        alert('User deleted successfully');
+      } catch (error) {
+        alert(`Failed to delete user: ${error}`);
+      }
     } else {
       alert('No user is signed in');
     }
   }
-  
 
+  async getUser() {
+    const user = await this.auth.currentUser;
 
+    if (user) {
+      try {
+        const querySnapshot = await this.db.collection('registeredStaff').ref.where('email', '==', user.email).get();
+        if (!querySnapshot.empty) {
+          this.userDocument = querySnapshot.docs[0].data();
+          console.log(this.userDocument);
+        }
+      } catch (error) {
+        console.error('Error getting user document:', error);
+      }
+    }
+  }
 
-
-
-
-//Previlages
-
-ionViewDidEnter() {
-  this.getUser();
-}
-
-async getUser(): Promise<void> {
-  const user = await this.auth.currentUser;
-
-  if (user) {
+  async goToPage(page: string, roleCheck: string) {
     try {
-      const querySnapshot = await this.db
-        .collection('registeredStaff')
-        .ref.where('email', '==', user.email)
-        .get();
+      await this.getUser();
 
-      if (!querySnapshot.empty) {
-        this.userDocument = querySnapshot.docs[0].data();
-        console.log(this.userDocument);
+      if (this.userDocument && this.userDocument.role && this.userDocument.role[roleCheck] === 'on') {
+        this.navCtrl.navigateForward(`/${page}`);
+      } else {
+        const toast = await this.toastController.create({
+          message: 'Unauthorized user.',
+          duration: 2000,
+          position: 'top'
+        });
+        toast.present();
       }
     } catch (error) {
-      console.error('Error getting user document:', error);
+      console.error(`Error navigating to ${page} Page:`, error);
     }
   }
-}
 
-
-
-
-
-async goToAllUsers(): Promise<void> {
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.allUsers === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/all-users');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to All Users Page:', error);
+  goToHomePage() {
+    this.navCtrl.navigateBack('/home');
   }
-}
 
-
-async goToApproval(): Promise<void> {
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.validation === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/approval');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to approvalPage:', error);
-  }
-}
-
-async goToAssign(): Promise<void> {
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.history === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/assign');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to Assign Page:', error);
-  }
-}
-
-async  goToDashboard(): Promise<void> {
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.allUsers === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/dashboard');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to All Dashboard Page:', error);
-  }
-}
-
-async goToRejection(): Promise<void> {
-
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.marks === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/rejection');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to Graded rejection Page:', error);
-  }
-}
-
-async goToUpload(): Promise<void> {
-
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.upcomingInterviews === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/upload');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to Scheduled interviews Page:', error);
-  }
-}
-
-async goToViewDocs(): Promise<void> {
-
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.scheduleInterview === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/view-docs');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to Schedule interview Page:', error);
-  }
-}
-
-async goToModules(): Promise<void> {
-
-  try {
-    await this.getUser();
-
-    if (this.userDocument && this.userDocument.role && this.userDocument.role.viewmodules === 'on') {
-      // Navigate to the desired page
-      this.navController.navigateForward('/modules');
-    } else {
-      const toast = await this.toastController.create({
-        message: 'Unauthorized user.',
-        duration: 2000,
-        position: 'top'
-      });
-      toast.present();
-    }
-  } catch (error) {
-    console.error('Error navigating to View Modules Page:', error);
-  }
-}
-
-
-
-
-goToMenuPage(): void {
-  this.navController.navigateForward('/home').then(() => {
-    window.location.reload();
-  });
-}
-
-async presentConfirmationAlert() {
-  const alert = await this.alertController.create({
-    header: 'Confirmation',
-    message: 'Are you sure you want to SIGN OUT?',
-    buttons: [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-       cssClass: 'my-custom-alert',
-        handler: () => {
-          console.log('Confirmation canceled');
+  async presentConfirmationAlert() {
+    const alert = await this.alertController.create({
+      header: 'Confirmation',
+      message: 'Are you sure you want to SIGN OUT?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'my-custom-alert',
+          handler: () => {
+            console.log('Confirmation canceled');
+          }
+        }, {
+          text: 'Confirm',
+          handler: () => {
+            this.auth.signOut().then(() => {
+              this.navCtrl.navigateForward("/login");
+              this.presentToast();
+            }).catch((error) => {
+              console.error('Error signing out:', error);
+            });
+          }
         }
-      }, {
-        text: 'Confirm',
-        handler: () => {
-         
-          
-          this.auth.signOut().then(() => {
-            this.navController.navigateForward("/login");
-            this.presentToast()
-      
-      
-          }).catch((error) => {
-          
-          });
+      ]
+    });
+    await alert.present();
+  }
 
+  async Validation() {
+    if (Object.values(this.role).every(value => value === 'off')) {
+      alert('Please select at least one role.');
+      return;
+    }
 
+    this.emailError = this.staffError = this.positionError = this.modulesError = this.nameError = null;
 
-        }
+    if (!this.name) {
+      this.nameError = 'Please enter name.';
+      alert(this.nameError);
+      return;
+    }
+
+    if (!this.email) {
+      this.emailError = 'Please enter email.';
+      alert(this.emailError);
+      return;
+    }
+
+    if (!this.emailRegex.test(this.email)) {
+      this.emailError = 'Please enter a valid email address.';
+      alert(this.emailError);
+      return;
+    }
+
+    if (!this.position) {
+      this.positionError = 'Please enter position.';
+      alert(this.positionError);
+      return;
+    }
+
+    if (this.selectedModules.length === 0) {
+      this.modulesError = 'Please select at least one module.';
+      alert(this.modulesError);
+      return;
+    }
+
+    if (!this.staffNumber) {
+      this.staffError = 'Please enter staff number.';
+      alert(this.staffError);
+      return;
+    }
+
+    const loader = await this.loadingController.create({
+      message: 'Assigning',
+      cssClass: 'custom-loader-class'
+    });
+    await loader.present();
+
+    try {
+      const userCredential = await this.auth.createUserWithEmailAndPassword(this.email, this.staffNumber);
+      if (userCredential.user) {
+        await this.db.collection('registeredStaff').add({
+          Name: this.name,
+          email: this.email,
+          staffNumber: this.staffNumber,
+          position: this.position,
+          modules: this.selectedModules, // Update this line
+          role: this.role
+        });
+        alert("Staff registered successfully");
+
+        this.name = this.email = this.position = this.staffNumber = '';
+        this.selectedModules = [];
+
+        await this.auth.signOut();
+      } else {
+        alert('User not found');
       }
-    ]
-  });
-  await alert.present();
-}
-
-
-
-
-async Validation() {
-  // Check if the specific role is selected
-  if (
-    this.role.modules === 'off' &&
-    this.role.upload === 'off' &&
-    this.role.viewDocs === 'off' &&
-    this.role.rejection === 'off' &&
-    this.role.assign === 'off' &&
-    this.role.allUsers === 'off' &&
-    this.role.dashboard === 'off' &&
-    this.role.allUsers === 'off' &&
-    this.role.approval === 'off' 
-  ) {
-    alert('Please select at least one role.');
-    return;
-  }
-
-  // Proceed with other validation checks
-  this.emailError = null;
-  this.staffError = null;
-  this.positionError = null;
-  this.modulesError = null;
-  this.nameError = null;
-
-  if (!this.name) {
-    this.nameError = 'Please enter name.';
-    alert('Please enter name');
-    return;
-  }
-
-  if (!this.email) {
-    this.emailError = 'Please enter email.';
-    alert('Please enter email');
-    return;
-  }
-
-  if (!this.emailRegex.test(this.email)) {
-    this.emailError = 'Please enter a valid email Address.';
-    alert('Please enter a valid email Address.');
-    return;
-  }
-
-  if (!this.position) {
-    this.positionError = 'Please enter position.';
-    alert('Please enter position.');
-    return;
-  }
-
-  if (!this.modules) {
-    this.modulesError = 'Please enter moduls.';
-    alert('Please enter position.');
-    return;
-  }
-
-  if (!this.staffNumber) {
-    this.staffError = 'Please enter staff number.';
-    alert('Please enter staff number.');
-    return;
-  }
-
-  const loader = await this.loadingController.create({
-    message: 'Assigning',
-    cssClass: 'custom-loader-class'
-  });
-  await loader.present();
-
-  try {
-    const userCredential = await this.auth.createUserWithEmailAndPassword(this.email, this.staffNumber);
-    if (userCredential.user) {
-      await this.db.collection('registeredStaff').add({
-        Name: this.name,
-        email: this.email,
-        staffNumber: this.staffNumber,
-        position: this.position,
-        modules: this.modules,
-        role: this.role
-        
-      });
-      alert("Staff registered successfully");
-
-      // Clear the field values
-      this.name = '';
-      this.email = '';
-      this.position = '';
-      // this.modules = '';
-      this.staffNumber = '';
-
-      // Sign out the newly created user
-      await this.auth.signOut();
-
-      // Optionally, re-authenticate the original user if needed
-      // await this.auth.signInWithEmailAndPassword(originalUserEmail, originalUserPassword);
-    } else {
-      alert('User not found');
+    } catch (error) {
+      alert(error);
+    } finally {
+      loader.dismiss();
     }
-  } catch (error: any ) {
-    const errorMessage = error.message;
-    alert(errorMessage);
-  } finally {
-    loader.dismiss();
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'SIGNED OUT!',
+      duration: 1500,
+      position: 'top',
+    });
+    await toast.present();
   }
 }
-
-
-
-
-
-async presentToast() {
-  const toast = await this.toastController.create({
-    message: 'SIGNED OUT!',
-    duration: 1500,
-    position: 'top',
-  
-  });
-
-  await toast.present();
-}
-
-goToHomePage(): void {
-  this.navController.navigateBack('/home');
-}
-
-
-}
-  
-
-

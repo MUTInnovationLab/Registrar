@@ -18,7 +18,7 @@
           <div class="position" ><ion-icon name="briefcase-outline"></ion-icon> Position: {{ currentUserPosition }}</div>
         </ion-col>
         <ion-col size="2">
-          <ion-router-link href="/view-docs" class="nav-header"><ion-icon name="documents-outline"></ion-icon> My Documents</ion-router-link>
+          <ion-router-link (click)="myDocs()" class="nav-header"><ion-icon name="documents-outline"></ion-icon> My Documents</ion-router-link>
         </ion-col>
         <ion-col size="2">
           <ion-router-link href="/rejection" class="nav-header"><ion-icon name="document-lock-outline"></ion-icon> Rejected Documents</ion-router-link>
@@ -85,41 +85,45 @@
         </ion-button>
         
         <swiper-container
-  #swiper
-  (slideChange)="swiperSlideChanged($event)"
-  [loop]="true"
-  [slidesPerView]="3"
-  [slidesPerGroup]="1"
-  [spaceBetween]="10"
-  [pagination]="{ clickable: true }">
-  
-  <swiper-slide *ngFor="let roleData of rolesData">
-    <ion-card class="Card">
-      <br>
-      <ion-card-subtitle>{{ roleData.role }}</ion-card-subtitle>
-      <ion-card style="margin-top: 90px;">
-        <ion-card-content>
-          {{ roleData.documentName }}
-        </ion-card-content>
-      </ion-card>
-      <div style="margin-top: 70px;">
-        <ion-button (click)="downloadDocument(roleData.url)">
-          <ion-icon name="cloud-download"></ion-icon>
-        </ion-button>
-        <label>{{ roleData.status }}</label>
-        <ion-button (click)="previewDocument(roleData.url)">
-          <ion-icon name="eye"></ion-icon>
-        </ion-button>
-      </div>
-    </ion-card>
-  </swiper-slide>
-</swiper-container>
-
-
+          #swiper
+          (slideChange)="swiperSlideChanged($event)"
+          [loop]="true"
+          [slidesPerView]="3"
+          [slidesPerGroup]="1"
+          [spaceBetween]="10"
+          [pagination]="{ clickable: true }">
+          
+          <swiper-slide *ngFor="let roleData of rolesData">
+            <ion-card class="Card">
+              <br>
+              <ion-card-subtitle>{{ roleData.role }}</ion-card-subtitle>
+              <ion-card style="margin-top: 90px;">
+                <ion-card-content>
+                  {{ roleData.documentName }}
+                </ion-card-content>
+              </ion-card>
+              <div style="margin-top: 70px;">
+                <ion-button 
+                  (click)="downloadDocument(roleData.url, roleData.role)" 
+                  [disabled]="!canDownload(roleData.role)">
+                  <ion-icon name="cloud-download"></ion-icon>
+                </ion-button>
+                <label>{{ roleData.status }}</label>
+                <ion-button 
+                  (click)="previewDocument(roleData.url, roleData.role)" 
+                  [disabled]="!canView(roleData.role)">
+                  <ion-icon name="eye"></ion-icon>
+                </ion-button>
+              </div>
+            </ion-card>
+          </swiper-slide>
+        </swiper-container>
+      
         <ion-button class="next-button" (click)="goNext()">
           <ion-icon slot="icon-only" name="arrow-forward"></ion-icon>
         </ion-button>
       </div>
+      
     </section>
   </div>
 
