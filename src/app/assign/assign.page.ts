@@ -15,7 +15,7 @@ export class AssignPage implements OnInit {
   faculties: any[] = [];
   departments: any[] = [];
   courses: any[] = [];
-  modules: any[] = [];
+  modules: any[] = [];  // Ensure this is defined as an array
 
   selectedFaculty: string = '';
   selectedDepartment: string = '';
@@ -27,7 +27,6 @@ export class AssignPage implements OnInit {
   modulesError: string | null = null;
   staffError: string | null = null;
   emailError: string | null = null;
-
   emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   name: string = '';
   email: string = '';
@@ -59,7 +58,10 @@ export class AssignPage implements OnInit {
 
   ngOnInit() {
     this.loadFaculties();
+    this.getUser();
   }
+
+
 
   loadFaculties() {
     this.dataService.getFaculties().subscribe((faculties: any[]) => {

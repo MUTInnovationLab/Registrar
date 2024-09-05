@@ -219,6 +219,9 @@ export class NotificationPage implements OnInit {
     if (this.selectedNotification && this.selectedNotification.id) {
       this.dataService.updateNotification(this.selectedNotification.id, this.selectedNotification).then(() => {
         this.loadNotifications();
+        this.showToast('Notification updated successfully');
+        this.resetNewNotificationForm();
+        this.selectedNotification = null; // Add this line to reset the selected notification
       }).catch(error => {
         this.showToast('Error updating notification: ' + error.message);
       });
