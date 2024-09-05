@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { NavController, AlertController, ToastController } from '@ionic/angular';
+import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -11,12 +11,11 @@ import { NavController, AlertController, ToastController } from '@ionic/angular'
 export class HomePage {
 
   profileVisible: boolean = false;
-
   navController: NavController;
   userDocument: any;
+  isAdmin: boolean = false;
 
   constructor(
-    private alertController: AlertController,
     private toastController: ToastController,
     private navCtrl: NavController,
     private auth: AngularFireAuth,
@@ -32,34 +31,53 @@ export class HomePage {
     this.profileVisible = !this.profileVisible;
   }
 
-
   ionViewDidEnter() {
     this.getUser();
   }
 
   async getUser(): Promise<void> {
     const user = await this.auth.currentUser;
-
+  
     if (user) {
       try {
-        const querySnapshot = await this.db
-          .collection('registeredStaff')
-          .ref.where('email', '==', user.email)
-          .get();
-
-        if (!querySnapshot.empty) {
-          this.userDocument = querySnapshot.docs[0].data();
+        // Check if the user is an admin
+        const adminSnapshot = await this.db.collection('admin', ref => 
+          ref.where('email', '==', user.email)
+        ).get().toPromise();
+  
+        if (adminSnapshot && !adminSnapshot.empty) {
+          this.isAdmin = true;
+          return; // Exit early if the user is an admin
+        }
+  
+        // Check if the user is a staff member
+        const staffSnapshot = await this.db.collection('registeredStaff', ref => 
+          ref.where('email', '==', user.email)
+        ).get().toPromise();
+  
+        if (staffSnapshot && !staffSnapshot.empty) {
+          this.userDocument = staffSnapshot.docs[0]?.data() || {}; // Use optional chaining and fallback to an empty object
+        } else {
+          // Handle case where the user is neither admin nor staff
+          this.userDocument = null;
         }
       } catch (error) {
         console.error('Error getting user document:', error);
       }
     }
   }
-
+  
+  
+  
 
   async navigateBasedOnRole(page: string): Promise<void> {
     try {
       await this.getUser();
+
+      if (this.isAdmin) {
+        this.navController.navigateForward('/' + page);
+        return;
+      }
 
       let authorized = false;
       let message = '';
@@ -88,16 +106,16 @@ export class HomePage {
             break;
           case 'assign':
             authorized = this.userDocument.role.assign === 'on';
-            message = 'Unauthorized user for assigned page.';
+            message = 'Unauthorized user for assign page.';
             break;
           case 'rejection':
             authorized = this.userDocument.role.rejection === 'on';
             message = 'Unauthorized user for rejection page.';
             break;
-            case 'modules':
-              authorized = this.userDocument.role.modules === 'on';
-              message = 'Unauthorized user for modules page.';
-              break;
+          case 'modules':
+            authorized = this.userDocument.role.modules === 'on';
+            message = 'Unauthorized user for modules page.';
+            break;
           default:
             authorized = false;
             message = 'Invalid page.';
@@ -109,7 +127,7 @@ export class HomePage {
         this.navController.navigateForward('/' + page);
       } else {
         const toast = await this.toastController.create({
-          message: 'Unauthorized Access:You do not have the necessary permissions to access this page. Please contact the administrator for assistance.',
+          message: message || 'Unauthorized Access',
           duration: 2000,
           position: 'top'
         });
@@ -120,6 +138,7 @@ export class HomePage {
     }
   }
 
+  // Example page navigation methods
   goToUpload(): Promise<void> {
     return this.navigateBasedOnRole('upload');
   }
@@ -139,15 +158,11 @@ export class HomePage {
   goToDashboard(): Promise<void> {
     return this.navigateBasedOnRole('dashboard');
   }
-
   goToApproval(): Promise<void> {
-      return this.navigateBasedOnRole('approval');
-    }
-
-  // Navigation back to home
+    return this.navigateBasedOnRole('approval');
+  }
   goToModules(): Promise<void> {
     return this.navigateBasedOnRole('modules');
   }  
-  
 
 }
