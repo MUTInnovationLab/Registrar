@@ -78,6 +78,8 @@ export class LoginPage implements OnInit {
     this.log();
   }
 
+  
+
   async log() {
     const loader = await this.loadingController.create({
       message: 'Signing in',
@@ -88,7 +90,7 @@ export class LoginPage implements OnInit {
     this.auth.signInWithEmailAndPassword(this.email, this.password)
       .then((userCred) => {
         if (userCred) {
-          this.db.collection('registeredStudents', ref => ref.where('email', '==', this.email))
+          this.db.collection('registeredStaff', ref => ref.where('email', '==', this.email))
             .get()
             .toPromise()
             .then((querySnapshot: any) => {
@@ -98,11 +100,11 @@ export class LoginPage implements OnInit {
                 const loginCount = userData.loginCount || 0;
                 const newLoginCount = loginCount + 1;
 
-                this.db.collection("registeredStudents").doc(id).update({ loginCount: newLoginCount });
+                this.db.collection("registeredStaff").doc(id).update({ loginCount: newLoginCount });
               });
             });
 
-          this.db.collection("registeredStudents")
+          this.db.collection("registeredStaff")
             .ref.where("email", "==", this.email.trim())
             .get()
             .then((querySnapshot) => {
@@ -151,7 +153,7 @@ export class LoginPage implements OnInit {
 
   async getUserData(email: string) {
     try {
-      const snapshot = await this.db.collection("registeredStudents").ref.where("email", "==", email).get();
+      const snapshot = await this.db.collection("registeredStaff").ref.where("email", "==", email).get();
       if (!snapshot.empty) {
         const userData = snapshot.docs[0].data();
         return userData;

@@ -585,9 +585,6 @@ async Validation() {
 }
 
 
-
-
-
 async presentToast() {
   const toast = await this.toastController.create({
     message: 'SIGNED OUT!',
@@ -606,5 +603,3 @@ goToHomePage(): void {
 
 }
   
-
-
