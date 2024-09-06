@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-view-docs',
@@ -23,21 +23,33 @@ export class ViewDocsPage implements OnInit {
   // Properties for side panel functionality
   isPanelHidden: boolean = false;
 
-  constructor(private dataService: DataService, private router: Router) {}
+  constructor(
+    private dataService: DataService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
-    this.loadDocuments();
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'];
+      this.loadDocuments(email); // Pass email to loadDocuments
+    });
   }
 
-  loadDocuments() {
-    this.dataService.getAllDocuments().subscribe((docs) => {
-      this.documents = docs;
+  loadDocuments(email?: string) {
+    this.dataService.getAllDocuments().subscribe(docs => {
+      if (email) {
+        this.documents = docs.filter(doc => doc.email === email); // Filter based on email
+      } else {
+        this.documents = docs; // Load all documents if no email is provided
+      }
       console.log('Documents Loaded:', this.documents);
-      this.documents.forEach(doc => console.log('Document URL:', doc.url));
       this.updateCounts();
       this.filterDocuments(); // Initial filtering
     });
   }
+
+  
   
 
   updateCounts() {

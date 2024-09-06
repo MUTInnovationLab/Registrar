@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
   }
 
   goToSignUp() {
-    this.navCtrl.navigateForward("/applicant-resgister");
+    this.navCtrl.navigateForward("/applicant-register");
   }
 
   async validate() {
@@ -82,8 +82,8 @@ export class LoginPage implements OnInit {
 
   async log() {
     const loader = await this.loadingController.create({
-      message: 'Signing in',
-      cssClass: 'custom-loader-class'
+        message: 'Signing in',
+        cssClass: 'custom-loader-class'
     });
     await loader.present();
 
@@ -141,15 +141,38 @@ export class LoginPage implements OnInit {
           });
           (await toast).present();
         } else {
-          const toast = this.toastController.create({
+            // If not an admin, check if the user is a staff member
+            const staffQuery = this.db.collection('registeredStaff', ref => 
+                ref.where('email', '==', this.email)
+                   .where('staffNumber', '==', this.password) // Staff login uses staffNumber
+            );
+            const staffSnapshot = await staffQuery.get().toPromise();
+
+            loader.dismiss();
+
+            if (staffSnapshot && !staffSnapshot.empty) {
+                this.navCtrl.navigateForward("/dashboard");
+            } else {
+                const toast = await this.toastController.create({
+                    message: 'Invalid email or password',
+                    duration: 2000,
+                    color: 'danger'
+                });
+                await toast.present();
+            }
+        }
+    } catch (error) {
+        loader.dismiss();
+        const errorMessage = (error as Error).message;
+        const toast = await this.toastController.create({
             message: 'Error signing in: ' + errorMessage,
             duration: 2000,
             color: 'danger'
-          });
-          (await toast).present();
-        }
-      });
-  }
+        });
+        await toast.present();
+    }
+}
+
 
   async getUserData(email: string) {
     try {

@@ -104,15 +104,16 @@ export class RegisterPage implements OnInit {
       const userCredential = await this.auths.registerUser(this.email, this.password);
       if (userCredential.user) {
         await this.db.collection('registeredStaff').add({
-          // Name: this.name,
-          email: this.email,
+          name: this.name,
+          email: this.email, //included
+          position: this.position, //included
           staffNumber: this.staffNumber,
           role: this.role,
         });
         alert('Staff registered successfully');
 
         // Clear the field values
-        // this.name = '';
+        this.name = '';
         this.email = '';
         this.position = '';
         this.staffNumber = '';

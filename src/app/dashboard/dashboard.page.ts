@@ -25,6 +25,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
   allUsers$: Observable<User[]> | undefined;
   userModules: string[] = [];
   currentUserPosition: string | undefined;
+  currentUserEmail: string = '';
 
   rolesData = [
     { role: 'Lecturer', documentName: '', url: '', status: '' },
@@ -34,8 +35,18 @@ export class DashboardPage implements OnInit, AfterViewInit {
     { role: 'Finance', documentName: '', url: '', status: '' },
     { role: 'Human Resource', documentName: '', url: '', status: '' },
     { role: 'External Moderator', documentName: '', url: '', status: '' },
-    
   ];
+
+  // Define the privileges object
+  privileges: { [key: string]: string[] } = {
+    'External Moderator': ['Human Resource','External Moderator'],
+    'Human Resource': ['Finance','Human Resource'],
+    'Finance': ['Examination Officer','Finance'],
+    'Examination Officer': ['Deputy Registrar','Examination Officer'],
+    'Deputy Registrar': ['HOD','Deputy Registrar'],
+    'HOD': ['Lecturer','HOD'],
+    'Lecturer': ['Lecturer','HOD','Deputy Registrar','Examination Officer','Finance','Human Resource','External Moderator']
+  };
 
   constructor(
     private navController: NavController,
@@ -49,9 +60,9 @@ export class DashboardPage implements OnInit, AfterViewInit {
     this.authService.getCurrentUser().pipe(
       mergeMap(user => {
         if (user) {
-          const currentUserEmail = user.email;
-          if (currentUserEmail) {
-            this.user$ = this.dataService.getUserByEmail(currentUserEmail);
+           this.currentUserEmail = user.email;
+          if (this.currentUserEmail) {
+            this.user$ = this.dataService.getUserByEmail(this.currentUserEmail);
             return this.user$;
           }
         }
@@ -77,6 +88,17 @@ export class DashboardPage implements OnInit, AfterViewInit {
       this.showSharedModulesAndPositions(allUsers);
     });
   }
+
+  
+  
+  myDocs() {
+    if (this.currentUserEmail) {
+      this.router.navigate(['/view-docs'], { queryParams: { email: this.currentUserEmail } });
+    } else {
+      console.error('No user email available');
+    }
+  }
+  
 
   ngAfterViewInit() {
     this.swiper = this.swiperRef?.nativeElement.swiper;
@@ -126,7 +148,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
       return { module, position };
     });
 
-    
+    // Implement logic if needed
   }
 
   private assignDocumentsToRoles(documents: any[]) {
@@ -176,12 +198,16 @@ export class DashboardPage implements OnInit, AfterViewInit {
     console.log('Changed', e);
   }
 
-  downloadDocument(url: string) {
-    window.open(url, '_blank');
+  downloadDocument(url: string, documentRole: string) {
+    if (this.canDownload(documentRole)) {
+      window.open(url, '_blank');
+    }
   }
 
-  previewDocument(url: string) {
-    window.open(url, '_blank');
+  previewDocument(url: string, documentRole: string) {
+    if (this.canView(documentRole)) {
+      window.open(url, '_blank');
+    }
   }
 
   onModuleClick(module: string) {
@@ -199,7 +225,18 @@ export class DashboardPage implements OnInit, AfterViewInit {
     }
   }
 
-  private filterDocumentsForModule(documents: any[]): any[] {
+   filterDocumentsForModule(documents: any[]): any[] {
     return documents.filter(doc => doc.module === this.selectedModule);
+  }
+
+  // Check if the current user has the privilege to download documents
+   canDownload(documentRole: string): boolean {
+    const accessibleRoles = this.privileges[this.currentUserPosition || ''] || [];
+    return accessibleRoles.includes(documentRole);
+  }
+
+  // Check if the current user has the privilege to view documents
+   canView(documentRole: string): boolean {
+    return this.canDownload(documentRole); // Assuming view privileges are the same as download
   }
 }
