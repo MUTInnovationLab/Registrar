@@ -13,11 +13,16 @@ export class AllUsersPage implements OnInit {
   users: User[] = [];
   filteredUsers: User[] = [];
   searchTerm: string = '';
+  profileVisible: boolean = false;
 
   constructor(private router: Router, private dataService: DataService) { }
 
   ngOnInit() {
     this.loadUsers();
+  }
+
+  toggleProfile() {
+    this.profileVisible = !this.profileVisible;
   }
 
   loadUsers() {

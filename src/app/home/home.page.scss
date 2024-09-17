@@ -1,80 +1,320 @@
-.main-card {
+// .main-card {
+//   // background-color: #054c5b;
+//   width: 850px;
+//   margin: auto;
+// }
+
+// .profile-card {
+//   z-index: 20;
+//   position: absolute;
+//   top: 60px;
+//   right: 10px;
+//   color: #054c5b;
+//   height: 350px;
+//   width: 225px;
+//   background: #054c5b;
+//   border-radius: 10px;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+//   transition: transform 0.3s, box-shadow 0.3s;
+// }
+
+// .profile-card:hover {
+//   transform: translateY(-20px);
+//   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+// }
+
+
+// .dashboard-grid {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+//   gap: 16px;
+//   padding-top: 16px;
+// }
+
+// @media (max-width: 1200px) {
+//   .dashboard-grid {
+//     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+//   }
+// }
+
+// @media (max-width: 800px) {
+//   .dashboard-grid {
+//     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+//   }
+// }
+
+// @media (max-width: 500px) {
+//   .dashboard-grid {
+//     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+//   }
+// }
+
+// .dashboard-card {
+//   color: white;
+//   height: 150px;
+//   background: #562520;
+//   border-radius: 10px;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+//   transition: transform 0.3s, box-shadow 0.3s;
+// }
+
+// .dashboard-card:hover {
+//   transform: translateY(-20px);
+//   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+// }
+
+// ion-card-header {
+//   background: white;
+//   
+//   border-top-left-radius: 10px;
+//   border-top-right-radius: 10px;
+// }
+
+// ion-card-title {
+//   font-size: 1.2rem;
+//   font-weight: bold;
+// }
+// ion-grid{
+//   background-color: #054c5b;
+//   padding-top: 20px;
+// }
+
+// .ion-card.dashboard-card{
+//   color: white;
+//   height: 150px;
+//   background: #562520;
+//   border-radius: 10px;
+//   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+//   transition: transform 0.3s, box-shadow 0.3s;
+
+// }
+
+// ion-card-content {
+//   font-size: 2rem;
+//   color: #ffffff;
+//   background-color: #562520;
+//   padding-top: 20px;
+
+// }
+// ion-card{
+
+// }
+
+// .ion-card.ion-text-center{//iocon
+//   color: white;
+//   text-align: center;
+// }
+
+// @media (max-width: 800px) {
+//   .dashboard-grid {
+//     grid-template-columns: repeat(2, 1fr);
+//     gap: 0;
+//     padding: 0;
+//   }
+
+//   .dashboard-card {
+//     width: 55%;
+//     gap: 0;
+//     padding: 0;
+//   }
+// }
+
+ion-content {
+  --background: #054c5b;
+}
+
+ion-card {
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   background-color: #054c5b;
-  width: 850px;
-  margin: auto;
+}
+ion-title{
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+}
+
+.custom-card {
+  background-color: transparent;
+  
+
+  .custom-card-header {
+    padding: 10px;
+
+    ion-card-title {
+      color: #000000;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  .custom-card-content {
+    background-color: #000000; /* Red background for the card body */
+    color: #054c5b;
+    padding: 20px;
+    height: 145px;
+
+    ion-icon {
+      font-size: 48px;
+      color: #053a44;//053a44
+    }
+  }
+
+  ion-card-content.ion-text-center {
+    align-items: center;
+    background-color: #562520;
+  }
+}
+
+ion-toolbar {
+  --background: #562520;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+// General styles for non-custom cards
+ion-card-header {
+  background-color: white;
+
+  ion-card-title {
+    color: #000000;
+    text-align: center;
+    font-weight: bold;
+  }
+}
+
+ion-card-content ion-icon {
+  font-size: 48px;
+  color: #ffffff;
+}
+
+toolbar-title{
+  color: #054c5b;
 }
 
 .profile-card {
-  z-index: 20;
   position: absolute;
+  z-index: 20;
   top: 60px;
   right: 10px;
+  background-color: #054c5b;
   color: white;
-  height: 350px;
-  width: 225px;
-  background: #054c5b;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 
-.profile-card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
+  ion-card-header {
+    background-color: #054c5b;
 
-.dashboard-content {
-  --background: #053a44;
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-  padding: 16px;
-}
-
-.dashboard-card {
-  color: white;
-  height: 150px;
-  background: #562520;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.dashboard-card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
-ion-card-header {
-  background: white;
-  color: #054c5b;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-ion-card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-ion-card-content {
-  font-size: 0.9rem;
-  color: #555;
-}
-
-@media (max-width: 800px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    padding: 0;
+    ion-card-title {
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
   }
 
-  .dashboard-card {
-    width: 55%;
-    gap: 0;
-    padding: 0;
+  ion-card-content {
+    color: #015796;
   }
+
+  ion-item {
+    --background: #054c5b;
+    --color: white;
+
+    ion-label {
+      color: white; // Changed from rgb(0, 0, 0) to white for better visibility
+    }
+    
+    ion-icon {
+      color: white; // Changed from #054c5b to white for visibility
+    }
+  }
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.profile-card ion-icon {
+  margin-right: 10px;
+  color: white; // Changed from #054c5b to white for visibility
+}
+
+@media (max-width: 768px) {
+  .custom-card .custom-card-content ion-icon,
+  ion-card-content ion-icon {
+    font-size: 36px;
+  }
+}
+
+/* Diamond Shape Styling */
+/* Diamond Container for Horizontal Layout and Top Positioning */
+.diamond-container {
+  display: flex;
+  flex-direction: row; /* Change to horizontal layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 100%; /* Full width */
+  margin-top: auto; /* Center vertically */
+  gap: 10px; /* Adjust spacing between diamonds */
+  background-color: #054c5b;
+}
+
+/* Diamond Shape Styling */
+.diamond {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation: changeColor 3s infinite; /* Add animation */
+}
+
+/* Define keyframes for color changes */
+@keyframes changeColor {
+  0% {
+      background-color: #F8F9FA; /* White Diamond */
+  }
+  33% {
+      background-color: #800000; /* Maroon Diamond */
+  }
+  66% {
+      background-color: #FFCF33; /* Yellow Diamond */
+  }
+  100% {
+      background-color: #F8F9FA; /* White Diamond */
+  }
+}
+
+/* Specific Classes for Diamonds */
+.white-diamond {
+  animation-delay: 0s; /* Start immediately */
+}
+
+.maroon-diamond {
+  animation-delay: 1s; /* Start after 1 second */
+}
+
+.yellow-diamond {
+  animation-delay: 2s; /* Start after 2 seconds */
+}
+
+ion-footer {
+  background-color: #562520;;
+}
+
+ion-footer ion-title {
+  color: white;
+  text-align: center;
+}
+
+.heart-icon {
+  color: red;
 }

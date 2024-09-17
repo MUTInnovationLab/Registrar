@@ -498,6 +498,10 @@ async deleteModule(facultyName: string, departmentName: string, courseName: stri
     return this.afs.collection<User>('/registeredStaff').doc(userId).valueChanges();
   }
 
+  getUserByPosition(position: string): Observable<User[]> {
+    return this.afs.collection<User>('/registeredStaff', ref => ref.where('position', '==', 'Lecturer')).valueChanges();
+  }
+  
   async uploadDocument(file: File, date: string, module: string, email: string, position:string): Promise<void> {
     try {
       const filePath = `uploads/${file.name}`;
@@ -696,7 +700,7 @@ async deleteModule(facultyName: string, departmentName: string, courseName: stri
     
   
     // Method to update an existing notification
-    updateNotification(id: string, updates: Partial<any>): Promise<void> { // Replace 'any' with your Notification type
+updateNotification(id: string, updates: Partial<any>): Promise<void> { // Replace 'any' with your Notification type
       return this.afs.collection('/notifications').doc(id).update(updates);
     }
   
