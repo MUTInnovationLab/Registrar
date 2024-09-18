@@ -27,6 +27,8 @@ export class DashboardPage implements OnInit, AfterViewInit {
   userModules: string[] = [];
   currentUserPosition: string | undefined;
   currentUserEmail: string = '';
+  profileVisible: boolean = false;
+
 
   rolesData = [
     { role: 'Lecturer', documentName: '', url: '', status: '' },

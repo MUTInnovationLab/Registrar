@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -22,18 +22,37 @@ export class ViewDocsPage implements OnInit {
 
   // Properties for side panel functionality
   isPanelHidden: boolean = false;
+  isSmallScreen: boolean = false;
 
   constructor(
     private dataService: DataService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.checkScreenSize();
+  }
+
+    // Function to check screen size
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any) {
+      this.checkScreenSize();
+    }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
       const email = params['email'];
       this.loadDocuments(email); // Pass email to loadDocuments
     });
+  }
+  
+  checkScreenSize() {
+    // If the screen width is less than 768px (small screen), hide the side panel by default
+    this.isSmallScreen = window.innerWidth < 768;
+    if (this.isSmallScreen) {
+      this.isPanelHidden = true;  // Hide the panel by default on small screens
+    } else {
+      this.isPanelHidden = false;  // Show the panel by default on larger screens
+    }
   }
 
   loadDocuments(email?: string) {

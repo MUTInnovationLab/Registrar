@@ -3,10 +3,10 @@
 export interface AppNotification {
     id?: string;
     courseName: string;
-    courseType: string;
+    courseType: 'semester' | 'annual'; //
     lecturer: string; // Adjust according to your needs, e.g., it could be an array of strings if multiple recipients
     date: Date;
-    status: string; // e.g., 'reminder', 'alert', etc.
+    status: 'pending' | 'approved' | 'rejected'; // e.g., 'reminder', 'alert', etc.
     reminderSent: boolean; // e.g., 'sent', 'pending', etc.
     staffNumber: string;
     expanded?: boolean; // Optional field for UI purposes 

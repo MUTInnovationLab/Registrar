@@ -14,6 +14,16 @@ export class HomePage {
   navController: NavController;
   userDocument: any;
   isAdmin: boolean = false;
+  dashboardItems = [
+    { title: 'All Users', icon: 'people-circle', route: '/all-users' },
+    { title: 'Approval', icon: 'checkmark-done-circle', route: '/approval' },
+    { title: 'Assign', icon: 'person-add', route: '/assign' },
+    { title: 'Home', icon: 'home', route: '/home' },
+    { title: 'Rejection', icon: 'close-circle', route: '/rejection' },
+    { title: 'Upload', icon: 'cloud-upload', route: '/upload' },
+    { title: 'View Documents', icon: 'document', route: '/view-docs' },
+    { title: 'View Modules', icon: 'list-outline', route: '/modules' },
+  ];
 
   constructor(
     private toastController: ToastController,
@@ -29,6 +39,9 @@ export class HomePage {
 
   toggleProfile() {
     this.profileVisible = !this.profileVisible;
+  }
+  navigate(route: string){
+    this.navCtrl.navigateForward(route);
   }
 
   ionViewDidEnter() {
