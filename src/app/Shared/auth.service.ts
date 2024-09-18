@@ -22,11 +22,14 @@ export class AuthService {
       );
     }
     
-    getCurrentUser(): Observable<any> {
-      return this.fauth.authState.pipe(
-        map(user => user ? user : null) // Return the user object or null
-      );
-    }
+      // Method to get the currently logged-in user
+  getCurrentUser(): Observable<any> {
+    return this.fauth.authState.pipe(
+      map((user) => {
+        return user ? { email: user.email } : null;
+      })
+    );
+  }
   
     async registerUser(email:string, password:string){
   
