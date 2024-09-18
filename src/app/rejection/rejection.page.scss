@@ -603,3 +603,43 @@ ion-toolbar {
     font-size: 24px;
   }
 }
+
+
+.profile-card {
+  position: absolute;
+  z-index: 20;
+  top: 60px;
+  right: 10px;
+  background-color: #054c5b;
+  color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+
+  ion-card-header {
+    background-color: #054c5b;
+
+    ion-card-title {
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  ion-card-content {
+    color: #015796;
+  }
+
+  ion-item {
+    --background: #054c5b;
+    --color: white;
+
+    ion-label {
+      color: white; // Changed from rgb(0, 0, 0) to white for better visibility
+    }
+    
+    ion-icon {
+      color: white; // Changed from #054c5b to white for visibility
+    }
+  }
+}

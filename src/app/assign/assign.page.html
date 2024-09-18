@@ -4,8 +4,13 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
+    <div class="diamond-container">
+      <div class="diamond diamond-red"></div>
+      <div class="diamond diamond-green"></div>
+      <div class="diamond diamond-blue"></div>
+    </div>
     <ion-title class="header-title">ASSIGN USER</ion-title>
-  </ion-toolbar>
+      </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="background">
@@ -56,14 +61,14 @@
   <ion-grid class="grid-container">
     <ion-row>
       <ion-col size="12" class="info">
-        <ion-label>ADD & GRANT USER PRIVILEGES</ion-label>
+        <ion-label style="color: white; padding: 5px;">ADD & GRANT USER PRIVILEGES</ion-label>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col size="6" class="card-column">
         <ion-card class="cardcenter card-column">
           <ion-card-header>
-            <ion-card-title text-align="center">Add User Info</ion-card-title>
+            <ion-card-title style="text-align: center; font-weight: bold; color: white;">Add User Info</ion-card-title>
           </ion-card-header>
           <ion-card-content>
 
@@ -127,7 +132,7 @@
       <ion-col size="6" class="card-column1">
         <ion-card class="cardcenter card-column1">
           <ion-card-header>
-            <ion-card-title text-align="center">Add Role</ion-card-title>
+        <ion-card-title style="text-align: center; font-weight: bold; color: white;">Add Role</ion-card-title>
           </ion-card-header>
           
           <ion-card-content>
