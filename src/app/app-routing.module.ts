@@ -66,6 +66,10 @@ const routes: Routes = [
     path: 'display-board',
     loadChildren: () => import('./display-board/display-board.module').then( m => m.DisplayBoardPageModule)
   },
+  {
+    path: 'brevo',
+    loadChildren: () => import('./brevo/brevo.module').then( m => m.BrevoPageModule)
+  },
 
 
   

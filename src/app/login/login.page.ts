@@ -37,7 +37,7 @@ export class LoginPage implements OnInit {
   }
 
   goToSignUp() {
-    this.navCtrl.navigateForward("/applicant-register");
+    this.navCtrl.navigateForward("/applicant-resgister");
   }
 
   async validate() {
@@ -82,97 +82,77 @@ export class LoginPage implements OnInit {
 
   async log() {
     const loader = await this.loadingController.create({
-        message: 'Signing in',
-        cssClass: 'custom-loader-class'
+      message: 'Signing in',
+      cssClass: 'custom-loader-class'
     });
     await loader.present();
-
-    this.auth.signInWithEmailAndPassword(this.email, this.password)
-      .then((userCred) => {
-        if (userCred) {
-          this.db.collection('registeredStaff', ref => ref.where('email', '==', this.email))
-            .get()
-            .toPromise()
-            .then((querySnapshot: any) => {
-              querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
-                const id = doc.id;
-                const userData = doc.data();
-                const loginCount = userData.loginCount || 0;
-                const newLoginCount = loginCount + 1;
-
-                this.db.collection("registeredStaff").doc(id).update({ loginCount: newLoginCount });
-              });
-            });
-
-          this.db.collection("registeredStaff")
-            .ref.where("email", "==", this.email.trim())
-            .get()
-            .then((querySnapshot) => {
-              loader.dismiss();
-              if (!querySnapshot.empty) {
-                this.navCtrl.navigateForward("/dashboard");
-              } else {
-                this.navCtrl.navigateForward("/home");
-              }
-            })
-            .catch((error) => {
-              loader.dismiss();
-              const errorMessage = error.message;
-              console.error("Error checking registered students:", errorMessage);
-            });
-        }
-      })
-      .catch(async (error) => {
-        loader.dismiss();
-        const errorMessage = error.message;
-        if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." 
-        || errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
-          const toast = this.toastController.create({
-            message: 'Invalid email or password',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
-        } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
-          const toast = this.toastController.create({
-            message: 'Incorrectly formatted email',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
-        } else {
-            // If not an admin, check if the user is a staff member
-            const staffQuery = this.db.collection('registeredStaff', ref => 
-                ref.where('email', '==', this.email)
-                   .where('staffNumber', '==', this.password) // Staff login uses staffNumber
-            );
-            const staffSnapshot = await staffQuery.get().toPromise();
-
-            loader.dismiss();
-
-            if (staffSnapshot && !staffSnapshot.empty) {
-                this.navCtrl.navigateForward("/dashboard");
+  
+    try {
+      // Sign in with email and password
+      const userCred = await this.auth.signInWithEmailAndPassword(this.email, this.password);
+  
+      if (userCred.user) {
+        // Fetch user data from Firestore
+        const snapshot = await this.db.collection('registeredStaff', ref => ref.where('email', '==', this.email.trim())).get().toPromise();
+  
+        if (snapshot && !snapshot.empty) {
+          const doc = snapshot.docs[0];
+          const userData = doc.data() as { position?: string, loginCount?: number }; // Casting to a specific type
+  
+          if (userData) {
+            const position = userData.position || '';
+            const loginCount = userData.loginCount || 0;
+            const newLoginCount = loginCount + 1;
+  
+            // Update login count
+            await this.db.collection('registeredStaff').doc(doc.id).update({ loginCount: newLoginCount });
+  
+            // Navigate based on position
+            if (position === 'Admin') {
+              this.navCtrl.navigateForward('/home');
             } else {
-                const toast = await this.toastController.create({
-                    message: 'Invalid email or password',
-                    duration: 2000,
-                    color: 'danger'
-                });
-                await toast.present();
+              this.navCtrl.navigateForward('/dashboard');
             }
+          } else {
+            this.navCtrl.navigateForward('/home');
+          }
+        } else {
+          this.navCtrl.navigateForward('/home');
         }
+      }
     } catch (error) {
-        loader.dismiss();
-        const errorMessage = (error as Error).message;
-        const toast = await this.toastController.create({
-            message: 'Error signing in: ' + errorMessage,
-            duration: 2000,
-            color: 'danger'
-        });
-        await toast.present();
+      let errorMessage: string;
+  
+      if (error instanceof Error) {
+        // Handling the error if it is an instance of Error
+        errorMessage = error.message;
+      } else {
+        // Fallback if the error is not an instance of Error
+        errorMessage = 'An unexpected error occurred.';
+      }
+  
+      let toastMessage: string;
+      if (errorMessage.includes('auth/wrong-password') || errorMessage.includes('auth/user-not-found')) {
+        toastMessage = 'Invalid email or password';
+      } else if (errorMessage.includes('auth/invalid-email')) {
+        toastMessage = 'Incorrectly formatted email';
+      } else {
+        toastMessage = 'Error signing in: ' + errorMessage;
+      }
+  
+      const toast = await this.toastController.create({
+        message: toastMessage,
+        duration: 2000,
+        color: 'danger'
+      });
+      toast.present();
+    } finally {
+      loader.dismiss();
     }
-}
-
+  }
+  
+  
+  
 
   async getUserData(email: string) {
     try {

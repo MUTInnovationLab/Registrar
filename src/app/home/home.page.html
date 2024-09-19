@@ -5,15 +5,14 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="dashboard-content">
-
   <ion-card class="main-card">
     <div class="dashboard-grid">
       <ion-card class="dashboard-card" (click)="goToAllUsers()">
         <ion-card-header>
           <ion-card-title>All Users</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="people-circle"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="people-circle" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
   
@@ -21,8 +20,8 @@
         <ion-card-header>
           <ion-card-title>Approval</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="checkmark-done-circle"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="checkmark-done-circle" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
   
@@ -30,17 +29,8 @@
         <ion-card-header>
           <ion-card-title>Assign</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="person-add"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToDashboard()">
-        <ion-card-header>
-          <ion-card-title>Home</ion-card-title>
-        </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="home"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="person-add" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
   
@@ -48,17 +38,8 @@
         <ion-card-header>
           <ion-card-title>Rejection</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="close-circle"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToUpload()">
-        <ion-card-header>
-          <ion-card-title>Upload</ion-card-title>
-        </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="cloud-upload"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="close-circle" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
   
@@ -66,17 +47,17 @@
         <ion-card-header>
           <ion-card-title>View Documents</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="document"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="document" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
 
       <ion-card class="dashboard-card" (click)="goToModules()">
         <ion-card-header>
-          <ion-card-title>View Modules</ion-card-title>
+          <ion-card-title>Add Faculty</ion-card-title>
         </ion-card-header>
-        <ion-card-content style="color: white; font-size: 90px; left: 50px;">
-          <ion-icon name="list-outline"></ion-icon>
+        <ion-card-content>
+          <ion-icon name="list-outline" style="font-size: 90px;"></ion-icon>
         </ion-card-content>
       </ion-card>
     </div>
@@ -86,11 +67,11 @@
     <ion-card-header>
       <ion-card-title>Profile Management</ion-card-title>
     </ion-card-header>
-    <ion-card-content style="color: white;">
-      <ion-icon name="person-circle"></ion-icon>Name: Wandile Khumalo <br>
-      <ion-icon name="mail"></ion-icon>Email: generalwandile41&#64;<br>
-      <ion-icon name="person-add"></ion-icon>Role: Admin <br>
-      <ion-icon name="calendar-number"></ion-icon>Login Count: 5 <br>
+    <ion-card-content>
+      <ion-icon name="person-circle"></ion-icon> Name: Wandile Khumalo <br>
+      <ion-icon name="mail"></ion-icon> Email: generalwandile41&#64;<br>
+      <ion-icon name="person-add"></ion-icon> Role: Admin <br>
+      <ion-icon name="calendar-number"></ion-icon> Login Count: 5 <br>
     </ion-card-content>
   </ion-card>
 
@@ -99,5 +80,4 @@
       <ion-icon name="person-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
 </ion-content>

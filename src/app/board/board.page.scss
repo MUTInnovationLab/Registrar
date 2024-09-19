@@ -20,13 +20,13 @@ ion-header {
   }
   
   ion-button {
-    --background: #c99115;
+    --background: #054c5b;
     --color: #ffffff;
     --border-radius: 4px;
   }
   
   ion-button[expand="block"] {
-    --background: #c99115;
+    --background: #054c5b;
   }
   
   ion-button[color="danger"] {
@@ -63,7 +63,7 @@ ion-header {
   
   /* General Content Styles */
   ion-content {
-    --background: #f4f4f4;
+    --background: #562520;
   }
   
   /* Button Container Styles */
@@ -77,7 +77,7 @@ ion-header {
   .button-container ion-button {
     flex: 1; /* Ensure buttons take up equal space */
     margin: 0 5px; /* Space between buttons */
-    --background: #c99115; /* Default button color */
+    --background: #054c5b; /* Default button color */
     --color: #ffffff; /* Button text color */
     --border-radius: 4px; /* Button border radius */
   }

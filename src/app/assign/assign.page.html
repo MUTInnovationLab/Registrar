@@ -56,7 +56,7 @@
   <ion-grid class="grid-container">
     <ion-row>
       <ion-col size="12" class="info">
-        <ion-label>ADD & GRANT USER PRIVILEGES</ion-label>
+        <!-- <ion-label>ADD & GRANT USER PRIVILEGES</ion-label> -->
       </ion-col>
     </ion-row>
     <ion-row>
@@ -83,7 +83,7 @@
 
             <ion-item>
               <ion-label position="floating">Position</ion-label>
-              <ion-select [(ngModel)]="position" name="position" (ionChange)="positionError = null">
+              <ion-select [(ngModel)]="position" name="position" (ionChange)="onPositionChange()" (ionChange)="positionError = null">
                 <ion-select-option value="External Moderator">External Moderator</ion-select-option>
                 <ion-select-option value="Finance">Finance</ion-select-option>
                 <ion-select-option value="Examination Officer">Examination Officer</ion-select-option>
@@ -91,19 +91,18 @@
                 <ion-select-option value="Deputy Registrar">Deputy Registrar</ion-select-option>
                 <ion-select-option value="HOD"> HOD</ion-select-option>
                 <ion-select-option value="Lecturer">Lecturer</ion-select-option>
+                <ion-select-option value="Admin">Admin</ion-select-option>
               </ion-select>
               <ion-icon name="briefcase" slot="start"></ion-icon>
-                  <div class="error-message" *ngIf="positionError">{{ positionError }}</div>
+              <div class="error-message" *ngIf="positionError">{{ positionError }}</div>
             </ion-item>
-
             
-        
-                <ion-item>
-                  <!-- <ion-label>Module</ion-label> -->
-                  <ion-select [(ngModel)]="selectedModules" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
-                    <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
-                  </ion-select>
-                </ion-item>
+            <ion-item>
+              <ion-select [(ngModel)]="selectedModules" placeholder="Select Module" [disabled]="position === 'Admin'" multiple="true">
+                <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
+              </ion-select>
+            </ion-item>
+            
               
             
             
@@ -127,12 +126,12 @@
       <ion-col size="6" class="card-column1">
         <ion-card class="cardcenter card-column1">
           <ion-card-header>
-            <ion-card-title text-align="center">Add Role</ion-card-title>
+            <ion-card-title text-align="center">Assign Admin</ion-card-title>
           </ion-card-header>
           
           <ion-card-content>
 
-            <ion-item>
+            <!-- <ion-item>
               <ion-label>
                 <ion-icon name="time"></ion-icon>
                 Assign User
@@ -191,10 +190,10 @@
             <ion-item>
               <ion-label>
                 <ion-icon name="layers-outline"></ion-icon>
-                View Modules
+                Add Faculty
               </ion-label>
               <ion-toggle slot="end" (ionChange)="getModulesValue($event)"></ion-toggle>
-            </ion-item>
+            </ion-item> -->
 
            
 

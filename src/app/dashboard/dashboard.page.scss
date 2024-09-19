@@ -219,12 +219,133 @@ swiper-slide {
 }
 
 
-
 .menu-button {
   display: none;
   
 }
 
 
+@media (min-width: 600px) {
+/* General styles for the toolbar */
+ion-toolbar {
+  --background: #054c5b;
+  --color: white;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
 
+.centered-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100%;
+}
+
+.header-toolbar {
+  --background: #054c5b;
+  padding: 0 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-header {
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.position {
+  font-weight: bold;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.position ion-icon {
+  margin-right: 5px;
+}
+
+.icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.backIcon {
+  font-size: 40px;
+  color: white;
+}
+
+.tooltip {
+  visibility: hidden;
+  width: 100px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -50px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.icon-container:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
+
+ion-content {
+  --background: #562520;
+  padding: 10px;
+}
+
+/* Styling for the card components */
+.Card {
+  background-color: whitesmoke;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px; /* Add spacing between the cards */
+}
+
+.Card ion-card {
+  margin-top: 10px;
+  background-color: #f4f4f4;
+}
+
+.Card ion-button {
+  --background: #054c5b;
+  margin: 10px 0;
+}
+
+.Card ion-icon {
+  color: white;
+}
+
+.Card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+ion-grid {
+  margin-top: 20px;
+}
+
+ion-list ion-item {
+  --background: #054c5b;
+  color: white;
+  margin-bottom: 10px;
+}
+
+ion-item:hover {
+  background-color: #062f35;
+}
+
+
+}
 

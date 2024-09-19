@@ -35,16 +35,16 @@ export class AssignPage implements OnInit {
 
   userDocument: any;
 
-  role = {
-    allUsers: 'off',
-    approval: 'off',
-    assign: 'off',
-    dashboard: 'off',
-    rejection: 'off',
-    upload: 'off',
-    viewDocs: 'off',
-    modules: 'off'
-  };
+  // role = {
+  //   allUsers: 'off',
+  //   approval: 'off',
+  //   assign: 'off',
+  //   dashboard: 'off',
+  //   rejection: 'off',
+  //   upload: 'off',
+  //   viewDocs: 'off',
+  //   modules: 'off'
+  // };
 
   constructor(
     private alertController: AlertController,
@@ -102,37 +102,37 @@ export class AssignPage implements OnInit {
     });
   }
 
-  getAdduserValue(event: any) {
-    this.role.assign = event.target.checked ? 'on' : 'off';
-  }
+  // getAdduserValue(event: any) {
+  //   this.role.assign = event.target.checked ? 'on' : 'off';
+  // }
 
-  getAllUsersValue(event: any) {
-    this.role.allUsers = event.target.checked ? 'on' : 'off';
-  }
+  // getAllUsersValue(event: any) {
+  //   this.role.allUsers = event.target.checked ? 'on' : 'off';
+  // }
 
-  getApprovalValue(event: any) {
-    this.role.approval = event.target.checked ? 'on' : 'off';
-  }
+  // getApprovalValue(event: any) {
+  //   this.role.approval = event.target.checked ? 'on' : 'off';
+  // }
 
-  getDashboardValue(event: any) {
-    this.role.dashboard = event.target.checked ? 'on' : 'off';
-  }
+  // getDashboardValue(event: any) {
+  //   this.role.dashboard = event.target.checked ? 'on' : 'off';
+  // }
 
-  getRejectionValue(event: any) {
-    this.role.rejection = event.target.checked ? 'on' : 'off';
-  }
+  // getRejectionValue(event: any) {
+  //   this.role.rejection = event.target.checked ? 'on' : 'off';
+  // }
 
-  getUploadValue(event: any) {
-    this.role.upload = event.target.checked ? 'on' : 'off';
-  }
+  // getUploadValue(event: any) {
+  //   this.role.upload = event.target.checked ? 'on' : 'off';
+  // }
 
-  getViewDocsValue(event: any) {
-    this.role.viewDocs = event.target.checked ? 'on' : 'off';
-  }
+  // getViewDocsValue(event: any) {
+  //   this.role.viewDocs = event.target.checked ? 'on' : 'off';
+  // }
 
-  getModulesValue(event: any) {
-    this.role.modules = event.target.checked ? 'on' : 'off';
-  }
+  // getModulesValue(event: any) {
+  //   this.role.modules = event.target.checked ? 'on' : 'off';
+  // }
 
   async updateUser() {
     const auth = getAuth();
@@ -148,7 +148,7 @@ export class AssignPage implements OnInit {
           staffNumber: this.staffNumber,
           position: this.position,
           modules: this.selectedModules, // Update this line
-          role: this.role
+          // role: this.role
         });
 
         if (this.email) {
@@ -251,55 +251,57 @@ export class AssignPage implements OnInit {
   }
 
   async Validation() {
-    if (Object.values(this.role).every(value => value === 'off')) {
-      alert('Please select at least one role.');
-      return;
-    }
-
     this.emailError = this.staffError = this.positionError = this.modulesError = this.nameError = null;
-
+  
     if (!this.name) {
       this.nameError = 'Please enter name.';
       alert(this.nameError);
       return;
     }
-
+  
     if (!this.email) {
       this.emailError = 'Please enter email.';
       alert(this.emailError);
       return;
     }
-
+  
     if (!this.emailRegex.test(this.email)) {
       this.emailError = 'Please enter a valid email address.';
       alert(this.emailError);
       return;
     }
-
+  
     if (!this.position) {
       this.positionError = 'Please enter position.';
       alert(this.positionError);
       return;
     }
-
-    if (this.selectedModules.length === 0) {
+  
+    // Check if position is Admin
+    if (this.position === 'Admin' && this.selectedModules.length > 0) {
+      this.modulesError = 'Admin position should not have any selected modules.';
+      alert(this.modulesError);
+      return;
+    }
+  
+    if (this.position !== 'Admin' && this.selectedModules.length === 0) {
       this.modulesError = 'Please select at least one module.';
       alert(this.modulesError);
       return;
     }
-
+  
     if (!this.staffNumber) {
       this.staffError = 'Please enter staff number.';
       alert(this.staffError);
       return;
     }
-
+  
     const loader = await this.loadingController.create({
       message: 'Assigning',
       cssClass: 'custom-loader-class'
     });
     await loader.present();
-
+  
     try {
       const userCredential = await this.auth.createUserWithEmailAndPassword(this.email, this.staffNumber);
       if (userCredential.user) {
@@ -308,14 +310,14 @@ export class AssignPage implements OnInit {
           email: this.email,
           staffNumber: this.staffNumber,
           position: this.position,
-          modules: this.selectedModules, // Update this line
-          role: this.role
+          modules: this.position === 'Admin' ? [] : this.selectedModules, // Ensure modules are empty for Admin
+          // role: this.role
         });
         alert("Staff registered successfully");
-
+  
         this.name = this.email = this.position = this.staffNumber = '';
         this.selectedModules = [];
-
+  
         await this.auth.signOut();
       } else {
         alert('User not found');
@@ -326,6 +328,14 @@ export class AssignPage implements OnInit {
       loader.dismiss();
     }
   }
+  
+
+  onPositionChange() {
+    if (this.position === 'Admin') {
+      this.selectedModules = []; // Clear selected modules if position is Admin
+    }
+  }
+  
 
   async presentToast() {
     const toast = await this.toastController.create({

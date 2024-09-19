@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Router } from '@angular/router';
 import { NavController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -19,7 +20,8 @@ export class HomePage {
     private toastController: ToastController,
     private navCtrl: NavController,
     private auth: AngularFireAuth,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private router: Router,
   ) {
     this.getUser();
     this.navController = navCtrl;
@@ -70,99 +72,99 @@ export class HomePage {
   
   
 
-  async navigateBasedOnRole(page: string): Promise<void> {
-    try {
-      await this.getUser();
+  // async navigateBasedOnRole(page: string): Promise<void> {
+  //   try {
+  //     await this.getUser();
 
-      if (this.isAdmin) {
-        this.navController.navigateForward('/' + page);
-        return;
-      }
+  //     if (this.isAdmin) {
+  //       this.navController.navigateForward('/' + page);
+  //       return;
+  //     }
 
-      let authorized = false;
-      let message = '';
+  //     let authorized = false;
+  //     let message = '';
 
-      if (this.userDocument && this.userDocument.role) {
-        switch (page) {
-          case 'all-users':
-            authorized = this.userDocument.role.allUsers === 'on';
-            message = 'Unauthorized user for all users.';
-            break;
-          case 'upload':
-            authorized = this.userDocument.role.upload === 'on';
-            message = 'Unauthorized user for upload page.';
-            break;
-          case 'dashboard':
-            authorized = this.userDocument.role.dashboard === 'on';
-            message = 'Access denied dashboard page.';
-            break;
-          case 'view-docs':
-            authorized = this.userDocument.role.viewDocs === 'on';
-            message = 'Unauthorized user for view docs page.';
-            break;
-          case 'approval':
-            authorized = this.userDocument.role.approval === 'on';
-            message = 'Unauthorized user for approval page.';
-            break;
-          case 'assign':
-            authorized = this.userDocument.role.assign === 'on';
-            message = 'Unauthorized user for assign page.';
-            break;
-          case 'rejection':
-            authorized = this.userDocument.role.rejection === 'on';
-            message = 'Unauthorized user for rejection page.';
-            break;
-          case 'modules':
-            authorized = this.userDocument.role.modules === 'on';
-            message = 'Unauthorized user for modules page.';
-            break;
-          default:
-            authorized = false;
-            message = 'Invalid page.';
-            break;
-        }
-      }
+  //     if (this.userDocument && this.userDocument.role) {
+  //       switch (page) {
+  //         case 'all-users':
+  //           authorized = this.userDocument.role.allUsers === 'on';
+  //           message = 'Unauthorized user for all users.';
+  //           break;
+  //         case 'upload':
+  //           authorized = this.userDocument.role.upload === 'on';
+  //           message = 'Unauthorized user for upload page.';
+  //           break;
+  //         case 'dashboard':
+  //           authorized = this.userDocument.role.dashboard === 'on';
+  //           message = 'Access denied dashboard page.';
+  //           break;
+  //         case 'view-docs':
+  //           authorized = this.userDocument.role.viewDocs === 'on';
+  //           message = 'Unauthorized user for view docs page.';
+  //           break;
+  //         case 'approval':
+  //           authorized = this.userDocument.role.approval === 'on';
+  //           message = 'Unauthorized user for approval page.';
+  //           break;
+  //         case 'assign':
+  //           authorized = this.userDocument.role.assign === 'on';
+  //           message = 'Unauthorized user for assign page.';
+  //           break;
+  //         case 'rejection':
+  //           authorized = this.userDocument.role.rejection === 'on';
+  //           message = 'Unauthorized user for rejection page.';
+  //           break;
+  //         case 'board':
+  //           authorized = this.userDocument.role.modules === 'on';
+  //           message = 'Unauthorized user for modules page.';
+  //           break;
+  //         default:
+  //           authorized = false;
+  //           message = 'Invalid page.';
+  //           break;
+  //       }
+  //     }
 
-      if (authorized) {
-        this.navController.navigateForward('/' + page);
-      } else {
-        const toast = await this.toastController.create({
-          message: message || 'Unauthorized Access',
-          duration: 2000,
-          position: 'top'
-        });
-        toast.present();
-      }
-    } catch (error) {
-      console.error('Error navigating based on role:', error);
-    }
-  }
+  //     if (authorized) {
+  //       this.navController.navigateForward('/' + page);
+  //     } else {
+  //       const toast = await this.toastController.create({
+  //         message: message || 'Unauthorized Access',
+  //         duration: 2000,
+  //         position: 'top'
+  //       });
+  //       toast.present();
+  //     }
+  //   } catch (error) {
+  //     console.error('Error navigating based on role:', error);
+  //   }
+  // }
 
   // Example page navigation methods
-  goToUpload(): Promise<void> {
-    return this.navigateBasedOnRole('upload');
+  goToUpload(){
+    this.router.navigate(['/upload']);
   }
 
-  goToViewDocs(): Promise<void> {
-    return this.navigateBasedOnRole('view-docs');
+  goToViewDocs(){
+    this.router.navigate(['/view-docs']);
   }
-  goToRejection(): Promise<void> {
-    return this.navigateBasedOnRole('rejection');
+  goToRejection(){
+    this.router.navigate(['/rejection']);
   }
-  goToAssign(): Promise<void> {
-    return this.navigateBasedOnRole('assign');
+  goToAssign(){
+    this.router.navigate(['/assign']);('assign');
   }
-  goToAllUsers(): Promise<void> {
-    return this.navigateBasedOnRole('all-users');
+  goToAllUsers(){
+    this.router.navigate(['/all-users']);
   }
-  goToDashboard(): Promise<void> {
-    return this.navigateBasedOnRole('dashboard');
+  goToDashboard(){
+    this.router.navigate(['/dashboard']);
   }
-  goToApproval(): Promise<void> {
-    return this.navigateBasedOnRole('approval');
+  goToApproval(){
+    this.router.navigate(['/approval']);
   }
-  goToModules(): Promise<void> {
-    return this.navigateBasedOnRole('modules');
+  goToModules(){
+    this.router.navigate(['/board']);
   }  
 
 }

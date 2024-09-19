@@ -1,32 +1,33 @@
+/* Ensure the main card width is responsive */
 .main-card {
   background-color: #054c5b;
-  width: 850px;
+  width: 100%; /* Make it full width on mobile */
   margin: auto;
+  padding: 16px;
 }
 
+/* Profile card adjustments */
 .profile-card {
   z-index: 20;
   position: absolute;
   top: 60px;
   right: 10px;
   color: white;
-  height: 350px;
-  width: 225px;
+  height: auto; /* Allow height to adjust based on content */
+  width: 100%; /* Full width for mobile */
+  max-width: 225px; /* Limit maximum width */
   background: #054c5b;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 
-.profile-card:hover {
-  transform: translateY(-20px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-}
-
+/* Dashboard content styling */
 .dashboard-content {
   --background: #053a44;
 }
 
+/* Grid layout adjustments */
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -34,6 +35,7 @@
   padding: 16px;
 }
 
+/* Card styling adjustments */
 .dashboard-card {
   color: white;
   height: 150px;
@@ -41,6 +43,10 @@
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .dashboard-card:hover {
@@ -48,6 +54,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
+/* Card header and content styling */
 ion-card-header {
   background: white;
   color: #054c5b;
@@ -63,18 +70,12 @@ ion-card-title {
 ion-card-content {
   font-size: 0.9rem;
   color: #555;
+  text-align: center; /* Center content */
 }
 
-@media (max-width: 800px) {
-  .dashboard-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-    padding: 0;
-  }
-
-  .dashboard-card {
-    width: 55%;
-    gap: 0;
-    padding: 0;
+@media (max-width: 768px) {
+  .profile-card {
+    position: static; /* Remove absolute positioning on smaller screens */
+    margin-bottom: 16px; /* Add space below profile card */
   }
 }
