@@ -7,6 +7,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { AuthService } from '../Shared/auth.service';
 import { User } from '../Model/user';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,6 +27,8 @@ export class DashboardPage implements OnInit, AfterViewInit {
   userModules: string[] = [];
   currentUserPosition: string | undefined;
   currentUserEmail: string = '';
+  profileVisible: boolean = false;
+
 
   rolesData = [
     { role: 'Lecturer', documentName: '', url: '', status: '' },
@@ -53,6 +56,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
     private authService: AuthService,
     private dataService: DataService,
     private alertController: AlertController,
+    private afAuth: AngularFireAuth,
     private router: Router,
   ) {}
 
@@ -88,8 +92,14 @@ export class DashboardPage implements OnInit, AfterViewInit {
       this.showSharedModulesAndPositions(allUsers);
     });
   }
-
-  
+  async goToEmailPage() {
+    const user = await this.afAuth.currentUser;
+    if (user) {
+      this.router.navigate(['/emails']);
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
   
   myDocs() {
     if (this.currentUserEmail) {

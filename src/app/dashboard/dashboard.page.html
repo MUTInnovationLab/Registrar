@@ -2,12 +2,20 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <div class="icon-container">
-        <ion-icon name="close-circle-outline" (click)="goBack()" class="backIcon"></ion-icon>
+        <ion-icon  name="close-circle-outline" (click)="goBack()" class="backIcon"></ion-icon>
         <div class="tooltip">Logout</div>
       </div>
     </ion-buttons>
+    
+    
     <ion-title class="centered-label">External Moderator Processor</ion-title>
+     
+    <ion-buttons class="emailbutton" slot="start">
+      <ion-button class="emailbutton" (click)="goToEmailPage()">Emails</ion-button>
+    </ion-buttons>
+    
   </ion-toolbar>
+
   
 
   <!-- Navigation Bar with Table Headers -->
@@ -126,8 +134,7 @@
       
     </section>
   </div>
-
- 
-  </ion-content>
+  
+</ion-content>
 
 

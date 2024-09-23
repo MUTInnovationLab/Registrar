@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
@@ -31,7 +32,7 @@
   
 
   <!-- Toggle Button for Small Screens -->
-  <ion-button class="toggle-panel-button" (click)="toggleSidePanel()">
+  <ion-button class="toggle-panel-button" (click)="toggleSidePanel()" *ngIf="isSmallScreen">
     <ion-icon slot="icon-only" name="menu"></ion-icon>
   </ion-button>
 
@@ -53,39 +54,38 @@
       </ul>
     </div>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Document Name</th>
-            <th>Status</th>
-            <th>Module</th>
-            <th>Upload Date</th>
-            <th>Open Document</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let doc of filteredDocuments; let i = index" 
-              [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
-              (click)="selectRow(doc)">
-              <td>{{ doc.email || doc.uploadedBy }}</td>
-              <td>{{ doc.documentName || doc.fileName }}</td>
-              <td>{{ doc.status || 'N/A' }}</td>
-              <td>{{ doc.module }}</td>
-              <td>{{ doc.uploadDate || doc.submissionDate }}</td>
-              <td>
-                <a [href]="doc.url" target="_blank">
-                  <ion-icon name="eye-outline" class="blinking-eye" style="font-size: 24px; margin-left: 25px;"></ion-icon>
+ <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Document Name</th>
+          <th>Status</th>
+          <th>Module</th>
+          <th>Upload Date</th>
+          <th>Open Document</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doc of filteredDocuments; let i = index" 
+            [ngClass]="{'odd-row': i % 2 === 0, 'even-row': i % 2 !== 0, 'selected-row': isSelected(doc)}" 
+            (click)="selectRow(doc)">
+            <td>{{ doc.email || doc.uploadedBy }}</td>
+            <td>{{ doc.documentName || doc.fileName }}</td>
+            <td>{{ doc.status || 'N/A' }}</td>
+            <td>{{ doc.module }}</td>
+            <td>{{ doc.uploadDate || doc.submissionDate }}</td>
+            <td>
+              <a [href]="doc.url" target="_blank">
+                <ion-icon name="eye-outline" class="blinking-eye" style="font-size: 24px; margin-left: 25px;"></ion-icon>
               </a> 
-              </td>
-            </tr>
-        </tbody>
-      </table>
-      <div *ngIf="filteredDocuments.length === 0" class="empty-state">
-        <p>No documents found for the current selection.</p>
-      </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="filteredDocuments.length === 0" class="empty-state">
+      <p>No documents found for the current selection.</p>
     </div>
   </div>
+</div>
 </ion-content>
