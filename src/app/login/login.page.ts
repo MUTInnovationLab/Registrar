@@ -87,67 +87,69 @@ export class LoginPage implements OnInit {
     });
     await loader.present();
 
-    this.auth.signInWithEmailAndPassword(this.email, this.password)
-      .then((userCred) => {
+    try {
+        // Attempt to sign in with email and password
+        const userCred = await this.auth.signInWithEmailAndPassword(this.email, this.password);
+        
         if (userCred) {
-          this.db.collection('registeredStaff', ref => ref.where('email', '==', this.email))
-            .get()
-            .toPromise()
-            .then((querySnapshot: any) => {
-              querySnapshot.forEach((doc: { id: any; data: () => any; }) => {
-                const id = doc.id;
-                const userData = doc.data();
-                const loginCount = userData.loginCount || 0;
-                const newLoginCount = loginCount + 1;
+            // Get the user's document based on email
+            const querySnapshot = await this.db.collection('registeredStaff', ref => ref.where('email', '==', this.email)).get().toPromise();
+            
+            // Check if querySnapshot is defined
+            if (querySnapshot && !querySnapshot.empty) {
+                // Update login count for the user
+                querySnapshot.forEach(async (doc) => {
+                    const id = doc.id;
+                    const userData = doc.data() as { loginCount?: number }; // Type assertion for userData
+                    const loginCount = userData.loginCount || 0;
+                    const newLoginCount = loginCount + 1;
 
-                this.db.collection("registeredStaff").doc(id).update({ loginCount: newLoginCount });
-              });
-            });
+                    await this.db.collection("registeredStaff").doc(id).update({ loginCount: newLoginCount });
+                });
 
-          this.db.collection("registeredStaff")
-            .ref.where("email", "==", this.email.trim())
-            .get()
-            .then((querySnapshot) => {
-              loader.dismiss();
-              if (!querySnapshot.empty) {
+                // Check if user exists
+                loader.dismiss();
                 this.navCtrl.navigateForward("/dashboard");
-              } else {
+            } else {
+                loader.dismiss();
                 this.navCtrl.navigateForward("/home");
-              }
-            })
-            .catch((error) => {
-              loader.dismiss();
-              const errorMessage = error.message;
-              console.error("Error checking registered students:", errorMessage);
-            });
+            }
         }
-      })
-      .catch(async (error) => {
+    } catch (error: unknown) {  // Explicitly typing the error
         loader.dismiss();
-        const errorMessage = error.message;
-        if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." 
-        || errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
-          const toast = this.toastController.create({
-            message: 'Invalid email or password',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
-        } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
-          const toast = this.toastController.create({
-            message: 'Incorrectly formatted email',
-            duration: 2000,
-            color: 'danger'
-          });
-          (await toast).present();
+        let errorMessage: string;
+
+        // Check if the error is an instance of Error
+        if (error instanceof Error) {
+            errorMessage = error.message;
         } else {
-            // If not an admin, check if the user is a staff member
+            errorMessage = "An unknown error occurred.";
+        }
+
+        if (errorMessage === "Firebase: The password is invalid or the user does not have a password. (auth/wrong-password)." ||
+            errorMessage === "Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).") {
+            
+            const toast = await this.toastController.create({
+                message: 'Invalid email or password',
+                duration: 2000,
+                color: 'danger'
+            });
+            await toast.present();
+        } else if (errorMessage === "Firebase: The email address is badly formatted. (auth/invalid-email).") {
+            const toast = await this.toastController.create({
+                message: 'Incorrectly formatted email',
+                duration: 2000,
+                color: 'danger'
+            });
+            await toast.present();
+        } else {
+            // Check if the user is a staff member using staffNumber
             const staffQuery = this.db.collection('registeredStaff', ref => 
                 ref.where('email', '==', this.email)
                    .where('staffNumber', '==', this.password) // Staff login uses staffNumber
             );
-            const staffSnapshot = await staffQuery.get().toPromise();
 
+            const staffSnapshot = await staffQuery.get().toPromise();
             loader.dismiss();
 
             if (staffSnapshot && !staffSnapshot.empty) {
@@ -161,17 +163,11 @@ export class LoginPage implements OnInit {
                 await toast.present();
             }
         }
-    } catch (error) {
-        loader.dismiss();
-        const errorMessage = (error as Error).message;
-        const toast = await this.toastController.create({
-            message: 'Error signing in: ' + errorMessage,
-            duration: 2000,
-            color: 'danger'
-        });
-        await toast.present();
     }
 }
+
+
+
 
 
   async getUserData(email: string) {
