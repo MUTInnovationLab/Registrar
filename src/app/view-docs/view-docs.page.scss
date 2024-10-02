@@ -303,9 +303,11 @@ td, th {
 @media (max-width: 768px) {
     .view-docs-container {
         flex-direction: column;
+        width: 100%;
     }
 
     .side-panel {
+        display: block;
         width: 94.5%;
         margin-bottom: 10px;
         position: fixed;
@@ -314,12 +316,16 @@ td, th {
 
     .table-container {
         width: 100%;
+        overflow-x: auto; /* Allow horizontal scrolling */
     }
 
     .slogan{
         overflow: hidden; /* Prevents overflow */
         max-width: auto;
         font-size: small;
+    }
+    .toggle-panel-button {
+        display: inline-block;
     }
 }
 

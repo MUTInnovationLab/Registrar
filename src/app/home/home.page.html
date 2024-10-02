@@ -1,69 +1,68 @@
-<ion-header [translucent]="true">
+
+<ion-header>
   <ion-toolbar>
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="dashboard-content">
-  <ion-card class="main-card">
-    <div class="dashboard-grid">
-      <ion-card class="dashboard-card" (click)="goToAllUsers()">
-        <ion-card-header>
-          <ion-card-title>All Users</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="people-circle" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-  
-      <ion-card class="dashboard-card" (click)="goToAssign()">
-        <ion-card-header>
-          <ion-card-title>Assign</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="person-add" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToRejection()">
-        <ion-card-header>
-          <ion-card-title>Rejection</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="close-circle" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToViewDocs()">
-        <ion-card-header>
-          <ion-card-title>View Documents</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="document" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-
-      <ion-card class="dashboard-card" (click)="goToModules()">
-        <ion-card-header>
-          <ion-card-title>Add Faculty</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="list-outline" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
+<ion-content class="ion-padding">
+  <div class="diamond-container">
+    <div class="diamond white-diamond"></div>
+    <div class="diamond maroon-diamond"></div>
+    <div class="diamond yellow-diamond"></div>
+  </div>
+  <div class="centered-container">
+    <div class="card-container">
+      <ion-grid>
+        <ion-row class="ion-justify-content-center">
+          <ion-col size="12" size-md="10" size-lg="8">
+            <ion-card>
+              <ion-card-content>
+                <ion-grid>
+                  <ion-row>
+                    <ion-col size="6" size-md="4" size-lg="3" *ngFor="let item of dashboardItems">
+                      <ion-card button (click)="navigate(item.route)" class="custom-card">
+                        <ion-card-header class="custom-card-header">
+                          <ion-card-title>{{ item.title }}</ion-card-title>
+                        </ion-card-header>
+                        <ion-card-content class="ion-card-content ion-text-center">
+                          <ion-icon [name]="item.icon" size="large"></ion-icon>
+                        </ion-card-content>
+                      </ion-card>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
-  </ion-card>
+  </div>
 
-  <ion-card class="profile-card" *ngIf="profileVisible">
+  <ion-card *ngIf="profileVisible" class="profile-card">
     <ion-card-header>
       <ion-card-title>Profile Management</ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-icon name="person-circle"></ion-icon> Name: Wandile Khumalo <br>
-      <ion-icon name="mail"></ion-icon> Email: generalwandile41&#64;<br>
-      <ion-icon name="person-add"></ion-icon> Role: Admin <br>
-      <ion-icon name="calendar-number"></ion-icon> Login Count: 5 <br>
+      <ion-list>
+        <ion-item>
+          <ion-icon name="person-circle" slot="start"></ion-icon>
+          <ion-label>Name: Wandile Khumalo</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="mail" slot="start"></ion-icon>
+          <ion-label>Email: generalwandile41&#64;</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="person-add" slot="start"></ion-icon>
+          <ion-label>Role: Admin</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-icon name="calendar-number" slot="start"></ion-icon>
+          <ion-label>Login Count: 5</ion-label>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 
@@ -73,3 +72,11 @@
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title class="slogan">
+      Designed with <ion-icon name="heart" class="heart-icon"></ion-icon> by MUT INNOVATION LAB
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

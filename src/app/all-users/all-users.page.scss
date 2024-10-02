@@ -6,7 +6,7 @@ html, body {
 }
 
 ion-toolbar {
-    --background: #562520;;
+    --background: #562520;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -20,12 +20,27 @@ ion-title {
     transform: translateX(-50%); /* Center it horizontally */
     font-size: 20px; /* Adjust font size as needed */
     color: white;
+    width: 100%;
+}
+
+toolbar-title{
+    width: 100%;
 }
 
 ion-buttons {
     display: flex;
     align-items: center;
+    z-index: 1;
 }
+
+ion-button{
+    color: white;
+}
+
+.back-icon{
+    color: white;
+}
+
 /* Diamond Shape Styling */
 /* Diamond Container for Horizontal Layout and Top Positioning */
 .diamond-container {
@@ -34,7 +49,7 @@ ion-buttons {
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     width: 100%; /* Full width */
-    margin: 10px 0; /* Add margin to position it above search area */
+    margin-top: 6%; /* Center vertically */
     gap: 8px; /* Adjust spacing between diamonds */
 }
 
@@ -98,6 +113,10 @@ ion-buttons {
     border-radius: 54%;
 }
 
+.back-title{
+    color: white;
+}
+
 .content-background {
     --background: #054c5b;
     padding: 10px; /* Add some padding for better look on small screens */
@@ -142,6 +161,7 @@ ion-buttons {
 
 .table-container {
     display: flex;
+    color: #ddd;
     justify-content: center;
     align-items: center;
     background-color: #ffffff;
@@ -172,6 +192,7 @@ th {
     padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
+    color: white;
 }
 
 td {
@@ -223,6 +244,17 @@ tr {
     table-layout: fixed;
     transition: transform 0.3s ease; /* Smooth scaling transition */
 }
+/* Table row hover effect */
+tr:hover {
+    background-color: yellow; /* Highlight row in yellow when hovered */
+    cursor: pointer; /* Change cursor to pointer to indicate it's clickable */
+}
+
+/* Selected row effect */
+.selected-row {
+    background-color: yellow; /* Keep the row highlighted in yellow when selected */
+}
+
 
 td, th {
     padding: 10px;
@@ -281,3 +313,41 @@ ion-footer ion-title {
     }
 }
 
+.profile-card {
+    position: absolute;
+    z-index: 20;
+    top: 60px;
+    right: 10px;
+    background-color: #054c5b;
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+
+    ion-card-header {
+        background-color: #054c5b;
+    
+        ion-card-title {
+          color: white;
+          text-align: center;
+          font-weight: bold;
+        }
+    }
+
+    ion-card-content {
+        color: #015796;
+    }
+
+    ion-item {
+        --background: #054c5b;
+        --color: white;
+    
+        ion-label {
+          color: white; // Changed from rgb(0, 0, 0) to white for better visibility
+        }
+        
+        ion-icon {
+          color: white; // Changed from #054c5b to white for visibility
+        }
+    }
+}

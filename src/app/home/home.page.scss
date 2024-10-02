@@ -8,19 +8,19 @@
 
 /* Profile card adjustments */
 .profile-card {
-  z-index: 20;
   position: absolute;
+  z-index: 20;
   top: 60px;
   right: 10px;
+  background-color: #054c5b;
   color: white;
   height: auto; /* Allow height to adjust based on content */
   width: 100%; /* Full width for mobile */
   max-width: 225px; /* Limit maximum width */
   background: #054c5b;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 10px;
 
 /* Dashboard content styling */
 .dashboard-content {
@@ -78,4 +78,89 @@ ion-card-content {
     position: static; /* Remove absolute positioning on smaller screens */
     margin-bottom: 16px; /* Add space below profile card */
   }
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 20px;
+}
+
+.profile-card ion-icon {
+  margin-right: 10px;
+  color: white; // Changed from #054c5b to white for visibility
+}
+
+@media (max-width: 768px) {
+  .custom-card .custom-card-content ion-icon,
+  ion-card-content ion-icon {
+    font-size: 36px;
+  }
+}
+
+/* Diamond Shape Styling */
+/* Diamond Container for Horizontal Layout and Top Positioning */
+.diamond-container {
+  display: flex;
+  flex-direction: row; /* Change to horizontal layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 100%; /* Full width */
+  margin-top: auto; /* Center vertically */
+  gap: 10px; /* Adjust spacing between diamonds */
+  background-color: #054c5b;
+}
+
+/* Diamond Shape Styling */
+.diamond {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  animation: changeColor 3s infinite; /* Add animation */
+}
+
+/* Define keyframes for color changes */
+@keyframes changeColor {
+  0% {
+      background-color: #F8F9FA; /* White Diamond */
+  }
+  33% {
+      background-color: #800000; /* Maroon Diamond */
+  }
+  66% {
+      background-color: #FFCF33; /* Yellow Diamond */
+  }
+  100% {
+      background-color: #F8F9FA; /* White Diamond */
+  }
+}
+
+/* Specific Classes for Diamonds */
+.white-diamond {
+  animation-delay: 0s; /* Start immediately */
+}
+
+.maroon-diamond {
+  animation-delay: 1s; /* Start after 1 second */
+}
+
+.yellow-diamond {
+  animation-delay: 2s; /* Start after 2 seconds */
+}
+
+ion-footer {
+  background-color: #562520;;
+}
+
+ion-footer ion-title {
+  color: white;
+  text-align: center;
+}
+
+.heart-icon {
+  color: red;
+}
 }

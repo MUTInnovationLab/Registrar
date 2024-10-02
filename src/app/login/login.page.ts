@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Router } from '@angular/router';
-import { LoadingController, NavController, ToastController } from '@ionic/angular';
+import { NavController, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +11,7 @@ import { LoadingController, NavController, ToastController } from '@ionic/angula
 export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
-  emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // regular expression for email validation
+  emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/; // Regular expression for email validation
 
   constructor(
     private db: AngularFirestore,
@@ -20,7 +19,7 @@ export class LoginPage implements OnInit {
     private navCtrl: NavController,
     private auth: AngularFireAuth,
     private toastController: ToastController
-  ) { }
+  ) {}
 
   ngOnInit() {}
 
@@ -43,34 +42,19 @@ export class LoginPage implements OnInit {
   async validate() {
     // Validate input
     if (!this.email) {
-      const toast = await this.toastController.create({
-        message: 'Please enter your email.',
-        duration: 2000,
-        color: 'danger'
-      });
-      toast.present();
+      await this.showToast('Please enter your email.');
       return;
     }
 
     // Validate email format
     if (!this.emailRegex.test(this.email)) {
-      const toast = await this.toastController.create({
-        message: 'Please provide a valid email address.',
-        duration: 2000,
-        color: 'danger'
-      });
-      toast.present();
+      await this.showToast('Please provide a valid email address.');
       return;
     }
 
     // Validate password
     if (!this.password) {
-      const toast = await this.toastController.create({
-        message: 'Please enter your password.',
-        duration: 2000,
-        color: 'danger'
-      });
-      toast.present();
+      await this.showToast('Please enter your password.');
       return;
     }
 
@@ -78,7 +62,14 @@ export class LoginPage implements OnInit {
     this.log();
   }
 
-  
+  private async showToast(message: string) {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color: 'danger'
+    });
+    await toast.present();
+  }
 
   async log() {
     const loader = await this.loadingController.create({

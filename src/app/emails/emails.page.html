@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Send Email</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form (ngSubmit)="sendEmail()">
+    <ion-item>
+      <ion-label>From</ion-label>
+      <ion-input [value]="userEmail" disabled></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>To</ion-label>
+      <ion-select [(ngModel)]="email.to" name="to">
+        <ion-select-option *ngFor="let recipient of recipients$ | async" [value]="recipient.email">
+          {{ recipient.email }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Subject</ion-label>
+      <ion-input [(ngModel)]="email.subject" name="subject"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Body</ion-label>
+      <ion-textarea [(ngModel)]="email.text" name="text"></ion-textarea>
+    </ion-item>
+
+    <ion-button expand="full" type="submit">Send Email</ion-button>
+  </form>
+</ion-content>

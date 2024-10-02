@@ -25,6 +25,8 @@ export class RejectionPage implements OnInit {
   
   declinedDocuments: DocumentItem[] = [];
   showNoDocumentsCard: boolean = true;
+  profileVisible: boolean = false;
+
 
   constructor(
     private router: Router, 
@@ -39,6 +41,10 @@ export class RejectionPage implements OnInit {
     });
 
     
+  }
+
+  toggleProfile() {
+    this.profileVisible = !this.profileVisible;
   }
 
   // Method to toggle the details view

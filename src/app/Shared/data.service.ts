@@ -487,7 +487,7 @@ async deleteModule(facultyName: string, departmentName: string, courseName: stri
     
   
     // Method to update an existing notification
-    updateNotification(id: string, updates: Partial<any>): Promise<void> { // Replace 'any' with your Notification type
+updateNotification(id: string, updates: Partial<any>): Promise<void> { // Replace 'any' with your Notification type
       return this.afs.collection('/notifications').doc(id).update(updates);
     }
   

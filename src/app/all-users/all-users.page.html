@@ -2,10 +2,11 @@
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
-        Back
         <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
+        Back
       </ion-button>
     </ion-buttons>
+    <ion-title>All Users</ion-title>
     <ion-buttons slot="end">
       <ion-button aria-label="Profile">
         <ion-icon slot="icon-only" name="person" class="profile-icon"></ion-icon>
@@ -15,12 +16,16 @@
 </ion-header>
 
 <ion-content class="content-background">
-  <ion-title>All Users</ion-title>
+  <ion-title class="page-title">All Users</ion-title>
+  
+  <!-- Diamond Shape Container -->
   <div class="diamond-container">
     <div class="diamond white-diamond"></div>
     <div class="diamond maroon-diamond"></div>
     <div class="diamond yellow-diamond"></div>
   </div>
+
+  <!-- Search Box -->
   <div class="search-container">
     <ion-icon name="search" class="search-icon"></ion-icon>
     <input type="text" placeholder="Search by email, staff number, or role..." 
@@ -29,6 +34,7 @@
            (ngModelChange)="filterUsers()">
   </div>
 
+  <!-- Table for User Data -->
   <div class="table-container">
     <div class="table-wrapper">
       <table>
@@ -40,10 +46,11 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let user of filteredUsers" class="details">
+          <tr *ngFor="let user of filteredUsers" (click)="selectUser(user)"
+              [class.selected-row]="selectedUser === user">
             <td>{{ user.email }}</td>
             <td>{{ user.staffNumber }}</td>
-            <td>{{ user.position}}</td>
+            <td>{{ user.position }}</td>
           </tr>
         </tbody>
       </table>
@@ -54,6 +61,7 @@
   </div>
 </ion-content>
 
+<!-- Footer -->
 <ion-footer>
   <ion-toolbar>
     <ion-title class="slogan">

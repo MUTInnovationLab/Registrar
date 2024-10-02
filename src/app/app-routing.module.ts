@@ -50,7 +50,8 @@ const routes: Routes = [
   {
     path: 'assign',
     loadChildren: () => import('./assign/assign.module').then( m => m.AssignPageModule)
-  },  {
+  },
+  {
     path: 'modules',
     loadChildren: () => import('./modules/modules.module').then( m => m.ModulesPageModule)
   },
@@ -69,6 +70,10 @@ const routes: Routes = [
   {
     path: 'brevo',
     loadChildren: () => import('./brevo/brevo.module').then( m => m.BrevoPageModule)
+  },
+  {
+    path: 'emails',
+    loadChildren: () => import('./emails/emails.module').then( m => m.EmailsPageModule)
   },
 
 

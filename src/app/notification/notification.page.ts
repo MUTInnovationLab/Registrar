@@ -99,6 +99,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
 import { AppNotification, NotificationLog } from '../Model/notification';
 import { ToastController } from '@ionic/angular';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-notification',
@@ -121,7 +122,7 @@ export class NotificationPage implements OnInit {
   newNotification: AppNotification = {
     id: '',
     courseName: '',
-    courseType: '',
+    courseType: 'semester',
     date: new Date(),
     lecturer: '',
     reminderSent: false,
@@ -186,11 +187,16 @@ export class NotificationPage implements OnInit {
   }
 
   saveNewNotification() {
-    this.dataService.addNotification(this.newNotification).then(() => {
+    this.dataService.getUserByPosition('Lecturer').pipe(
+      switchMap(lecturers => {
+        this.newNotification.lecturer = lecturers.map(l => l.email).join(', ');
+        return this.dataService.addNotification(this.newNotification);
+      })
+    ).subscribe(() => {
       this.loadNotifications();
       this.showToast('Successfully added new notification');
       this.resetNewNotificationForm();
-    }).catch(error => {
+    }, error => {
       this.showToast('Error adding new notification: ' + error.message);
     });
   }
@@ -199,7 +205,7 @@ export class NotificationPage implements OnInit {
     this.newNotification = {
       id: '',
       courseName: '',
-      courseType: '',
+      courseType: 'semester',
       date: new Date(),
       lecturer: '',
       reminderSent: false,

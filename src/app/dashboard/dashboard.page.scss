@@ -1,3 +1,13 @@
+
+
+  .emailbutton {
+    margin: 0;     // Remove any default margin from the button
+    padding: 0.5rem; // Adjust padding as needed for a compact look
+    --padding-start: 0.5rem; // Adjust padding to ensure proper alignment
+    --padding-end: 0.5rem; // Adjust padding to ensure proper alignment
+  }
+
+
 ion-toolbar {
   --background: #054c5b; /* Background color */
   --color: white; /* Text color */
