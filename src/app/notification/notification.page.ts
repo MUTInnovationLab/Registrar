@@ -187,18 +187,18 @@ export class NotificationPage implements OnInit {
   }
 
   saveNewNotification() {
-    this.dataService.getUserByPosition('Lecturer').pipe(
-      switchMap(lecturers => {
-        this.newNotification.lecturer = lecturers.map(l => l.email).join(', ');
-        return this.dataService.addNotification(this.newNotification);
-      })
-    ).subscribe(() => {
-      this.loadNotifications();
-      this.showToast('Successfully added new notification');
-      this.resetNewNotificationForm();
-    }, error => {
-      this.showToast('Error adding new notification: ' + error.message);
-    });
+    // this.dataService.getUserByPosition('Lecturer').pipe(
+    //   switchMap(lecturers => {
+    //     this.newNotification.lecturer = lecturers.map(l => l.email).join(', ');
+    //     return this.dataService.addNotification(this.newNotification);
+    //   })
+    // ).subscribe(() => {
+    //   this.loadNotifications();
+    //   this.showToast('Successfully added new notification');
+    //   this.resetNewNotificationForm();
+    // }, error => {
+    //   this.showToast('Error adding new notification: ' + error.message);
+    // });
   }
 
   resetNewNotificationForm() {
