@@ -98,6 +98,14 @@ export class DashboardPage implements OnInit, AfterViewInit {
       console.error('No user email available');
     }
   }
+
+  rejection() {
+    if (this.currentUserEmail) {
+      this.router.navigate(['/rejection'], { queryParams: { email: this.currentUserEmail } });
+    } else {
+      console.error('No user email available');
+    }
+  }
   
 
   ngAfterViewInit() {
@@ -179,7 +187,13 @@ export class DashboardPage implements OnInit, AfterViewInit {
   }
 
   Upload() {
-    this.navController.navigateForward('/upload');
+    if (this.currentUserEmail) {
+      this.router.navigate(['/upload'], { queryParams: { modules: this.userModules } });
+    } else {
+      console.error('No user email available');
+    }
+
+    
   }
 
   View() {

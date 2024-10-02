@@ -201,6 +201,10 @@ swiper-slide {
   width: 100%;
 }
 
+.div22 {
+  display: none; 
+}
+
 
 .Card {
   background-color: whitesmoke;
@@ -225,7 +229,7 @@ swiper-slide {
 }
 
 
-@media (min-width: 600px) {
+@media (max-width: 900px) {
 /* General styles for the toolbar */
 ion-toolbar {
   --background: #054c5b;
@@ -344,6 +348,32 @@ ion-list ion-item {
 
 ion-item:hover {
   background-color: #062f35;
+}
+
+.div22 {
+  flex: 1; /* div2 will take the remaining space */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto; /* Ensure content can scroll if it overflows */
+}
+
+.div2{
+  display: none;
+}
+
+.div1{
+  width: 150px;
+  height: 87.5%;
+}
+
+.next-buttons, .prev-buttons{
+  display:none;
+}
+
+.div1 .footer1{
+width: 450px;
 }
 
 

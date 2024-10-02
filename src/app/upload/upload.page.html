@@ -37,16 +37,22 @@
         
         <ion-item class="inline-select">
           <ion-icon name="school-outline" slot="start" class="icon"></ion-icon>
-          <ion-label class="label" position="floating">Module for moderation:</ion-label>
-          <ion-input 
-            type="text"
-            placeholder="Enter module" 
+          <ion-label class="label" position="floating">
+            Select a module
+          </ion-label>
+          <ion-select 
             [(ngModel)]="customModule" 
-            class="custom-input"
+            interface="popover" 
+            placeholder="Choose a module"
             aria-label="Module for moderation"
             required>
-          </ion-input>
+            <ion-select-option *ngFor="let module of modules" [value]="module">
+              {{ module }}
+            </ion-select-option>
+          </ion-select>
         </ion-item>
+        
+        
         
         <div 
           class="drop-zone" 

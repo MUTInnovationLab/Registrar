@@ -6,6 +6,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { FormBuilder } from '@angular/forms';
 import { AuthService } from '../Shared/auth.service';
+import emailjs from 'emailjs-com';
 
 interface DocumentItem {
   id?: string;
@@ -31,6 +32,17 @@ export class ApprovalPage implements OnInit {
   userModules: string[] = [];
   currentUserEmail: string = '';
 
+
+   rolesData = [
+    { role: 'Lecturer', documentName: '', url: '', status: '' },
+    { role: 'HOD', documentName: '', url: '', status: '' },
+    { role: 'Deputy Registrar', documentName: '', url: '', status: '' },
+    { role: 'Examination Officer', documentName: '', url: '', status: '' },
+    { role: 'Finance', documentName: '', url: '', status: '' },
+    { role: 'Human Resource', documentName: '', url: '', status: '' },
+    { role: 'External Moderator', documentName: '', url: '', status: '' },
+  ];
+
   constructor(
     private fb: FormBuilder,
     private alertController: AlertController,
@@ -53,21 +65,54 @@ export class ApprovalPage implements OnInit {
     this.authService.getCurrentUser().subscribe(user => {
       if (user && user.email) {
         this.currentUserEmail = user.email;
-        
+  
         this.dataService.getUserByEmail(this.currentUserEmail).subscribe(userData => {
           if (userData && userData.modules) {
             this.userModules = userData.modules;
-            
-            // Fetch documents that belong to the user's modules
-            this.dataService.getDocumentsByModules(this.userModules).subscribe(
-              data => {
+  
+            // Determine roles to fetch based on the current user's position
+            let rolesToFetch: string[] = [];
+            switch (userData.position) {
+              case 'HOD':
+                rolesToFetch = ['Lecturer']; // HOD views Lecturer documents
+                break;
+              case 'Deputy Registrar':
+                rolesToFetch = ['HOD']; // Deputy Registrar views HOD documents
+                break;
+              case 'Examination Officer':
+                rolesToFetch = ['Deputy Registrar']; // Examination Officer views Deputy Registrar documents
+                break;
+              case 'Finance':
+                rolesToFetch = ['Examination Officer']; // Finance views Examination Officer documents
+                break;
+              case 'Human Resource':
+                rolesToFetch = ['Finance']; // Human Resource views Finance documents
+                break;
+              case 'External Moderator':
+                rolesToFetch = ['Human Resource']; // External Moderator views Human Resource documents
+                break;
+              default:
+                rolesToFetch = []; // Default to an empty array if the position doesn't match
+                break;
+            }
+  
+            // Fetch documents based on the roles derived from the current user's position (HOD documents)
+            this.dataService.getDocumentsByRoles(rolesToFetch).subscribe(
+              positionData => {
                 // Exclude documents associated with the current user's email
-                this.items = data.filter(item => item.email !== this.currentUserEmail);
+                const positionFilteredItems = positionData.filter(item => item.email !== this.currentUserEmail);
+  
+                // Further filter to include only items that share modules with the current user
+                this.items = positionFilteredItems.filter(item =>
+                  this.userModules.includes(item.module)
+                );
+  
+                // Update filteredItems for display
                 this.filteredItems = [...this.items];
               },
               error => {
-                console.error('Error fetching documents:', error);
-                this.showToast('Error fetching documents');
+                console.error('Error fetching documents by position:', error);
+                this.showToast('Error fetching documents by position');
               }
             );
           } else {
@@ -82,7 +127,8 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error fetching current user');
     });
   }
-
+  
+  
   filterItems(event: any) {
     const query = event.target.value.toLowerCase();
     this.filteredItems = this.items.filter(item =>
@@ -104,6 +150,9 @@ export class ApprovalPage implements OnInit {
           this.showToast('Document moved to rejected collection');
         }
         
+        // Send email notification after status change
+        await this.uploaded(item); // Pass the entire item to the uploaded method
+  
         this.loadItems();
       } else {
         this.showToast('Document ID is missing');
@@ -113,6 +162,25 @@ export class ApprovalPage implements OnInit {
       this.showToast('Error updating status');
     }
   }
+  
+  async uploaded(item: DocumentItem) {
+    // const emailParams = {
+    //   email_to: item.email, // Use item.email directly
+    //   from_email: 'thandekan736@gmail.com',
+    //   subject: 'New Document Approval',
+    //   message: `External invigilator document <span style="color: red;">${item.documentName}</span> has been <i>${item.status}</i> for the module <b>${item.module}</b>. You can view it here: <a href="${item.url}">${item.url}</a> and take necessary action.`
+    //   };
+  
+    // try {
+    //   await emailjs.send('interviewEmailsAD', 'template_7x4kjte', emailParams, 'TrFF8ofl4gbJlOhzB');
+    //   console.log('Email successfully sent');
+    //   this.showToast('Email successfully sent to ' + item.email);
+    // } catch (error: any) {
+    //   console.error('Error:', error);
+    //   this.showToast('Error sending email: ' + error.message);
+    // }
+  }
+  
 
   goBack() {
     this.router.navigate(['/home']);

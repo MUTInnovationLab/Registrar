@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/Shared/data.service'; // Adjust the path as needed
 import { DocumentItem } from 'src/app/Model/document-item'; // Adjust the path as needed
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
-
 
 @Component({
   selector: 'app-rejection',
@@ -22,7 +21,6 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ])
   ]
 })
-
 export class RejectionPage implements OnInit {
   
   declinedDocuments: DocumentItem[] = [];
@@ -30,11 +28,17 @@ export class RejectionPage implements OnInit {
 
   constructor(
     private router: Router, 
-    private dataService: DataService
+    private dataService: DataService,
+    private route: ActivatedRoute  
   ) {}
-//num
+
   ngOnInit() {
-    this.loadDeclinedDocuments();
+    this.route.queryParams.subscribe(params => {
+      const email = params['email'];
+      this.loadDeclinedDocuments(email); // Pass email to loadDocuments
+    });
+
+    
   }
 
   // Method to toggle the details view
@@ -42,9 +46,12 @@ export class RejectionPage implements OnInit {
     doc.showDetails = !doc.showDetails;
   }
 
-  loadDeclinedDocuments() {
+  loadDeclinedDocuments(email?: string) {
     this.dataService.getRejectedDocuments().subscribe(docs => {
-      this.declinedDocuments = docs;
+      // Filter documents based on the email if provided
+      this.declinedDocuments = email 
+        ? docs.filter(doc => doc.email === email) 
+        : docs;
       this.checkForDocuments();
     });
   }

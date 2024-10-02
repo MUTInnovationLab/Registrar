@@ -30,6 +30,7 @@
     "@ionic-native/preview-any-file": "^5.36.0",
     "@ionic/angular": "^8.0.0",
     "cordova-plugin-preview-any-file": "^0.2.9",
+    "emailjs-com": "^3.2.0",
     "firebase": "^10.12.4",
     "ionicons": "^7.0.0",
     "ngx-doc-viewer": "^15.0.1",

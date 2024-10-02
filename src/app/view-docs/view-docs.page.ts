@@ -36,68 +36,70 @@ export class ViewDocsPage implements OnInit {
     });
   }
 
-  loadDocuments(email?: string) {
-    this.dataService.getAllDocuments().subscribe(docs => {
-      if (email) {
-        this.documents = docs.filter(doc => doc.email === email); // Filter based on email
-      } else {
-        this.documents = docs; // Load all documents if no email is provided
-      }
-      console.log('Documents Loaded:', this.documents);
-      this.updateCounts();
-      this.filterDocuments(); // Initial filtering
-    });
-  }
-
-  
-  
 
   updateCounts() {
     this.allCount = this.documents.length;
-    this.approvedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'approved').length;
-    this.declinedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'declined').length;
-    this.suspendedCount = this.documents.filter(doc => doc.status.toLowerCase() === 'suspended').length;
+    this.approvedCount = this.documents.filter(doc => doc.status && doc.status.toLowerCase() === 'approved').length;
+    this.declinedCount = this.documents.filter(doc => doc.status && doc.status.toLowerCase() === 'declined').length;
+    this.suspendedCount = this.documents.filter(doc => doc.status && doc.status.toLowerCase() === 'suspended').length;
   }
+  
 
+  loadDocuments(email?: string) {
+    this.dataService.getAllDocuments().subscribe(docs => {
+      // Load documents based on email if provided
+      if (email) {
+        this.documents = docs.filter(doc => doc.email === email);
+      } else {
+        this.documents = docs; // Load all documents if no email is provided
+      }
+  
+      console.log('Documents Loaded:', this.documents);
+      this.updateCounts();  // Update document counts
+      this.filterDocuments(); // Apply filtering based on active tab and search term
+    });
+  }
+  
+  
   filterDocuments() {
     let filtered = this.documents;
-
-    // Filter by active tab
+  
+    // Apply status filtering based on active tab
     if (this.activeTab !== 'all') {
-      filtered = filtered.filter(doc => doc.status.toLowerCase() === this.activeTab);
+      filtered = filtered.filter(doc => doc.status && doc.status.toLowerCase() === this.activeTab);
     }
-
-    // Further filter by search term
+  
+    // Further filter by search term, if it's provided
     if (this.searchTerm.trim()) {
       const lowerSearchTerm = this.searchTerm.toLowerCase();
       filtered = filtered.filter(doc =>
-        (doc.documentName || doc.fileName || '').toLowerCase().includes(lowerSearchTerm) ||
-        (doc.email || doc.uploadedBy || '').toLowerCase().includes(lowerSearchTerm) ||
-        (doc.status || 'N/A').toLowerCase().includes(lowerSearchTerm) ||
-        (doc.module || '').toLowerCase().includes(lowerSearchTerm) ||
-        (doc.uploadDate || doc.submissionDate || '').toLowerCase().includes(lowerSearchTerm)
+        ((doc.documentName || doc.fileName || '').toLowerCase().includes(lowerSearchTerm)) ||
+        ((doc.email || doc.uploadedBy || '').toLowerCase().includes(lowerSearchTerm)) ||
+        ((doc.status || 'N/A').toLowerCase().includes(lowerSearchTerm)) ||
+        ((doc.module || '').toLowerCase().includes(lowerSearchTerm)) ||
+        ((doc.uploadDate || doc.submissionDate || '').toLowerCase().includes(lowerSearchTerm))
       );
     }
-
+  
     this.filteredDocuments = filtered;
     console.log('Filtered Documents:', this.filteredDocuments);
   }
+  
+  
 
   showDocuments(tab: string) {
-    this.activeTab = tab;
-    this.filterDocuments();
+    this.activeTab = tab; // Update the active tab
+    console.log('Active Tab:', this.activeTab); // Debugging log
+    this.filterDocuments(); // Re-filter the documents based on the new active tab
   }
-
 
   selectRow(doc: any) {
     this.selectedDocument = doc;
-    
   }
 
   isSelected(doc: any): boolean {
     return this.selectedDocument === doc;
   }
-  
 
   goBack() {
     this.router.navigate(['/home']);
