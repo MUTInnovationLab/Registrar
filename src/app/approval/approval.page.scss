@@ -1,101 +1,31 @@
-/* General toolbar styling */
-ion-toolbar {
-  --background: #054c5b; /* Background color */
-  --color: white; /* Text color */
-  display: flex;
-  justify-content: center;
-  padding: 0;
+// Minimal styling specific to approval page only
+// Most styles now come from global.scss
+
+.search-container {
+  background: var(--app-secondary);
+  padding: 8px 16px;
 }
 
-/* Header toolbar for table headers */
-.header-toolbar {
-  --background: #054c5b; /* Match background color */
-  padding: 0 10px;
-  border-bottom: 1px solid #ccc; /* Optional border for separation */
-}
-
-/* Table header styling inside toolbar */
-.nav-header {
-  font-weight: bold;
-  color: white;
-  text-align: center;
-}
-
-/* Ensure content is padded below the toolbar */
-ion-content {
-  --padding-top: 40px; /* Adjust padding to account for the header */
-}
-
-/* Table styling */
-.table-container table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0;
+// Custom status selector colors
+ion-select.status-select {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  padding: 4px;
   
-}
-
-.table-container td {
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-/* Styling for alternating rows */
-.table-container tr:nth-child(even) {
-  background-color: white;
+  &.status-approved {
+    --placeholder-color: #4caf50;
+  }
   
-}
-
-.table-container tr:nth-child(odd) {
-  background-color: #054c5b;
-}
-
-/* Additional styles for select and input fields */
-ion-select, ion-input {
-  --background: white;
-  color: black;
-}
-
-/* Button group styling */
-.button-group {
-  display: flex;
-  justify-content: center;
-  margin-top: 15px; /* Increased margin-top */
-}
-
-/* Styling for individual buttons within the button group */
-.button-group ion-button {
-  margin: 0 12px; /* Increased margin for better spacing */
-}
-
-/* Specific button styles */
-.back-button {
-  --background: #562520;;
-  --color: white;
-}
-
-.reset-button {
-  --background: maroon;
-  --color: white; /* Added text color */
-  height: 2px;
+  &.status-declined {
+    --placeholder-color: #f44336;
+  }
   
+  &.status-suspended {
+    --placeholder-color: #ff9800;
+  }
 }
 
-.save-button {
-  --background: #054c5b;
-  --color: white; /* Added text color */
-}
-
-.sticky-footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: white; /* Background color of the footer */
-  z-index: 10; /* Ensure it stays above other content */
-  padding: 10px 0; /* Add some padding */
-}
-
-.table-container {
-  padding-bottom: 60px; /* Adjust according to the height of the footer */
+.comment-input {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 0;
 }

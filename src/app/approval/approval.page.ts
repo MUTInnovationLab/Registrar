@@ -31,6 +31,7 @@ export class ApprovalPage implements OnInit {
   filteredItems: DocumentItem[] = [];
   userModules: string[] = [];
   currentUserEmail: string = '';
+  profileVisible: boolean = false;
 
 
    rolesData = [
@@ -182,8 +183,8 @@ export class ApprovalPage implements OnInit {
   }
   
 
-  goBack() {
-    this.router.navigate(['/home']);
+  goBack(): void {
+    this.navCtrl.back();
   }
 
   resetForm() {
@@ -248,5 +249,8 @@ export class ApprovalPage implements OnInit {
       position: 'top'
     });
     toast.present();
+  }
+  toggleProfile() {
+    this.profileVisible = !this.profileVisible;
   }
 }

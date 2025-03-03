@@ -14,13 +14,21 @@ export const environment = {
     // appId: "1:584208693624:web:b764f48268d8d17ea5b08d",
     // measurementId: "G-M658WBWC8W"
 
-    apiKey: "AIzaSyA0W9D7-Mp13AzsEwgWcnMXqdV-KvA3Cxo",
-    authDomain: "co-opproject.firebaseapp.com",
-    projectId: "co-opproject",
-    storageBucket: "co-opproject.appspot.com",
-    messagingSenderId: "1046956113974",
-    appId: "1:1046956113974:web:ef16dc02b546cd81c21897",
-    measurementId: "G-7DER6G5CYK"
+    // apiKey: "AIzaSyA0W9D7-Mp13AzsEwgWcnMXqdV-KvA3Cxo",
+    // authDomain: "co-opproject.firebaseapp.com",
+    // projectId: "co-opproject",
+    // storageBucket: "co-opproject.appspot.com",
+    // messagingSenderId: "1046956113974",
+    // appId: "1:1046956113974:web:ef16dc02b546cd81c21897",
+    // measurementId: "G-7DER6G5CYK"
+
+    apiKey: "AIzaSyDgDyuNQioOPYVzKEptfSHIa0SqabfOJfQ",
+    authDomain: "registrar-66139.firebaseapp.com",
+    databaseURL: "https://registrar-66139-default-rtdb.firebaseio.com",
+    projectId: "registrar-66139",
+    storageBucket: "registrar-66139.appspot.com",
+    messagingSenderId: "591105233997",
+    appId: "1:591105233997:web:ca7d30430a110257b9b804"
   }
 };
 

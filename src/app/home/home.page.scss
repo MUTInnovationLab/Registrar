@@ -1,81 +1,227 @@
-/* Ensure the main card width is responsive */
-.main-card {
-  background-color: #054c5b;
-  width: 100%; /* Make it full width on mobile */
-  margin: auto;
-  padding: 16px;
-}
+// Main Variables
+$primary-color: #054c5b;
+$secondary-color: #562520;
+$accent-color: #FFCF33;
+$text-light: #ffffff;
+$card-radius: 12px;
+$transition-standard: all 0.3s ease;
 
-/* Profile card adjustments */
-.profile-card {
-  z-index: 20;
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  color: white;
-  height: auto; /* Allow height to adjust based on content */
-  width: 100%; /* Full width for mobile */
-  max-width: 225px; /* Limit maximum width */
-  background: #054c5b;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-/* Dashboard content styling */
+// Base Content Styling
 .dashboard-content {
-  --background: #053a44;
+  --background: #{$primary-color};
 }
 
-/* Grid layout adjustments */
+// Diamond Animation
+.diamond-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  
+  .diamond {
+    width: 40px;
+    height: 40px;
+    background-color: $text-light;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: pulseColor 4s infinite;
+    
+    &:nth-child(2) {
+      animation-delay: 1s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 2s;
+    }
+  }
+}
+
+@keyframes pulseColor {
+  0%, 100% { background-color: $text-light; }
+  33% { background-color: $secondary-color; }
+  66% { background-color: $accent-color; }
+}
+
+// Dashboard Grid Layout
 .dashboard-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px;
-  padding: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
 }
 
-/* Card styling adjustments */
+// Dashboard Cards
 .dashboard-card {
-  color: white;
-  height: 150px;
-  background: #562520;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  height: 160px;
+  background: $secondary-color;
+  border-radius: $card-radius;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: $transition-standard;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+  
+  ion-card-header {
+    background: $text-light;
+    padding: 12px;
+    
+    ion-card-title {
+      color: $secondary-color;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-align: center;
+      margin: 0;
+    }
+  }
+  
+  ion-card-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+    
+    ion-icon {
+      font-size: 60px;
+      color: $text-light;
+      transition: transform 0.3s ease;
+    }
+    
+    &:active ion-icon {
+      transform: scale(0.9);
+    }
+  }
 }
 
-.dashboard-card:hover {
+// Profile Card
+.profile-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 90;
+}
+
+.profile-card {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 280px;
+  background: $primary-color;
+  border-radius: $card-radius;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  overflow: hidden;
+  opacity: 0;
   transform: translateY(-20px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: $transition-standard;
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  ion-card-header {
+    background: $secondary-color;
+    padding: 16px;
+    
+    ion-card-title {
+      color: $text-light;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      
+      ion-icon {
+        font-size: 1.3rem;
+      }
+    }
+  }
+  
+  ion-card-content {
+    padding: 16px;
+    color: $text-light;
+    
+    .profile-info {
+      margin-bottom: 16px;
+      
+      p {
+        display: flex;
+        align-items: center;
+        margin: 8px 0;
+        
+        ion-icon {
+          margin-right: 10px;
+          color: $accent-color;
+          font-size: 1.2rem;
+        }
+      }
+    }
+    
+    ion-button {
+      --background: #d33939;
+      --border-radius: 6px;
+      margin-top: 8px;
+      font-weight: 500;
+    }
+  }
 }
 
-/* Card header and content styling */
-ion-card-header {
-  background: white;
-  color: #054c5b;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+// FAB Button
+ion-fab-button {
+  --background: #{$secondary-color};
+  --background-activated: #{darken($secondary-color, 10%)};
+  --background-hover: #{darken($secondary-color, 5%)};
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease;
+  
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
-ion-card-title {
-  font-size: 1.2rem;
-  font-weight: bold;
+// Header & Footer
+ion-toolbar {
+  --background: #{$secondary-color};
+  --color: #{$text-light};
 }
 
-ion-card-content {
+ion-footer .footer-text {
   font-size: 0.9rem;
-  color: #555;
-  text-align: center; /* Center content */
+  text-align: center;
+  
+  ion-icon {
+    color: #ff5a5a;
+    margin: 0 4px;
+    animation: heartBeat 1.5s infinite;
+  }
 }
 
+@keyframes heartBeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+// Responsive Adjustments
 @media (max-width: 768px) {
+  .dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    padding: 16px;
+  }
+  
   .profile-card {
-    position: static; /* Remove absolute positioning on smaller screens */
-    margin-bottom: 16px; /* Add space below profile card */
+    width: 90%;
+    max-width: 320px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%) translateY(-20px);
+    
+    &.visible {
+      transform: translateX(-50%) translateY(0);
+    }
   }
 }

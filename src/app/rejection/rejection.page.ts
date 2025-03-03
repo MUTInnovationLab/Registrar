@@ -3,6 +3,7 @@ import { DataService } from 'src/app/Shared/data.service'; // Adjust the path as
 import { DocumentItem } from 'src/app/Model/document-item'; // Adjust the path as needed
 import { ActivatedRoute, Router } from '@angular/router';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-rejection',
@@ -29,9 +30,9 @@ export class RejectionPage implements OnInit {
 
 
   constructor(
-    private router: Router, 
     private dataService: DataService,
-    private route: ActivatedRoute  
+    private route: ActivatedRoute,
+    private navCtrl: NavController  
   ) {}
 
   ngOnInit() {
@@ -70,7 +71,7 @@ export class RejectionPage implements OnInit {
     this.showNoDocumentsCard = this.declinedDocuments.length === 0;
   }
   
-  goBack() {
-    this.router.navigate(['/home']);
+  goBack(): void {
+    this.navCtrl.back();
   }
 }

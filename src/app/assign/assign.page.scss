@@ -1,133 +1,59 @@
-/* Global Styles */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #ECF0F6;
-  margin: 0;
+// Minimal styling specific to assign page only
+// Most styles now come from global.scss
+
+ion-grid {
   padding: 0;
 }
 
-img {
-  width: 100px; /* Adjust the desired width */
-  height: 60px; /* Adjust the desired height */
-}
-
-ion-header {
+.button-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: #054c5b;
-  color: white;
-  height: 70px;
-  animation: headerFadeIn 1s ease-in;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
 }
 
-.header-title {
-  margin: 0;
-  color: #ffffff;
-  text-align: center;
-  font-weight: bold;
-  animation: textFadeIn 1.5s ease-in-out;
-}
-
-ion-toolbar {
-  --background: #054c5b;
-}
-
-/* Page Title Styles */
-.info {
-  background-color: #054c5b;
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  font-size: 20px;
-  animation: titleFadeIn 1s ease-in-out;
-  height: 50px;
-}
-
-/* Content Background */
-.background {
-  background-color: rgb(198, 200, 201);
-}
-
-/* Card Styles */
-ion-card {
-  border-radius: 0px;
-  background: #ffffff;
-  box-shadow: 6px 6px 14px #8f8f8f, -6px -6px 14px #ffffff;
-}
-
-/* Error Message Styles */
-.error-message {
-  color: red;
-  font-size: small;
-}
-
-/* Button Styles */
-ion-button {
-  margin-top: 10px;
-  transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.butSubmit, .btnHover1, .btnHover2 {
-  border: none;
-  padding: 10px;
-  font-size: 1rem;
-  width: 150px;
-  border-radius: 1rem;
-  box-shadow: 0 0.4rem #dfd9d9;
-  cursor: pointer;
-  margin: 20px;
-  animation: bounceIn 1s ease 1.5s;
-}
-
-.butSubmit {
-  background-color: #054c5b;
+button.butSubmit {
+  background: var(--app-primary);
   color: rgb(4, 255, 58);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--app-transition);
+  
+  &:hover {
+    background: green;
+    color: white;
+  }
 }
 
-.butSubmit:hover {
-  background-color: green;
-  color: rgb(255, 255, 255);
-}
-
-.btnHover1 {
-  background-color: #054c5b;
+button.btnHover1 {
+  background: var(--app-primary);
   color: red;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--app-transition);
+  
+  &:hover {
+    background: red;
+    color: white;
+  }
 }
 
-.btnHover1:hover {
-  background-color: red;
-  color: rgb(255, 255, 255);
-}
-
-.btnHover2 {
-  background-color: #054c5b;
+button.btnHover2 {
+  background: var(--app-primary);
   color: blue;
-}
-
-.btnHover2:hover {
-  background-color: rgb(0, 89, 255);
-  color: rgb(255, 255, 255);
-}
-
-/* Footer Styles */
-.custom-footer {
-  text-align: center;
-  background-color: #054c5b;
-  padding: 2px;
-}
-
-/* Responsive Styles */
-@media (min-width: 100px) and (max-width: 767px) {
-  ion-grid {
-    overflow-x: auto; 
-  }
-
-  .card-column, .card-column1 {
-    width: 320px; 
-    margin-left: 10px;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--app-transition);
+  
+  &:hover {
+    background: rgb(0, 89, 255);
+    color: white;
   }
 }
-
-
-

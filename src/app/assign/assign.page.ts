@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { NavController, AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { Router } from '@angular/router';
 import { getAuth, deleteUser, updateEmail } from 'firebase/auth';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { DataService } from '../Shared/data.service';
@@ -53,7 +54,8 @@ export class AssignPage implements OnInit {
     private loadingController: LoadingController,
     private auth: AngularFireAuth,
     private navCtrl: NavController,
-    private dataService: DataService
+    private dataService: DataService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -218,8 +220,8 @@ export class AssignPage implements OnInit {
     }
   }
 
-  goToHomePage() {
-    this.navCtrl.navigateBack('/home');
+  goBack() {
+    this.router.navigate(['/home']);
   }
 
   async presentConfirmationAlert() {

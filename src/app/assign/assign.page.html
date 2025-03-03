@@ -1,16 +1,10 @@
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <div class="diamond-container">
-      <div class="diamond diamond-red"></div>
-      <div class="diamond diamond-green"></div>
-      <div class="diamond diamond-blue"></div>
-    </div>
     <ion-title class="header-title">ASSIGN USER</ion-title>
-      </ion-toolbar>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="background">
@@ -19,7 +13,6 @@
     <ion-row>
       <ion-col size="3">
         <ion-item>
-          <!-- <ion-label>Faculty</ion-label> -->
           <ion-select [(ngModel)]="selectedFaculty" (ionChange)="onFacultyChange()" placeholder="Select Faculty">
             <ion-select-option *ngFor="let faculty of faculties" [value]="faculty.id">{{ faculty.facultyName }}</ion-select-option>
           </ion-select>
@@ -28,7 +21,6 @@
 
       <ion-col size="3">
         <ion-item>
-          <!-- <ion-label>Department</ion-label> -->
           <ion-select [(ngModel)]="selectedDepartment" (ionChange)="onDepartmentChange()" placeholder="Select Department" [disabled]="!selectedFaculty">
             <ion-select-option *ngFor="let department of departments" [value]="department.departmentName">{{ department.departmentName }}</ion-select-option>
           </ion-select>
@@ -37,41 +29,33 @@
 
       <ion-col size="3">
         <ion-item>
-          <!-- <ion-label>Course</ion-label> -->
           <ion-select [(ngModel)]="selectedCourse" (ionChange)="onCourseChange()" placeholder="Select Course" [disabled]="!selectedDepartment">
             <ion-select-option *ngFor="let course of courses" [value]="course.courseName">{{ course.courseName }}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
 
-      
-
       <ion-col size="3">
         <ion-item>
-          <!-- <ion-label>Module</ion-label> -->
           <ion-select [(ngModel)]="selectedModules" placeholder="Select Module" [disabled]="!selectedCourse" multiple="true">
             <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
           </ion-select>
         </ion-item>
       </ion-col>
-      
     </ion-row>
   </ion-grid>
   
   <ion-grid class="grid-container">
     <ion-row>
-      <ion-col size="12" class="info">
-        <!-- <ion-label>ADD & GRANT USER PRIVILEGES</ion-label> -->
-      </ion-col>
+      <ion-col size="12" class="info"></ion-col>
     </ion-row>
     <ion-row>
       <ion-col size="6" class="card-column">
         <ion-card class="cardcenter card-column">
           <ion-card-header>
-            <ion-card-title style="text-align: center; font-weight: bold; color: white;">Add User Info</ion-card-title>
+            <ion-card-title>Add User Info</ion-card-title>
           </ion-card-header>
           <ion-card-content>
-
             <ion-item>
               <ion-label position="floating">Name</ion-label>
               <ion-icon name="person" slot="start"></ion-icon>
@@ -94,7 +78,7 @@
                 <ion-select-option value="Examination Officer">Examination Officer</ion-select-option>
                 <ion-select-option value="Human Resource">Human Resource</ion-select-option>
                 <ion-select-option value="Deputy Registrar">Deputy Registrar</ion-select-option>
-                <ion-select-option value="HOD"> HOD</ion-select-option>
+                <ion-select-option value="HOD">HOD</ion-select-option>
                 <ion-select-option value="Lecturer">Lecturer</ion-select-option>
                 <ion-select-option value="Admin">Admin</ion-select-option>
               </ion-select>
@@ -107,10 +91,6 @@
                 <ion-select-option *ngFor="let module of modules" [value]="module.moduleName">{{ module.moduleName }}</ion-select-option>
               </ion-select>
             </ion-item>
-            
-              
-            
-            
 
             <ion-item>
               <ion-label position="floating">Staff Number</ion-label>
@@ -118,111 +98,43 @@
               <ion-input type="text" name="staffNumber" [(ngModel)]="staffNumber" (input)="staffError = null;"></ion-input>
               <div class="error-message" *ngIf="staffError">{{ staffError }}</div>
             </ion-item>
-
           </ion-card-content>
         </ion-card>
-
-       
-         
-
-          
       </ion-col>
 
       <ion-col size="6" class="card-column1">
         <ion-card class="cardcenter card-column1">
           <ion-card-header>
-            <ion-card-title text-align="center">Assign Admin</ion-card-title>
+            <ion-card-title>Assign Admin</ion-card-title>
           </ion-card-header>
-          
           <ion-card-content>
-
-            <!-- <ion-item>
-              <ion-label>
-                <ion-icon name="time"></ion-icon>
-                Assign User
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getAdduserValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="stats-chart"></ion-icon>
-                All User
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getAllUsersValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="briefcase"></ion-icon>
-                Approval
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getApprovalValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="school"></ion-icon>
-                Dashboard
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getDashboardValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="person-add-sharp"></ion-icon>
-                Rejection
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getRejectionValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="person-add-sharp"></ion-icon>
-                Upload
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getUploadValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="checkmark-done-sharp"></ion-icon>
-                View Documents
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getViewDocsValue($event)"></ion-toggle>
-            </ion-item>
-
-            <ion-item>
-              <ion-label>
-                <ion-icon name="layers-outline"></ion-icon>
-                Add Faculty
-              </ion-label>
-              <ion-toggle slot="end" (ionChange)="getModulesValue($event)"></ion-toggle>
-            </ion-item> -->
-
-           
-
+            <!-- Card content -->
           </ion-card-content>
         </ion-card>
       </ion-col>
     </ion-row>
   </ion-grid>
 
-  <button class="butSubmit" expand="block" (click)="Validation()" >
-    <ion-icon slot="start" name="add-outline"></ion-icon>
-    Assign
-  </button>
-<button class="btnHover2" expand="block" (click)="Validation()" (click)="updateUser()" >
-  <ion-icon slot="start" name="pencil-outline"></ion-icon>
-  Update
-</button>
-<button  class="btnHover1"  expand="block" (click)="Validation()" (click)="deleteUser()">
-    <ion-icon slot="start" name="trash-outline"></ion-icon>
-    Remove
-  </button>
-  
+  <div class="button-container">
+    <button class="butSubmit" expand="block" (click)="Validation()">
+      <ion-icon name="add-outline"></ion-icon>
+      Assign
+    </button>
+    <button class="btnHover2" expand="block" (click)="Validation()" (click)="updateUser()">
+      <ion-icon name="pencil-outline"></ion-icon>
+      Update
+    </button>
+    <button class="btnHover1" expand="block" (click)="Validation()" (click)="deleteUser()">
+      <ion-icon name="trash-outline"></ion-icon>
+      Remove
+    </button>
+  </div>
 </ion-content>
 
-<ion-footer class="custom-footer">
-  Designed with ❤️ by <b>MUT INNOVATIONLAB</b>
+<ion-footer>
+  <ion-toolbar>
+    <div class="footer-text">
+      Designed with <ion-icon name="heart"></ion-icon> by MUT INNOVATION LAB
+    </div>
+  </ion-toolbar>
 </ion-footer>

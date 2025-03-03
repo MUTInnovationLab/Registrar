@@ -14,6 +14,7 @@ export class AllUsersPage implements OnInit {
   filteredUsers: User[] = [];     // Filtered users list for display
   searchTerm: string = '';        // Search input binding
   selectedUser: User | null = null; // Initialize as null
+  profileVisible: boolean = false; // Profile visibility flag
 
 
   selectedRow: number = -1;       // Holds the index of the selected row (-1 means none selected)
@@ -69,5 +70,8 @@ export class AllUsersPage implements OnInit {
   // Navigate back to the home page
   goBack() {
     this.router.navigate(['/home']); // Adjust the route based on your app structure
+  }
+  toggleProfile() {
+    this.profileVisible = !this.profileVisible;
   }
 }

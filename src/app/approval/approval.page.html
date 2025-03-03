@@ -1,76 +1,60 @@
- <ion-header>
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
+        Back
+      </ion-button>
     </ion-buttons>
+    <ion-title>Document Management</ion-title>
   </ion-toolbar>
-
-  <!-- Navigation Bar with Table Headers -->
-  <ion-toolbar class="header-toolbar">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="2">
-          <div class="nav-header">Email</div>
-        </ion-col>
-        <ion-col size="2">
-          <div class="nav-header">Module</div>
-        </ion-col>
-        <ion-col size="3">
-          <div class="nav-header">Document Name</div>
-        </ion-col>
-        <ion-col size="2">
-          <div class="nav-header">Status</div>
-        </ion-col>
-        <ion-col size="3">
-          <div class="nav-header">Comment</div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-toolbar>
-
-  <ion-row>
-    <ion-col size="12" class="search-container">
-      
-      <ion-searchbar (ionInput)="filterItems($event)"></ion-searchbar>
-    </ion-col>
-  </ion-row>
+  
+  <div class="search-container">
+    <ion-searchbar placeholder="Search documents..." (ionInput)="filterItems($event)" animated></ion-searchbar>
+  </div>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" class="table-container">
-        <table>
-          <tbody>
-            <tr *ngFor="let item of filteredItems">
-              <td>{{ item.email }}</td>
-              <td>{{item.module}}</td>
-              <td>{{ item.documentName }}</td>
-              <td>
-                <ion-select [(ngModel)]="item.status" (ionChange)="onStatusChange(item)">
-                  <ion-select-option value="approved">Approved</ion-select-option>
-                  <ion-select-option value="declined">Declined</ion-select-option>
-                  <ion-select-option value="suspended">Suspended</ion-select-option>
-                </ion-select>
-              </td>
-              <td>
-                <ion-input [(ngModel)]="item.comment" placeholder="Add comment" class="comment-input"></ion-input>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </ion-col>
-    </ion-row>
-  
-    <div class="sticky-footer">
-      <ion-row>
-        <ion-col size="12" class="button-group">
-          <ion-button class="reset-button" (click)="resetForm()">Reset</ion-button>
-          <ion-button class="save-button" (click)="saveChanges()">Save</ion-button>
-        </ion-col>
-      </ion-row>
+<ion-content>
+  <div class="table-container">
+    <!-- Table Header -->
+    <div class="table-header">
+      <div class="header-cell">Email</div>
+      <div class="header-cell">Module</div>
+      <div class="header-cell">Document Name</div>
+      <div class="header-cell">Status</div>
+      <div class="header-cell">Comment</div>
     </div>
-  </ion-grid>
-  
+    
+    <!-- Table Body -->
+    <div class="table-body">
+      <div class="table-row" *ngFor="let item of filteredItems; let i = index" [ngClass]="{'odd': i % 2 !== 0}">
+        <div class="table-cell">{{ item.email }}</div>
+        <div class="table-cell">{{ item.module }}</div>
+        <div class="table-cell">{{ item.documentName }}</div>
+        <div class="table-cell status-cell">
+          <ion-select interface="popover" [(ngModel)]="item.status" (ionChange)="onStatusChange(item)">
+            <ion-select-option value="approved">Approved</ion-select-option>
+            <ion-select-option value="declined">Declined</ion-select-option>
+            <ion-select-option value="suspended">Suspended</ion-select-option>
+          </ion-select>
+        </div>
+        <div class="table-cell comment-cell">
+          <ion-input [(ngModel)]="item.comment" placeholder="Add comment"></ion-input>
+        </div>
+      </div>
+    </div>
+  </div>
 </ion-content>
 
+<ion-footer>
+  <div class="button-container">
+    <ion-button color="medium" (click)="resetForm()">
+      <ion-icon name="refresh-outline" slot="start"></ion-icon>
+      Reset
+    </ion-button>
+    <ion-button color="primary" (click)="saveChanges()">
+      <ion-icon name="save-outline" slot="start"></ion-icon>
+      Save Changes
+    </ion-button>
+  </div>
+</ion-footer>

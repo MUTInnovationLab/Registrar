@@ -82,76 +82,20 @@ export class HomePage {
     }
   }
   
-  
-  
-
-  // async navigateBasedOnRole(page: string): Promise<void> {
-  //   try {
-  //     await this.getUser();
-
-  //     if (this.isAdmin) {
-  //       this.navController.navigateForward('/' + page);
-  //       return;
-  //     }
-
-  //     let authorized = false;
-  //     let message = '';
-
-  //     if (this.userDocument && this.userDocument.role) {
-  //       switch (page) {
-  //         case 'all-users':
-  //           authorized = this.userDocument.role.allUsers === 'on';
-  //           message = 'Unauthorized user for all users.';
-  //           break;
-  //         case 'upload':
-  //           authorized = this.userDocument.role.upload === 'on';
-  //           message = 'Unauthorized user for upload page.';
-  //           break;
-  //         case 'dashboard':
-  //           authorized = this.userDocument.role.dashboard === 'on';
-  //           message = 'Access denied dashboard page.';
-  //           break;
-  //         case 'view-docs':
-  //           authorized = this.userDocument.role.viewDocs === 'on';
-  //           message = 'Unauthorized user for view docs page.';
-  //           break;
-  //         case 'approval':
-  //           authorized = this.userDocument.role.approval === 'on';
-  //           message = 'Unauthorized user for approval page.';
-  //           break;
-  //         case 'assign':
-  //           authorized = this.userDocument.role.assign === 'on';
-  //           message = 'Unauthorized user for assign page.';
-  //           break;
-  //         case 'rejection':
-  //           authorized = this.userDocument.role.rejection === 'on';
-  //           message = 'Unauthorized user for rejection page.';
-  //           break;
-  //         case 'board':
-  //           authorized = this.userDocument.role.modules === 'on';
-  //           message = 'Unauthorized user for modules page.';
-  //           break;
-  //         default:
-  //           authorized = false;
-  //           message = 'Invalid page.';
-  //           break;
-  //       }
-  //     }
-
-  //     if (authorized) {
-  //       this.navController.navigateForward('/' + page);
-  //     } else {
-  //       const toast = await this.toastController.create({
-  //         message: message || 'Unauthorized Access',
-  //         duration: 2000,
-  //         position: 'top'
-  //       });
-  //       toast.present();
-  //     }
-  //   } catch (error) {
-  //     console.error('Error navigating based on role:', error);
-  //   }
-  // }
+  async logout() {
+    try {
+      await this.auth.signOut();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error logging out:', error);
+      const toast = await this.toastController.create({
+        message: 'Error logging out. Please try again.',
+        duration: 2000,
+        position: 'top'
+      });
+      toast.present();
+    }
+  }
 
   // Example page navigation methods
   goToUpload(){

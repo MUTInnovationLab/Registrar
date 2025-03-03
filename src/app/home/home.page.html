@@ -5,72 +5,59 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="dashboard-content">
-  <ion-card class="main-card">
-    <div class="dashboard-grid">
-      <ion-card class="dashboard-card" (click)="goToAllUsers()">
-        <ion-card-header>
-          <ion-card-title>All Users</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="people-circle" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      
-  
-      <ion-card class="dashboard-card" (click)="goToAssign()">
-        <ion-card-header>
-          <ion-card-title>Assign</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="person-add" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToRejection()">
-        <ion-card-header>
-          <ion-card-title>Rejection</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="close-circle" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-  
-      <ion-card class="dashboard-card" (click)="goToViewDocs()">
-        <ion-card-header>
-          <ion-card-title>View Documents</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="document" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
+  <!-- Animated Elements -->
+  <div class="diamond-container">
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+    <div class="diamond"></div>
+  </div>
 
-      <ion-card class="dashboard-card" (click)="goToModules()">
-        <ion-card-header>
-          <ion-card-title>Add Faculty</ion-card-title>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-icon name="list-outline" style="font-size: 90px;"></ion-icon>
-        </ion-card-content>
-      </ion-card>
-    </div>
-  </ion-card>
+  <!-- Dashboard Cards Grid -->
+  <div class="dashboard-grid">
+    <ion-card class="dashboard-card" *ngFor="let item of dashboardItems" (click)="navigate(item.route)">
+      <ion-card-header>
+        <ion-card-title>{{item.title}}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-icon [name]="item.icon"></ion-icon>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-  <ion-card class="profile-card" *ngIf="profileVisible">
+  <!-- Profile Card (conditionally displayed) -->
+  <div class="profile-overlay" *ngIf="profileVisible" (click)="toggleProfile()"></div>
+  <ion-card class="profile-card" [class.visible]="profileVisible">
     <ion-card-header>
-      <ion-card-title>Profile Management</ion-card-title>
+      <ion-card-title>
+        <ion-icon name="person-circle"></ion-icon>
+        Profile Management
+      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
-      <ion-icon name="person-circle"></ion-icon> Name: Wandile Khumalo <br>
-      <ion-icon name="mail"></ion-icon> Email: generalwandile41&#64;<br>
-      <ion-icon name="person-add"></ion-icon> Role: Admin <br>
-      <ion-icon name="calendar-number"></ion-icon> Login Count: 5 <br>
+      <div class="profile-info">
+        <p><ion-icon name="person"></ion-icon> {{userDocument?.name || 'N/A'}}</p>
+        <p><ion-icon name="mail"></ion-icon> {{userDocument?.email || 'N/A'}}</p>
+        <p><ion-icon name="shield-checkmark"></ion-icon> {{isAdmin ? 'Admin' : userDocument?.position || 'N/A'}}</p>
+      </div>
+      <ion-button expand="block" (click)="logout()">
+        <ion-icon name="log-out" slot="start"></ion-icon>
+        Logout
+      </ion-button>
     </ion-card-content>
   </ion-card>
 
+  <!-- Profile Button -->
   <ion-fab vertical="top" horizontal="end" slot="fixed">
     <ion-fab-button (click)="toggleProfile()">
       <ion-icon name="person-circle"></ion-icon>
     </ion-fab-button>
   </ion-fab>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title class="footer-text">
+      Designed with <ion-icon name="heart"></ion-icon> by MUT INNOVATION LAB
+    </ion-title>
+  </ion-toolbar>
+</ion-footer>

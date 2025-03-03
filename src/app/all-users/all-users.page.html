@@ -1,59 +1,51 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="back-icon" (click)="goBack()" aria-label="Go back">
-        <ion-icon slot="start" name="arrow-back" class="back-icon"></ion-icon>
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline" slot="start"></ion-icon>
         Back
       </ion-button>
     </ion-buttons>
     <ion-title>All Users</ion-title>
-    <ion-buttons slot="end">
-      <ion-button aria-label="Profile">
-        <ion-icon slot="icon-only" name="person" class="profile-icon"></ion-icon>
-      </ion-button>
-    </ion-buttons>
   </ion-toolbar>
+  
+  <div class="search-container">
+    <ion-searchbar placeholder="Search by email, staff number, or role..." 
+                  [(ngModel)]="searchTerm"
+                  (ionChange)="filterUsers()"
+                  animated></ion-searchbar>
+  </div>
 </ion-header>
 
-<ion-content class="content-background">
-  <ion-title class="page-title">All Users</ion-title>
-  
-  <!-- Diamond Shape Container -->
-  <div class="diamond-container">
-    <div class="diamond white-diamond"></div>
-    <div class="diamond maroon-diamond"></div>
-    <div class="diamond yellow-diamond"></div>
-  </div>
-
-  <!-- Search Box -->
-  <div class="search-container">
-    <ion-icon name="search" class="search-icon"></ion-icon>
-    <input type="text" placeholder="Search by email, staff number, or role..." 
-           class="search-input" 
-           [(ngModel)]="searchTerm" 
-           (ngModelChange)="filterUsers()">
-  </div>
-
-  <!-- Table for User Data -->
+<ion-content>
   <div class="table-container">
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Staff Number</th>
-            <th>Role</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let user of filteredUsers" (click)="selectUser(user)"
-              [class.selected-row]="selectedUser === user">
-            <td>{{ user.email }}</td>
-            <td>{{ user.staffNumber }}</td>
-            <td>{{ user.position }}</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- Table Header -->
+    <div class="table-header">
+      <div class="header-cell">Email</div>
+      <div class="header-cell">Staff Number</div>
+      <div class="header-cell">Role</div>
+      <div class="header-cell">Actions</div>
+    </div>
+    
+    <!-- Table Body -->
+    <div class="table-body">
+      <div class="table-row" *ngFor="let user of filteredUsers; let i = index" 
+           [ngClass]="{'odd': i % 2 !== 0}" 
+           [class.selected-row]="selectedUser === user" 
+           (click)="selectUser(user)">
+        <div class="table-cell">{{ user.email }}</div>
+        <div class="table-cell">{{ user.staffNumber }}</div>
+        <div class="table-cell">{{ user.position }}</div>
+        <div class="table-cell action-cell">
+          <ion-button fill="clear" size="small" color="primary">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" size="small" color="danger">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+      
       <div *ngIf="filteredUsers.length === 0" class="empty-state">
         <p>No users found.</p>
       </div>
@@ -61,11 +53,10 @@
   </div>
 </ion-content>
 
-<!-- Footer -->
 <ion-footer>
   <ion-toolbar>
-    <ion-title class="slogan">
-      Designed with <ion-icon name="heart" class="heart-icon"></ion-icon> by MUT INNOVATION LAB
-    </ion-title>
+    <div class="footer-text">
+      Designed with <ion-icon name="heart"></ion-icon> by MUT INNOVATION LAB
+    </div>
   </ion-toolbar>
 </ion-footer>

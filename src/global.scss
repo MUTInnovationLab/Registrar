@@ -25,13 +25,365 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-/**
- * Ionic Dark Mode
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
-
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/* Ionic Dark Mode */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+/* App Theme Variables */
+:root {
+  --app-primary: #054c5b;
+  --app-secondary: #562520;
+  --app-accent: #FFCF33;
+  --app-light: #ffffff;
+  --app-dark: #313131;
+  --app-gray: #f5f5f5;
+  --app-transition: all 0.3s ease;
+}
+
+/* Unified Header Styling */
+ion-header ion-toolbar {
+  --background: var(--app-secondary);
+  --color: var(--app-light);
+  --border-color: transparent;
+  --min-height: 56px;
+  ion-title {
+    font-weight: 600;
+    font-size: 18px;
+  }
+}
+
+/* Back Button Styling */
+ion-buttons[slot="start"] ion-button,
+.back-button {
+  --color: var(--app-light);
+  font-size: 14px;
+  margin: 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  transition: var(--app-transition);
+  
+  &:hover {
+    --color: var(--app-accent);
+  }
+  
+  ion-icon {
+    margin-right: 4px;
+    font-size: 18px;
+  }
+}
+
+/* Common Content Area */
+ion-content {
+  --background: var(--app-primary);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 16px;
+  --padding-bottom: 16px;
+}
+
+/* Diamond Animation Shared Across Pages */
+.diamond-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 16px 0;
+  
+  .diamond {
+    width: 36px;
+    height: 36px;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: diamondPulse 4s infinite;
+    
+    &.white-diamond { animation-delay: 0s; }
+    &.maroon-diamond { animation-delay: 1.33s; }
+    &.yellow-diamond { animation-delay: 2.66s; }
+  }
+}
+
+@keyframes diamondPulse {
+  0%, 100% { background-color: var(--app-light); }
+  33% { background-color: var(--app-secondary); }
+  66% { background-color: var(--app-accent); }
+}
+
+/* Consistent Card Styling */
+ion-card {
+  background: var(--app-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 16px 0;
+  overflow: hidden;
+  
+  ion-card-header {
+    background: var(--app-secondary);
+    padding: 12px 16px;
+    
+    ion-card-title {
+      color: var(--app-light);
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+  }
+  
+  ion-card-content {
+    padding: 16px;
+    color: var(--app-light);
+  }
+}
+
+/* Unified Table Styling */
+.table-container {
+  background: var(--app-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 16px 0;
+  
+  .table-header {
+    display: flex;
+    background: var(--app-secondary);
+    color: var(--app-light);
+    font-weight: 600;
+    text-align: left;
+    
+    .header-cell {
+      padding: 12px;
+      flex: 1;
+    }
+  }
+  
+  .table-body {
+    .table-row {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      
+      .table-cell {
+        padding: 12px;
+        flex: 1;
+        color: var(--app-light);
+      }
+    }
+  }
+}
+
+/* Enhanced Table Styling */
+.table-container {
+  background: var(--app-dark);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin: 16px 0;
+  width: 100%;
+  
+  .table-header {
+    display: flex;
+    background: var(--app-secondary);
+    color: var(--app-light);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 0;
+    
+    .header-cell {
+      padding: 0 12px;
+      flex: 1;
+    }
+  }
+  
+  .table-body {
+    .table-row {
+      display: flex;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      transition: background-color 0.2s ease;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+      
+      &.odd {
+        background: rgba(0, 0, 0, 0.1);
+        
+        &:hover {
+          background: rgba(255, 255, 255, 0.05);
+        }
+      }
+      
+      .table-cell {
+        padding: 12px;
+        flex: 1;
+        color: var(--app-light);
+        display: flex;
+        align-items: center;
+      }
+      
+      .action-cell {
+        justify-content: center;
+        gap: 8px;
+        
+        ion-button {
+          --padding-start: 8px;
+          --padding-end: 8px;
+          margin: 0;
+          height: 30px;
+          
+          &[color="primary"] {
+            --color: var(--app-accent);
+          }
+          
+          &[color="danger"] {
+            --color: #ff4961;
+          }
+          
+          &:hover {
+            --background: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Standardized Search Container */
+.search-container {
+  background: var(--app-secondary);
+  padding: 8px 16px;
+  
+  ion-searchbar {
+    --background: rgba(255, 255, 255, 0.1);
+    --box-shadow: none;
+    --color: var(--app-light);
+    --placeholder-color: rgba(255, 255, 255, 0.7);
+    --icon-color: var(--app-accent);
+    --clear-button-color: var(--app-light);
+    --border-radius: 8px;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* Standardized Button Container */
+.button-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+/* Standard Form Controls */
+ion-searchbar {
+  --background: rgba(255, 255, 255, 0.1);
+  --color: var(--app-light);
+  --placeholder-color: rgba(255, 255, 255, 0.6);
+  --icon-color: var(--app-accent);
+  --border-radius: 8px;
+  --box-shadow: none;
+  margin: 8px 0;
+}
+
+ion-select {
+  --placeholder-color: rgba(255, 255, 255, 0.6);
+  --placeholder-opacity: 1;
+}
+
+/* Unified Footer */
+ion-footer ion-toolbar {
+  --background: var(--app-secondary);
+  --color: var(--app-light);
+  --min-height: 46px;
+  
+  .footer-text {
+    font-size: 12px;
+    text-align: center;
+    padding: 8px 0;
+    
+    ion-icon[name="heart"] {
+      color: #ff5a5a;
+      animation: heartbeat 1.5s infinite;
+    }
+  }
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+/* Profile Card Styling */
+.profile-card {
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: var(--app-primary);
+  color: var(--app-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  width: 280px;
+  z-index: 999;
+  
+  ion-card-header {
+    background: var(--app-secondary);
+    
+    ion-card-title {
+      color: var(--app-light);
+      text-align: center;
+    }
+  }
+  
+  ion-item {
+    --background: transparent;
+    --color: var(--app-light);
+    
+    ion-icon {
+      color: var(--app-light);
+    }
+  }
+}
+
+/* FAB Button Styling */
+ion-fab-button {
+  --background: var(--app-secondary);
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    --background: var(--app-accent);
+  }
+}
+
+/* Common Button Styling */
+ion-button,
+button.app-button {
+  --background: var(--app-secondary);
+  --color: var(--app-light);
+  --border-radius: 8px;
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: var(--app-transition);
+  
+  &:hover {
+    --background: var(--app-accent);
+    --color: var(--app-dark);
+  }
+}
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

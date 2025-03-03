@@ -1,16 +1,24 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button class="back-button" (click)="goBack()">Back</ion-button>
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Back
+      </ion-button>
     </ion-buttons>
-    <ion-title class="heading">View Rejections</ion-title>
+    <ion-title>View Rejections</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleProfile()">
+        <ion-icon name="person-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <div class="form-title">Document Evaluations Below</div>
-
-  <!-- Diamond Container -->
+<ion-content>
+  <h2 class="ion-text-center ion-padding">Document Evaluations</h2>
+  
+  <!-- Diamond Container (from global.scss) -->
   <div class="diamond-container">
     <div class="diamond white-diamond"></div>
     <div class="diamond maroon-diamond"></div>
@@ -84,18 +92,12 @@
       </ion-list>
     </ion-card-content>
   </ion-card>
-
-  <ion-fab vertical="top" horizontal="end" slot="fixed">
-    <ion-fab-button (click)="toggleProfile()">
-      <ion-icon name="person-circle"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-title class="slogan">
-      Designed with <ion-icon name="heart" class="heart-icon"></ion-icon> by MUT INNOVATION LAB
-    </ion-title>
+    <div class="footer-text">
+      Designed with <ion-icon name="heart"></ion-icon> by MUT INNOVATION LAB
+    </div>
   </ion-toolbar>
 </ion-footer>
