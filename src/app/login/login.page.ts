@@ -31,12 +31,12 @@ export class LoginPage implements OnInit {
     this.navCtrl.navigateForward("/reset");
   }
 
-  signUp() {
-    this.navCtrl.navigateForward("/create");
-  }
+  // signUp() {
+  //   this.navCtrl.navigateForward("/register");
+  // }
 
   goToSignUp() {
-    this.navCtrl.navigateForward("/applicant-resgister");
+    this.navCtrl.navigateForward("/resgister");
   }
 
   async validate() {

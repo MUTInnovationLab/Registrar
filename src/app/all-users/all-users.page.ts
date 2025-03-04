@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataService } from '../Shared/data.service';
 import { User } from '../Model/user';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-all-users',
@@ -22,7 +23,7 @@ export class AllUsersPage implements OnInit {
     this.selectedUser = user; // Track the selected user object
   }
 
-  constructor(private router: Router, private dataService: DataService) { }
+  constructor(private router: Router, private dataService: DataService, private navCtrl: NavController) { }
 
   ngOnInit() {
     this.loadUsers(); // Load users on component initialization
@@ -68,8 +69,8 @@ export class AllUsersPage implements OnInit {
   }
 
   // Navigate back to the home page
-  goBack() {
-    this.router.navigate(['/home']); // Adjust the route based on your app structure
+  goBack(): void {
+    this.navCtrl.back();
   }
   toggleProfile() {
     this.profileVisible = !this.profileVisible;

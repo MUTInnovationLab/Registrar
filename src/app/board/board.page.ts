@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../Shared/data.service';
-import { ToastController } from '@ionic/angular';
+import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-board',
@@ -24,7 +24,8 @@ export class BoardPage implements OnInit {
   selectedModule: string = '';
 
   constructor(private dataService: DataService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private navCtrl: NavController
   ) { }
 
   ngOnInit() {
@@ -145,6 +146,8 @@ export class BoardPage implements OnInit {
     });
     toast.present();
   }
-  
+  goBack(): void {
+    this.navCtrl.back();
+  }
   
 }

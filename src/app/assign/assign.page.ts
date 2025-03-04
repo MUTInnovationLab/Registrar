@@ -220,8 +220,8 @@ export class AssignPage implements OnInit {
     }
   }
 
-  goBack() {
-    this.router.navigate(['/home']);
+  goBack(): void {
+    this.navCtrl.back();
   }
 
   async presentConfirmationAlert() {
