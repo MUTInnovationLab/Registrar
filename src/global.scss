@@ -136,7 +136,7 @@ ion-card {
   background: var(--app-dark);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 1(0, 0, 0, 0.15);
   margin: 16px 0;
   
   .table-header {
@@ -176,7 +176,7 @@ ion-card {
 
 /* Enhanced Table Styling */
 .table-container {
-  background: var(--app-dark);
+  background: #054c5b;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -256,7 +256,7 @@ ion-card {
 
 /* Standardized Search Container */
 .search-container {
-  background: var(--app-secondary);
+  background: white;
   padding: 8px 16px;
   
   ion-searchbar {
