@@ -5,7 +5,10 @@
   background: var(--app-secondary);
   padding: 8px 16px;
 }
-
+.centered-title {
+  text-align: center;
+  width: 100%;
+}
 // Custom status selector colors
 ion-select.status-select {
   background: rgba(255, 255, 255, 0.1);
