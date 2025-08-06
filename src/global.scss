@@ -38,6 +38,10 @@
   --app-gray: #f5f5f5;
   --app-transition: all 0.3s ease;
 }
+.centered-title {
+  text-align: center;
+  width: 100%;
+}
 
 /* Unified Header Styling */
 ion-header ion-toolbar {
@@ -254,9 +258,10 @@ ion-card {
   }
 }
 
+
 /* Standardized Search Container */
 .search-container {
-  background: white;
+  background: #054c5b;
   padding: 8px 16px;
   
   ion-searchbar {

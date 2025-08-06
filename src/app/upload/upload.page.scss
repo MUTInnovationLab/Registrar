@@ -1,8 +1,16 @@
+$primary-color: #054c5b;
+$secondary-color: #562520;
+$accent-color: #FFCF33;
+$text-light: #ffffff;
+$card-radius: 12px;
+$transition-standard: all 0.3s ease;
+
 ion-content {
   --background: #054C5B; 
 }
 
 ion-title {
+  background: #562520;
   text-align: center;
   color: #FFFFFF;
   font-family: 'Open Sans', sans-serif;
@@ -12,7 +20,7 @@ ion-title {
 ion-toolbar {
   --padding-start: 0;
   --padding-end: 0;
-  --background: #054C5B;
+  --background: #562520;
 }
 
 .centered-content {
@@ -34,21 +42,31 @@ ion-toolbar {
 .diamond-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 20px 0; 
+  gap: 12px;
+  margin: 24px 0;
+  
+  .diamond {
+    width: 40px;
+    height: 40px;
+    background-color: $text-light;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: pulseColor 4s infinite;
+    
+    &:nth-child(2) {
+      animation-delay: 1s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 2s;
+    }
+  }
 }
 
-.diamond {
-  width: 30px;
-  height: 30px;
-  margin: 0 15px;
-  transform: rotate(45deg);
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+@keyframes pulseColor {
+  0%, 100% { background-color: $text-light; }
+  33% { background-color: $secondary-color; }
+  66% { background-color: $accent-color; }
 }
-
-.diamond:nth-child(1) { background-color: #FFFFFF; }
-.diamond:nth-child(2) { background-color: #FAC710; }
-.diamond:nth-child(3) { background-color: #812B29; }
 
 ion-card {
   width: 100%;
@@ -199,7 +217,7 @@ ion-button {
   color: #888; /* Placeholder text color */
 }
 .custom-footer{
-  
+  background: #562520;
   text-align: center;
   
 }

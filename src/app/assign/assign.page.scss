@@ -1,5 +1,23 @@
 // Minimal styling specific to assign page only
 // Most styles now come from global.scss
+ion-grid ion-select,
+ion-grid ion-select::part(text),
+ion-grid ion-select-option {
+  color: #000000 !important;
+}
+
+ion-grid ion-select {
+  --placeholder-color: rgba(0, 0, 0, 0.6);
+  --placeholder-opacity: 1;
+  --background: #ffffff;
+}
+
+ion-grid ion-item {
+  --color: #000000;
+  --background: white;
+}
+
+
 
 ion-grid {
   padding: 0;

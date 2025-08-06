@@ -2,9 +2,23 @@
 // Most styles now come from global.scss
 
 .search-container {
-  background: var(--app-secondary);
+  background: white;
   padding: 8px 16px;
 }
+
+.search-container ion-searchbar {
+  --background: #f0f0f0; /* light grey for contrast */
+  --color: #000000; /* black input text */
+  --placeholder-color: rgba(0, 0, 0, 0.6); /* dark grey placeholder */
+  --icon-color: #000000; /* black icons (search/clear) */
+  --clear-button-color: #000000;
+  --border-radius: 8px;
+  --box-shadow: none;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
 .centered-title {
   text-align: center;
   width: 100%;

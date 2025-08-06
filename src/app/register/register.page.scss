@@ -12,6 +12,13 @@ html, body {
 //   padding: 20px;
 }
 
+$primary-color: #054c5b;
+$secondary-color: #562520;
+$accent-color: #FFCF33;
+$text-light: #ffffff;
+$card-radius: 12px;
+$transition-standard: all 0.3s ease;
+
 ion-header {
   --background: maroon;
 }
@@ -23,6 +30,35 @@ ion-title {
   text-align: center;
   display: flex;
   justify-content: center; /* Center items horizontally */
+}
+
+.diamond-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 24px 0;
+  
+  .diamond {
+    width: 40px;
+    height: 40px;
+    background-color: $text-light;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: pulseColor 4s infinite;
+    
+    &:nth-child(2) {
+      animation-delay: 1s;
+    }
+    
+    &:nth-child(3) {
+      animation-delay: 2s;
+    }
+  }
+}
+
+@keyframes pulseColor {
+  0%, 100% { background-color: $text-light; }
+  33% { background-color: $secondary-color; }
+  66% { background-color: $accent-color; }
 }
 
 ion-toolbar {
