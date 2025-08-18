@@ -9,15 +9,18 @@
     <ion-title class="centered-title">All Users</ion-title>
   </ion-toolbar>
   
-  <div class="search-container">
+ 
+</ion-header>
+
+<ion-content>
+
+ <div class="search-container">
     <ion-searchbar placeholder="Search by email, staff number, or role..." 
                   [(ngModel)]="searchTerm"
                   (ionChange)="filterUsers()"
                   animated></ion-searchbar>
   </div>
-</ion-header>
-
-<ion-content>
+  
   <div class="table-container">
     <!-- Table Header -->
     <div class="table-header">
